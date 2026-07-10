@@ -1,9 +1,13 @@
 [gd_scene format=3 uid="uid://dwwa4u4id4t2m"]
 
+[ext_resource type="PackedScene" uid="uid://byro3ciqr2064" path="res://Objects/Player/Player.tscn" id="1_glv2v"]
+[ext_resource type="Script" uid="uid://df01en1boiqpy" path="res://level.gd" id="1_uu6xs"]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
 size = Vector2(178, 20)
 
 [node name="Node2D" type="Node2D" unique_id=1188062101]
+script = ExtResource("1_uu6xs")
 
 [node name="RigidBody2D" type="RigidBody2D" parent="." unique_id=1904165104]
 position = Vector2(0, 30)
@@ -17,3 +21,5 @@ offset_right = 180.0
 offset_bottom = 20.0
 offset_transform_enabled = true
 offset_transform_position = Vector2(-90, -10)
+
+[node name="Player" parent="." unique_id=1936875832 instance=ExtResource("1_glv2v")]

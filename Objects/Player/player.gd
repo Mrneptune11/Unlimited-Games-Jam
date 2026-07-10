@@ -2,7 +2,7 @@ class_name Player extends CharacterBody2D
 
 # Physics/control parameters
 const GRAVITY: float = 1024.0
-const SPEED: float = 384.0
+const SPEED: float = 256.0
 const JUMP_POWER: float = 256.0
 const GROUND_ACCEL: float = 1024.0
 const AIR_ACCEL: float = 512.0
@@ -33,7 +33,6 @@ var character: int = 0 : # Determines which character to display as
 		character = clampi(value, 0, 50)
 		# Update sprite to display as the new character
 		var sprite: AnimatedSprite2D = $AnimatedSprite2D
-		color_id = gen_id()
 		$Sprite2D.modulate = Color(color_id)
 		print(color_id)
 
@@ -57,14 +56,6 @@ var direction: float = 1.0 : # Which direction the player is facing
 		direction = 1.0 if (value > 0.0) else -1.0
 		# Flip sprite
 		$AnimatedSprite2D.flip_h = (direction < 0.0)
-
-#-------------------------------------------------------------------------------
-
-##Creates a color / id for a given player 
-func gen_id()->String:
-	var rng:RandomNumberGenerator = RandomNumberGenerator.new()
-	var id:String = "%06x" % rng.randi_range(0x000000,0xFFFFFF)
-	return "#" + id
 
 #-------------------------------------------------------------------------------
 
