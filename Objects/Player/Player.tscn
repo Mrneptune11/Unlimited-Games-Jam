@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://byro3ciqr2064"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_861e5"]
+
+[node name="Player" type="Node2D" unique_id=188929278]
+
+[node name="ServerSync" type="MultiplayerSynchronizer" parent="." unique_id=83124740]
+replication_config = SubResource("SceneReplicationConfig_861e5")
+
+[node name="ClientSync" type="MultiplayerSynchronizer" parent="." unique_id=2116309635]
+replication_config = SubResource("SceneReplicationConfig_861e5")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1356588963]
