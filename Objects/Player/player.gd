@@ -25,7 +25,7 @@ var local: bool = true # If this player belongs to the local peer
 var points:int = 0 
 
 #Color id of the player
-var color_id:String = ""
+var color_id:String = "#FFFFFF"
 
 var character: int = 0 : # Determines which character to display as
 	set(value):

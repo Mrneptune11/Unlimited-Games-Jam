@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bi6nfjhot1eo5"]
 
 [ext_resource type="Script" uid="uid://3mtp3mvg1058" path="res://lobby.gd" id="1_gv8if"]
+[ext_resource type="Script" uid="uid://b3bltlekjmkx8" path="res://ui.gd" id="2_0y700"]
 
 [node name="Lobby" type="Node2D" unique_id=2146104970]
 script = ExtResource("1_gv8if")
@@ -18,3 +19,81 @@ spawn_limit = 50
 _spawnable_scenes = PackedStringArray("uid://dwwa4u4id4t2m")
 spawn_path = NodePath("../Level")
 spawn_limit = 1
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1150281040]
+script = ExtResource("2_0y700")
+
+[node name="Start" type="VBoxContainer" parent="UI" unique_id=1095290580]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -93.0
+offset_right = 108.0
+offset_bottom = 94.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="RichTextLabel" parent="UI/Start" unique_id=520906420]
+custom_minimum_size = Vector2(100, 25)
+layout_mode = 2
+text = "Test Thy Net
+"
+
+[node name="ENet" type="VBoxContainer" parent="UI/Start" unique_id=2036676489]
+layout_mode = 2
+
+[node name="HostENet" type="PanelContainer" parent="UI/Start/ENet" unique_id=251083739]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="UI/Start/ENet/HostENet" unique_id=1876653768]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Options" type="GridContainer" parent="UI/Start/ENet/HostENet/VBox" unique_id=1602178311]
+layout_mode = 2
+columns = 2
+
+[node name="PortLabel" type="Label" parent="UI/Start/ENet/HostENet/VBox/Options" unique_id=1296956702]
+layout_mode = 2
+text = "Port:"
+
+[node name="Port" type="SpinBox" parent="UI/Start/ENet/HostENet/VBox/Options" unique_id=1819557715]
+layout_mode = 2
+max_value = 1000000.0
+
+[node name="Start" type="Button" parent="UI/Start/ENet/HostENet/VBox" unique_id=1840390251]
+layout_mode = 2
+text = "Host"
+
+[node name="Join" type="PanelContainer" parent="UI/Start/ENet" unique_id=159374255]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="UI/Start/ENet/Join" unique_id=1008451054]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Options" type="GridContainer" parent="UI/Start/ENet/Join/VBox" unique_id=613895801]
+layout_mode = 2
+columns = 2
+
+[node name="AddressLabel" type="Label" parent="UI/Start/ENet/Join/VBox/Options" unique_id=485884758]
+layout_mode = 2
+text = "Address:"
+
+[node name="Address" type="LineEdit" parent="UI/Start/ENet/Join/VBox/Options" unique_id=1735152330]
+layout_mode = 2
+
+[node name="PortLabel" type="Label" parent="UI/Start/ENet/Join/VBox/Options" unique_id=1854792270]
+layout_mode = 2
+text = "Port:"
+
+[node name="Port" type="SpinBox" parent="UI/Start/ENet/Join/VBox/Options" unique_id=412054546]
+layout_mode = 2
+max_value = 1000000.0
+
+[node name="Start" type="Button" parent="UI/Start/ENet/Join/VBox" unique_id=1813664087]
+layout_mode = 2
+text = "Join"

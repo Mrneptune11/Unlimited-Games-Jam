@@ -122,7 +122,7 @@ func load_level(new_level_idx: int) -> void:
 	$Level.add_child.call_deferred(level, true)
 
 	# Listen to level events
-	level.goal_reached.connect(_on_goal_reached, ConnectFlags.CONNECT_ONE_SHOT)
+	#level.goal_reached.connect(_on_goal_reached, ConnectFlags.CONNECT_ONE_SHOT)
 	
 	#spawn players to 0,0
 	teleport_players(Vector2.ZERO)
@@ -183,7 +183,7 @@ func spawn_player(peer_id: int) -> void:
 	
 	# Add player to level and teleport to spawn position
 	$Players.add_child(player)
-	player.teleport.rpc(level.get_spawn_position())
+	player.teleport.rpc(Vector2.ZERO)
 
 func remove_player(peer_id: int) -> void:
 	# Find player node
