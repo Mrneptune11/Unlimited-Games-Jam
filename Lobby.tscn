@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bi6nfjhot1eo5"]
+
+[node name="Lobby" type="Node2D" unique_id=2146104970]
+
+[node name="Level" type="Node2D" parent="." unique_id=817860642]
+
+[node name="Players" type="Node2D" parent="." unique_id=2132795720]
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="." unique_id=892560041]
+_spawnable_scenes = PackedStringArray("uid://byro3ciqr2064")
+spawn_path = NodePath("../Players")
+spawn_limit = 50
+
+[node name="LevelSpawner" type="MultiplayerSpawner" parent="." unique_id=710557274]
+_spawnable_scenes = PackedStringArray("uid://dwwa4u4id4t2m")
+spawn_path = NodePath("../Level")
+spawn_limit = 1

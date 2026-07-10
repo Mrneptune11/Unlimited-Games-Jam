@@ -4,8 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://d2heawl5ty88q" path="res://Assets/sprites/white_square.png" id="1_oansn"]
 [ext_resource type="Texture2D" uid="uid://xtu6gk86tanv" path="res://Assets/SpriteSheets/char_test-Sheet.png" id="1_we6tp"]
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_861e5"]
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_oansn"]
 atlas = ExtResource("1_we6tp")
 region = Rect2(0, 0, 16, 16)
@@ -45,14 +43,27 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
 size = Vector2(15, 16)
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_cac6a"]
+properties/0/path = NodePath("Player:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("Player:state")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("Player:direction")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_b0me6"]
+properties/0/path = NodePath("Player:character")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("Player:points")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
 [node name="Player" type="CharacterBody2D" unique_id=1936875832]
 script = ExtResource("1_cac6a")
-
-[node name="ServerSync" type="MultiplayerSynchronizer" parent="." unique_id=83124740]
-replication_config = SubResource("SceneReplicationConfig_861e5")
-
-[node name="ClientSync" type="MultiplayerSynchronizer" parent="." unique_id=2116309635]
-replication_config = SubResource("SceneReplicationConfig_861e5")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=946934264]
 texture_filter = 1
@@ -62,7 +73,6 @@ texture = ExtResource("1_oansn")
 process_mode = 3
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_mg473")
-autoplay = "default"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1991172779]
 zoom = Vector2(5, 5)
@@ -71,3 +81,9 @@ zoom = Vector2(5, 5)
 visible = false
 position = Vector2(-0.5, 0)
 shape = SubResource("RectangleShape2D_g4v7s")
+
+[node name="ClientSync" type="MultiplayerSynchronizer" parent="." unique_id=1474497450]
+replication_config = SubResource("SceneReplicationConfig_cac6a")
+
+[node name="ServerSync" type="MultiplayerSynchronizer" parent="." unique_id=1418538309]
+replication_config = SubResource("SceneReplicationConfig_b0me6")

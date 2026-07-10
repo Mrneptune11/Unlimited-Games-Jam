@@ -2,8 +2,8 @@ class_name Player extends CharacterBody2D
 
 # Physics/control parameters
 const GRAVITY: float = 1024.0
-const SPEED: float = 512.0
-const JUMP_POWER: float = 512.0
+const SPEED: float = 384.0
+const JUMP_POWER: float = 256.0
 const GROUND_ACCEL: float = 1024.0
 const AIR_ACCEL: float = 512.0
 const FRICTION: float = 1024.0
@@ -22,6 +22,8 @@ enum State {
 var peer_id: int = 1 # The peer that controls this player
 var local: bool = true # If this player belongs to the local peer
 
+var points:int = 0 
+
 #Color id of the player
 var color_id:String = ""
 
@@ -37,9 +39,17 @@ var character: int = 0 : # Determines which character to display as
 
 var state: State = State.IDLE : # The current state the player is in
 	set(value):
+		var sprite: AnimatedSprite2D = $AnimatedSprite2D
+		
 		# Limit the value to the bounds of State
 		state = clampi(value, 0, State.size() - 1) as State
 		#TODO Change sprite animation based on state
+		if state != State.WALK:
+			sprite.frame = 0
+			sprite.pause()
+		else:
+			sprite.play()
+			
 
 var direction: float = 1.0 : # Which direction the player is facing
 	set(value):
@@ -123,6 +133,7 @@ func _state_walk(input_v: Vector2, delta: float) -> void:
 func _state_jump(input_v: Vector2, delta: float) -> void:
 	if (_check_fall()): return
 	_air_controls(input_v, delta)
+	points+=1
 
 func _state_fall(input_v: Vector2, delta: float) -> void:
 	# Control in air
