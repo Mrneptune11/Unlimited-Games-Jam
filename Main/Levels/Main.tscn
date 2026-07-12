@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://dwwa4u4id4t2m"]
 
-[ext_resource type="Script" uid="uid://df01en1boiqpy" path="res://level.gd" id="1_uu6xs"]
+[ext_resource type="Script" uid="uid://df01en1boiqpy" path="res://Main/Levels/level.gd" id="1_i15iu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
 size = Vector2(178, 20)
 
 [node name="Node2D" type="Node2D" unique_id=1188062101]
-script = ExtResource("1_uu6xs")
+script = ExtResource("1_i15iu")
 
 [node name="RigidBody2D" type="RigidBody2D" parent="." unique_id=1904165104]
 position = Vector2(0, 30)
