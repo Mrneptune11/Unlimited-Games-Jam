@@ -18,10 +18,15 @@ enum State {
 	FALL = 3,
 }
 
+#States of play the player can be in
+enum Mode {
+	PAUSE = 0,
+	PLAY = 1,
+	SPECTATE = 2,
+}
+
 var peer_id: int = 1 # The peer that controls this player
 var local: bool = true # If this player belongs to the local peer
-
-var points:int = 0 
 
 #Color id of the player
 var color_id:String = "#FFFFFF"
@@ -52,6 +57,10 @@ var state: State = State.IDLE : # The current state the player is in
 			sprite.play()
 			
 
+var mode: Mode = Mode.PAUSE :
+	set (value):
+		mode = value
+
 var direction: float = 1.0 : # Which direction the player is facing
 	set(value):
 		# Restrict to either exactly 1.0 or -1.0
@@ -65,7 +74,7 @@ var player_name:String = "" :
 		player_name = value
 #-------------------------------------------------------------------------------
 
-var death_scene:PackedScene = preload("res://Objects/Death/explosion.tscn")
+var death_scene:PackedScene = preload("res://Objects/Death/explosion.tscn") #Explosion scene
 
 # Life cycle 
 
@@ -79,10 +88,12 @@ func _ready() -> void:
 	if (local):
 		# Activate the camera if local
 		$Camera2D.make_current()
-		
-	create_label()
+	
+	#Create the player label and ask their name
+	create_label() 
 	ask_name()
 
+#Teleports peers to a specific position
 @rpc("authority", "call_local", "reliable")
 func teleport(new_pos: Vector2) -> void:
 	velocity = Vector2.ZERO
@@ -92,14 +103,15 @@ func teleport(new_pos: Vector2) -> void:
 #-------------------------------------------------------------------------------
 
 func _input(_event: InputEvent) -> void:
-	if (!local): return
+	if (!local || mode == Mode.PAUSE): return #Prevent input from others / during pause
 		
+	#Test for explosions
 	if Input.is_key_label_pressed(KEY_0):
 		explode()
 
 func _physics_process(delta: float) -> void:
 	# Only process physics if local
-	if (!local): return
+	if (!local || mode == Mode.PAUSE): return #Prevent input from others / during pause
 
 	# Retrieve inputs as a convenient vector
 	var input_v: Vector2 = Input.get_vector(
@@ -126,11 +138,14 @@ func _physics_process(delta: float) -> void:
 	
 
 func _process(_delta: float) -> void:
+	#Sync the ui labels with the player
 	var screen_pos = get_viewport().get_canvas_transform() * global_position
 	label_pos = screen_pos
 	my_label.position = label_pos
 
 #-------------------------------------------------------------------------------
+
+#State machine for basic physics
 
 func _state_idle(input_v: Vector2, delta: float) -> void:
 	if (_check_fall()): return
@@ -147,7 +162,6 @@ func _state_walk(input_v: Vector2, delta: float) -> void:
 func _state_jump(input_v: Vector2, delta: float) -> void:
 	if (_check_fall()): return
 	_air_controls(input_v, delta)
-	points+=1
 
 func _state_fall(input_v: Vector2, delta: float) -> void:
 	# Control in air
@@ -165,6 +179,8 @@ func jump() -> void:
 	velocity.y = -JUMP_POWER
 
 #-------------------------------------------------------------------------------
+
+#Physics helper functions
 
 func _check_fall() -> bool:
 	if (!is_on_floor() && velocity.y > 0.0):
@@ -202,9 +218,14 @@ func _air_controls(input_v: Vector2, delta: float) -> void:
 	
 #-------------------------------------------------------------------------------
 
+#Explosion  logic
+
+#Wrapper for the rpc call
 func explode()->void:
 	spawn_explosion.rpc(global_position, Color(color_id))
 	
+	
+##Explosion are not a syncronized object, but rather every player spawns one at the correct position
 @rpc("any_peer", "call_local", "reliable")
 func spawn_explosion(pos: Vector2, color: Color):
 	var explosion: Explosion = death_scene.instantiate()
@@ -215,30 +236,37 @@ func spawn_explosion(pos: Vector2, color: Color):
 	
 #-------------------------------------------------------------------------------
 
+##Updates the player's label
 func update_label(label:String)->void:
-	print(label)
+	#print(label)
 	player_name = label
 	my_label.text = player_name
 
+##Instantiates the players label and adds it to the UI
 func create_label() -> void:
 	var player_label: NameLabel = preload("res://Objects/NameLabel/NameLabel.tscn").instantiate()
 	player_label.set_label(player_name, color_id)
 	my_label = player_label
 	get_node("/root/Lobby/UI").add_child(player_label)
+	
+	self.tree_exiting.connect(my_label.queue_free) #Ensure label dies with a given player
 
-
+##Request for players to name themselves
+#TODO probably needs better validation
 func ask_name()->void:
 	if (!local): return
 	
+	mode = Mode.PAUSE
+	
 	var name_box:EntryBox = preload("res://Objects/Entry Box/EntryBox.tscn").instantiate()
 	get_node("/root/Lobby/UI").add_child(name_box)
-	
-	
 	name_box.my_button.pressed.connect(func():
 		set_player_name.rpc(name_box.my_entry.text)
+		mode = Mode.PLAY
 	)
 
+##Synchronize name changes across clients
 @rpc("any_peer", "call_local")
-func set_player_name(name: String):
-	player_name = name
-	my_label.text = name
+func set_player_name(new_name: String):
+	player_name = new_name
+	my_label.text = new_name

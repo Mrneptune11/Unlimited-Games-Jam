@@ -1,11 +1,11 @@
 class_name Lobby extends Node2D
 
-const MAX_PLAYERS = 50
-const DEFAULT_PORT = 47218
+const MAX_PLAYERS = 15 ##15 max players for now
+const DEFAULT_PORT = 47218 ##Default port number
 
 const PLAYER_SCN:PackedScene = preload("res://Objects/Player/Player.tscn")
-var available_colors:Array[StringName] = []
-var player_idx:int = 0
+var available_colors:Array[StringName] = [] ##Stores generated colors for a match
+var player_idx:int = 0 ##Player number
 
 #-------------------------------------------------------------------------------
 
@@ -118,9 +118,6 @@ func load_level(new_level_idx: int) -> void:
 	level = level_scn.instantiate()
 	level_idx = new_level_idx
 	$Level.add_child.call_deferred(level, true)
-
-	# Listen to level events
-	#level.goal_reached.connect(_on_goal_reached, ConnectFlags.CONNECT_ONE_SHOT)
 	
 	#spawn players to 0,0
 	teleport_players(Vector2.ZERO)
@@ -174,6 +171,7 @@ func spawn_player(peer_id: int) -> void:
 	var player: Player = PLAYER_SCN.instantiate()
 	player.name = str(peer_id)
 	
+	#Set up player to start
 	player.color_id = available_colors.pop_at(player_idx)
 	player_idx += 1
 	player.character = player_idx
