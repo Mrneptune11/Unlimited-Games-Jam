@@ -9,7 +9,6 @@ const AIR_ACCEL: float = 512.0
 const FRICTION: float = 1024.0
 const SLIDE_FRICTION: float = 512.0
 const AIR_DRAG: float = 512.0
-const HIT_COOLDOWN_MS: int = 250
 
 #  player states
 enum State {
@@ -59,6 +58,8 @@ var direction: float = 1.0 : # Which direction the player is facing
 
 #-------------------------------------------------------------------------------
 
+var death_scene:PackedScene = preload("res://Objects/Death/explosion.tscn")
+
 # Life cycle 
 
 func _enter_tree() -> void:
@@ -79,6 +80,12 @@ func teleport(new_pos: Vector2) -> void:
 	state = State.IDLE
 
 #-------------------------------------------------------------------------------
+
+func _input(_event: InputEvent) -> void:
+	if (!local): return
+		
+	if Input.is_key_label_pressed(KEY_0):
+		explode()
 
 func _physics_process(delta: float) -> void:
 	# Only process physics if local
@@ -178,3 +185,16 @@ func _air_controls(input_v: Vector2, delta: float) -> void:
 	velocity.x = move_toward(velocity.x, SPEED * input_v.x, AIR_ACCEL * delta)
 	
 #-------------------------------------------------------------------------------
+
+func explode()->void:
+	spawn_explosion.rpc(global_position, Color(color_id))
+	
+@rpc("any_peer", "call_local", "reliable")
+func spawn_explosion(pos: Vector2, color: Color):
+	var explosion: Explosion = death_scene.instantiate()
+	explosion.global_position = pos
+	explosion.modulate = color
+	get_tree().current_scene.get_node("Effects").add_child(explosion)
+	explosion.emitting = true
+	
+	

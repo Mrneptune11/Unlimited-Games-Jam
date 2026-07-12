@@ -10,6 +10,8 @@ script = ExtResource("1_0duqs")
 
 [node name="Players" type="Node2D" parent="." unique_id=2132795720]
 
+[node name="Effects" type="Node2D" parent="." unique_id=174491174]
+
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="." unique_id=892560041]
 _spawnable_scenes = PackedStringArray("uid://byro3ciqr2064")
 spawn_path = NodePath("../Players")

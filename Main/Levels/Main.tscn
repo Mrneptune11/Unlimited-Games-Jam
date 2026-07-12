@@ -23,3 +23,5 @@ offset_right = 180.0
 offset_bottom = 20.0
 offset_transform_enabled = true
 offset_transform_position = Vector2(-90, -10)
+
+[node name="Effects" type="Node2D" parent="." unique_id=433243468]
