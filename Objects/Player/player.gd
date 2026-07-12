@@ -81,6 +81,7 @@ func _ready() -> void:
 		$Camera2D.make_current()
 		
 	create_label()
+	ask_name()
 
 @rpc("authority", "call_local", "reliable")
 func teleport(new_pos: Vector2) -> void:
@@ -214,11 +215,30 @@ func spawn_explosion(pos: Vector2, color: Color):
 	
 #-------------------------------------------------------------------------------
 
-func update_label(label:NameLabel)->void:
-	my_label = label
+func update_label(label:String)->void:
+	print(label)
+	player_name = label
+	my_label.text = player_name
 
 func create_label() -> void:
 	var player_label: NameLabel = preload("res://Objects/NameLabel/NameLabel.tscn").instantiate()
 	player_label.set_label(player_name, color_id)
-	update_label(player_label)
+	my_label = player_label
 	get_node("/root/Lobby/UI").add_child(player_label)
+
+
+func ask_name()->void:
+	if (!local): return
+	
+	var name_box:EntryBox = preload("res://Objects/Entry Box/EntryBox.tscn").instantiate()
+	get_node("/root/Lobby/UI").add_child(name_box)
+	
+	
+	name_box.my_button.pressed.connect(func():
+		set_player_name.rpc(name_box.my_entry.text)
+	)
+
+@rpc("any_peer", "call_local")
+func set_player_name(name: String):
+	player_name = name
+	my_label.text = name

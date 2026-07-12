@@ -54,21 +54,6 @@ text = "Test Thy Net
 [node name="ENet" type="VBoxContainer" parent="UI/Start" unique_id=2036676489]
 layout_mode = 2
 
-[node name="NameContainer" type="PanelContainer" parent="UI/Start/ENet" unique_id=1089841600]
-layout_mode = 2
-
-[node name="HBox" type="HBoxContainer" parent="UI/Start/ENet/NameContainer" unique_id=234368910]
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="NameLabel" type="Label" parent="UI/Start/ENet/NameContainer/HBox" unique_id=96413914]
-layout_mode = 2
-text = "Name:"
-
-[node name="Name" type="LineEdit" parent="UI/Start/ENet/NameContainer/HBox" unique_id=665797565]
-custom_minimum_size = Vector2(94, 0)
-layout_mode = 2
-
 [node name="HostENet" type="PanelContainer" parent="UI/Start/ENet" unique_id=251083739]
 layout_mode = 2
 
