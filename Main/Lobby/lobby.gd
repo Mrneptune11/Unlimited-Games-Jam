@@ -14,7 +14,6 @@ var level_idx:int = 1
 
 #-------------------------------------------------------------------------------
 
-
 # Lifecycle
 
 func _init()->void:
@@ -99,7 +98,6 @@ func _on_connection_failed() -> void:
 
 func _on_server_disconnected() -> void:
 	pass
-	
 #-------------------------------------------------------------------------------
 
 # Level Management
@@ -179,6 +177,7 @@ func spawn_player(peer_id: int) -> void:
 	player.color_id = available_colors.pop_at(player_idx)
 	player_idx += 1
 	player.character = player_idx
+	player.player_name = "Player " + str(player_idx)
 	
 	
 	# Add player to level and teleport to spawn position

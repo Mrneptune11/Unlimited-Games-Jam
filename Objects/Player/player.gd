@@ -26,12 +26,15 @@ var points:int = 0
 #Color id of the player
 var color_id:String = "#FFFFFF"
 
+##Label for the player
+var my_label:Label = null
+var label_pos:Vector2 = Vector2.ZERO
+
 var character: int = 0 : # Determines which character to display as
 	set(value):
 		# Limit the value to the bounds of CHARACTERS
 		character = clampi(value, 0, 50)
 		# Update sprite to display as the new character
-		var sprite: AnimatedSprite2D = $AnimatedSprite2D
 		$Sprite2D.modulate = Color(color_id)
 		print(color_id)
 
@@ -56,6 +59,10 @@ var direction: float = 1.0 : # Which direction the player is facing
 		# Flip sprite
 		$AnimatedSprite2D.flip_h = (direction < 0.0)
 
+
+var player_name:String = "" :
+	set(value):
+		player_name = value
 #-------------------------------------------------------------------------------
 
 var death_scene:PackedScene = preload("res://Objects/Death/explosion.tscn")
@@ -72,6 +79,8 @@ func _ready() -> void:
 	if (local):
 		# Activate the camera if local
 		$Camera2D.make_current()
+		
+	create_label()
 
 @rpc("authority", "call_local", "reliable")
 func teleport(new_pos: Vector2) -> void:
@@ -114,6 +123,12 @@ func _physics_process(delta: float) -> void:
 	# Apply physics
 	move_and_slide()
 	
+
+func _process(_delta: float) -> void:
+	var screen_pos = get_viewport().get_canvas_transform() * global_position
+	label_pos = screen_pos
+	my_label.position = label_pos
+
 #-------------------------------------------------------------------------------
 
 func _state_idle(input_v: Vector2, delta: float) -> void:
@@ -197,4 +212,13 @@ func spawn_explosion(pos: Vector2, color: Color):
 	get_tree().current_scene.get_node("Effects").add_child(explosion)
 	explosion.emitting = true
 	
-	
+#-------------------------------------------------------------------------------
+
+func update_label(label:NameLabel)->void:
+	my_label = label
+
+func create_label() -> void:
+	var player_label: NameLabel = preload("res://Objects/NameLabel/NameLabel.tscn").instantiate()
+	player_label.set_label(player_name, color_id)
+	update_label(player_label)
+	get_node("/root/Lobby/UI").add_child(player_label)

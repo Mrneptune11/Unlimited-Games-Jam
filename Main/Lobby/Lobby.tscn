@@ -6,6 +6,13 @@
 [node name="Lobby" type="Node2D" unique_id=2146104970]
 script = ExtResource("1_0duqs")
 
+[node name="Labels" type="Control" parent="." unique_id=2072846370]
+texture_filter = 2
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
 [node name="Level" type="Node2D" parent="." unique_id=817860642]
 
 [node name="Players" type="Node2D" parent="." unique_id=2132795720]
@@ -45,6 +52,21 @@ text = "Test Thy Net
 "
 
 [node name="ENet" type="VBoxContainer" parent="UI/Start" unique_id=2036676489]
+layout_mode = 2
+
+[node name="NameContainer" type="PanelContainer" parent="UI/Start/ENet" unique_id=1089841600]
+layout_mode = 2
+
+[node name="HBox" type="HBoxContainer" parent="UI/Start/ENet/NameContainer" unique_id=234368910]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="NameLabel" type="Label" parent="UI/Start/ENet/NameContainer/HBox" unique_id=96413914]
+layout_mode = 2
+text = "Name:"
+
+[node name="Name" type="LineEdit" parent="UI/Start/ENet/NameContainer/HBox" unique_id=665797565]
+custom_minimum_size = Vector2(94, 0)
 layout_mode = 2
 
 [node name="HostENet" type="PanelContainer" parent="UI/Start/ENet" unique_id=251083739]

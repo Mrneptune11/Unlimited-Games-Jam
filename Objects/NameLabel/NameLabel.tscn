@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://7d06mklmig8i"]
+
+[ext_resource type="Script" uid="uid://dknumv6crenqm" path="res://Objects/NameLabel/name_label.gd" id="1_3fmgj"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_3fmgj"]
+font_size = 32
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" unique_id=2091247295]
+top_level = true
+texture_filter = 2
+offset_right = 136.0
+offset_bottom = 45.0
+offset_transform_enabled = true
+offset_transform_position = Vector2(-68, -90)
+theme_override_font_sizes/font_size = 5
+text = "Neptune"
+label_settings = SubResource("LabelSettings_3fmgj")
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("1_3fmgj")

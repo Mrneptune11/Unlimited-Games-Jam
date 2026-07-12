@@ -53,9 +53,9 @@ properties/1/replication_mode = 2
 properties/2/path = NodePath(".:direction")
 properties/2/spawn = true
 properties/2/replication_mode = 2
-properties/3/path = NodePath(".:visible")
+properties/3/path = NodePath(".:label_pos")
 properties/3/spawn = true
-properties/3/replication_mode = 1
+properties/3/replication_mode = 2
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_b0me6"]
 properties/0/path = NodePath(".:character")
@@ -67,6 +67,9 @@ properties/1/replication_mode = 2
 properties/2/path = NodePath(".:color_id")
 properties/2/spawn = true
 properties/2/replication_mode = 2
+properties/3/path = NodePath(".:player_name")
+properties/3/spawn = true
+properties/3/replication_mode = 2
 
 [node name="Player" type="CharacterBody2D" unique_id=1936875832]
 script = ExtResource("1_cac6a")
