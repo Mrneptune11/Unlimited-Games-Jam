@@ -7,4 +7,3 @@ class_name EntryBox extends PanelContainer
 
 func _ready()->void:
 	my_entry.grab_focus()
-	my_button.pressed.connect(queue_free)

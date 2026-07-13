@@ -282,9 +282,14 @@ func ask_name()->void:
 	
 	var name_box:EntryBox = preload("res://Objects/Entry Box/EntryBox.tscn").instantiate()
 	get_node("/root/Lobby/UI").add_child(name_box)
+	
 	name_box.my_button.pressed.connect(func():
-		set_player_name.rpc(name_box.my_entry.text)
+		var name_text:String = name_box.my_entry.text
+		if name_text.is_empty(): return
+		
+		set_player_name.rpc(name_text)
 		mode = Mode.PLAY
+		name_box.queue_free.call_deferred()
 	)
 
 ##Synchronize name changes across clients
