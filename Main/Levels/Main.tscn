@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://df01en1boiqpy" path="res://Main/Levels/level.gd" id="1_i15iu"]
 [ext_resource type="Texture2D" uid="uid://msmaau3d3825" path="res://Assets/SpriteSheets/tile_sheet.png" id="2_01y7v"]
+[ext_resource type="PackedScene" uid="uid://bhwdr3lxev2pm" path="res://Events/Fireball/FireballEvent.tscn" id="3_i3w5c"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i3w5c"]
 texture = ExtResource("2_01y7v")
@@ -48,3 +49,5 @@ script = ExtResource("1_i15iu")
 texture_filter = 1
 tile_map_data = PackedByteArray("AAD8/wEAAAAAAAAAAAD9/wEAAAABAAEAAAD+/wEAAAABAAEAAAD//wEAAAABAAAAAAAAAAEAAAACAAAAAAABAAEAAAABAAEAAAACAAEAAAABAAEAAAADAAEAAAADAAAAAAD4////AAACAAIAAAD7////AAADAAIAAAD6////AAACAAAAAAD5////AAABAAAAAAADAPz/AAADAAEAAAAEAPz/AAABAAMAAAACAPz/AAAAAAMAAAAGAAEAAAAAAAEAAAAHAAEAAAABAAEAAAAIAAEAAAACAAEAAAAHAP7/AAAAAAAAAAAIAP7/AAABAAAAAAAJAP7/AAACAAAAAAAKAP7/AAADAAAAAAD6//v/AAABAAIAAAD8//v/AAABAAIAAAD+//v/AAAAAAEAAAALAAEAAAABAAIAAAANAP//AAABAAIAAAD///v/AAACAAEAAAA=")
 tile_set = SubResource("TileSet_g4v7s")
+
+[node name="FireballEvent" parent="." unique_id=1498200931 instance=ExtResource("3_i3w5c")]
