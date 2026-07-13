@@ -9,6 +9,7 @@ const AIR_ACCEL: float = 512.0
 const FRICTION: float = 1024.0
 const SLIDE_FRICTION: float = 512.0
 const AIR_DRAG: float = 512.0
+const SPECTATE_SPEED:float = 10
 
 #  player states
 enum State {
@@ -118,6 +119,11 @@ func _physics_process(delta: float) -> void:
 		&"move_left", &"move_right", &"move_up", &"move_down"
 	)
 	
+	if mode == Mode.SPECTATE:
+		self.global_position += input_v * SPECTATE_SPEED
+		if (!is_zero_approx(input_v.x)): direction = roundf(input_v.x)
+		return
+	
 	# Apply gravity
 	velocity.y += GRAVITY * delta
 	
@@ -141,7 +147,9 @@ func _process(_delta: float) -> void:
 	#Sync the ui labels with the player
 	var screen_pos = get_viewport().get_canvas_transform() * global_position
 	label_pos = screen_pos
-	my_label.position = label_pos
+	
+	if my_label:
+		my_label.position = label_pos
 
 #-------------------------------------------------------------------------------
 
@@ -223,6 +231,11 @@ func _air_controls(input_v: Vector2, delta: float) -> void:
 #Wrapper for the rpc call
 func explode()->void:
 	spawn_explosion.rpc(global_position, Color(color_id))
+	self.mode = Mode.SPECTATE
+	$AnimatedSprite2D.play("ded")
+	$Sprite2D.modulate.a = .5
+	z_index = 100
+	hide_player.rpc()
 	
 	
 ##Explosion are not a syncronized object, but rather every player spawns one at the correct position
@@ -233,6 +246,15 @@ func spawn_explosion(pos: Vector2, color: Color):
 	explosion.modulate = color
 	get_tree().current_scene.get_node("Effects").add_child(explosion)
 	explosion.emitting = true
+	
+##Kill the player on other screens
+@rpc("any_peer", "call_remote", "reliable")
+func hide_player():
+	hide()
+	$CollisionShape2D.queue_free()
+	my_label.queue_free()
+	
+
 	
 #-------------------------------------------------------------------------------
 

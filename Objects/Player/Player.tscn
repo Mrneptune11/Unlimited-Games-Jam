@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://8cw0nhh70vxf" path="res://Objects/Player/player.gd" id="1_cac6a"]
 [ext_resource type="Texture2D" uid="uid://d2heawl5ty88q" path="res://Assets/sprites/white_square.png" id="1_oansn"]
 [ext_resource type="Texture2D" uid="uid://xtu6gk86tanv" path="res://Assets/SpriteSheets/char_test-Sheet.png" id="1_we6tp"]
+[ext_resource type="Texture2D" uid="uid://bg7mtpr2qe4na" path="res://Assets/sprites/ghost.png" id="3_b0me6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oansn"]
 atlas = ExtResource("1_we6tp")
@@ -24,6 +25,14 @@ region = Rect2(48, 0, 16, 16)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("3_b0me6")
+}],
+"loop": 1,
+"name": &"ded",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_oansn")
 }, {
 "duration": 1.0,
@@ -41,7 +50,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
-size = Vector2(15, 16)
+size = Vector2(14, 16)
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_cac6a"]
 properties/0/path = NodePath(".:position")
@@ -79,13 +88,12 @@ texture = ExtResource("1_oansn")
 process_mode = 3
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_mg473")
+autoplay = "default"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1991172779]
 zoom = Vector2(5, 5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1611372691]
-visible = false
-position = Vector2(-0.5, 0)
 shape = SubResource("RectangleShape2D_g4v7s")
 
 [node name="ClientSync" type="MultiplayerSynchronizer" parent="." unique_id=1474497450]
