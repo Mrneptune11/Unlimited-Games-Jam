@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://b1iet7d1j2e6j"]
+
+[node name="StartGameButton" type="Button" unique_id=1053650365]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -132.5
+offset_top = 100.0
+offset_right = 132.5
+offset_bottom = 171.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 45
+text = "Start Game "

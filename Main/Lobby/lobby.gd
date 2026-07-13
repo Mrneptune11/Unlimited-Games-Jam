@@ -14,6 +14,10 @@ var level_idx:int = 1
 
 #-------------------------------------------------------------------------------
 
+const START_BTN_SCN = preload("res://UI/StartButton/StartGameButton.tscn")
+
+#-------------------------------------------------------------------------------
+
 # Lifecycle
 
 func _init()->void:
@@ -53,6 +57,8 @@ func gen_id()->StringName:
 func _start_server_common() -> void:
 	load_level(0) #start level scene
 	spawn_player(1) # server is always first player
+	
+	$UI.add_child(START_BTN_SCN.instantiate())
 
 func start_enet_server(port: int = DEFAULT_PORT) -> void:
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
