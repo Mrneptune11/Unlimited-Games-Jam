@@ -62,7 +62,14 @@ func start_enet_server(port: int = DEFAULT_PORT) -> void:
 
 func start_enet_client(address: String, port: int = DEFAULT_PORT) -> void:
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
-	peer.create_client(address, port)
+	var err:Error = peer.create_client(address, port)
+	
+	#OS notification for incorrect host or port information
+	if err != OK:
+		OS.alert("Failed to connect using provided host information")
+		get_tree().change_scene_to_file("res://Main/Lobby/Lobby.tscn")
+		return
+	
 	multiplayer.multiplayer_peer = peer
 
 func start_websocket_server(port: int = DEFAULT_PORT) -> void:
@@ -94,7 +101,9 @@ func _on_connected_to_server() -> void:
 	pass
 
 func _on_connection_failed() -> void:
-	pass
+	#Fails to connect to a valid host
+	OS.alert("Host connection failed")
+	
 
 func _on_server_disconnected() -> void:
 	pass
