@@ -2,6 +2,12 @@ extends CanvasLayer
 
 @onready var lobby: Lobby = get_parent()
 
+#-------------------------------------------------------------------------------
+
+const START_BTN_SCN = preload("res://UI/StartButton/StartGameButton.tscn")
+
+#-------------------------------------------------------------------------------
+
 func _ready() -> void:
 	$Start/ENet/Join/VBox/Start.pressed.connect(_on_enet_join_pressed)
 	$Start/ENet/HostENet/VBox/Start.pressed.connect(_on_enet_host_pressed)
@@ -30,3 +36,13 @@ func _on_websocket_host_pressed():
 	var port: int = $Start/ENet/Host/VBox/Options/Port.value
 	lobby.start_websocket_server(port)
 	$Start.hide()
+
+#-------------------------------------------------------------------------------
+
+func init_start_btn()->void:
+	var start_btn:Button = START_BTN_SCN.instantiate()
+	add_child(start_btn)
+	start_btn.pressed.connect(lobby.start_match)
+	start_btn.pressed.connect(start_btn.hide)
+	
+	

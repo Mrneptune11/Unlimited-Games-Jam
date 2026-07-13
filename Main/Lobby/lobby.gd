@@ -1,5 +1,15 @@
 class_name Lobby extends Node2D
 
+#enum used to prevent new server joins
+enum State {
+	MATCH = 0,
+	LOBBY = 1,
+}
+
+var server_status:State = State.LOBBY
+
+#-------------------------------------------------------------------------------
+
 const MAX_PLAYERS = 15 ##15 max players for now
 const DEFAULT_PORT = 47218 ##Default port number
 
@@ -11,10 +21,6 @@ var player_idx:int = 0 ##Player number
 
 var level:Level = null
 var level_idx:int = 1
-
-#-------------------------------------------------------------------------------
-
-const START_BTN_SCN = preload("res://UI/StartButton/StartGameButton.tscn")
 
 #-------------------------------------------------------------------------------
 
@@ -57,8 +63,8 @@ func gen_id()->StringName:
 func _start_server_common() -> void:
 	load_level(0) #start level scene
 	spawn_player(1) # server is always first player
+	$UI.init_start_btn()
 	
-	$UI.add_child(START_BTN_SCN.instantiate())
 
 func start_enet_server(port: int = DEFAULT_PORT) -> void:
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
@@ -89,11 +95,22 @@ func start_websocket_client(url: String) -> void:
 	peer.create_client(url)
 	multiplayer.multiplayer_peer = peer
 	
+
+@rpc("authority", "reliable")
+func force_peer_exit(message:String)->void:
+	OS.alert(message)
+	multiplayer.multiplayer_peer.close()
+	get_tree().change_scene_to_file("res://Main/Lobby/Lobby.tscn")
 #-------------------------------------------------------------------------------
 
 # Network Events
 
 func _on_peer_connected(peer_id: int) -> void:
+	#Don't allow new joins after the game starts
+	if !server_status: 
+		force_peer_exit.rpc("Can't join server during an active match")
+		return
+		
 	#handle spawn if host
 	if (!multiplayer.is_server()): return
 	spawn_player(peer_id)
@@ -151,10 +168,8 @@ func is_final_level() -> bool:
 
 # Level Events
 
-func _on_goal_reached(_player: Player) -> void:
-	# Detect when a player reaches the goal and switch levels
-	if (is_final_level()): return
-	next_level()
+func start_match()->void:
+	server_status = State.MATCH
 
 #-------------------------------------------------------------------------------
 

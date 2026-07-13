@@ -6,13 +6,6 @@
 [node name="Lobby" type="Node2D" unique_id=2146104970]
 script = ExtResource("1_0duqs")
 
-[node name="Labels" type="Control" parent="." unique_id=2072846370]
-texture_filter = 2
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
 [node name="Level" type="Node2D" parent="." unique_id=817860642]
 
 [node name="Players" type="Node2D" parent="." unique_id=2132795720]

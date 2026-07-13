@@ -2,21 +2,25 @@ extends Node
 
 class Event:
 	var id: StringName
-	var weight:int = 1
+	var weight:float = 1.0
+	
+	func _init(new_id:StringName, new_weight:int) -> void:
+		id = new_id
+		weight = new_weight
 
-const EVENT_LIST:Array[Event] = preload("res://Data/events.json").data
-var event_weights:Array[int] = []
+var EVENT_DICT:Array = preload("res://Data/events.json").data
+var event_list:Array[Event] = []
+var event_weights:Array[float] = []
 
 func _ready() -> void:
-	event_weights = prep_weights(EVENT_LIST)
-
-func prep_weights(events:Array[Event])->Array[int]:
-	var return_arr:Array[int]
-
+	prep_events(EVENT_DICT)
+	
+func prep_events(events:Array)->void:
 	for i:int in range(events.size()):
-		return_arr.append(EVENT_LIST[i].weight)
-	return return_arr
+		var event:Dictionary = events[i]
+		event_list.append(Event.new(event.id,event.weight))
+		event_weights.append(events[i].weight)
 
-func choose_event(events:Array[Event],weights:Array[int])->Event:
+func choose_event(events:Array[Event],weights:Array[float])->Event:
 	var rng:RandomNumberGenerator = RandomNumberGenerator.new()
 	return(events[rng.rand_weighted(weights)])
