@@ -1,0 +1,16 @@
+[
+	{
+		"id" : "name_change",
+		"weight" : 1,
+	},
+	
+	{
+		"id" : "print_hi",
+		"weight" : 1,
+	},
+	
+	{
+		"id" : "print_buh",
+		"weight" : 1,
+	}
+]
