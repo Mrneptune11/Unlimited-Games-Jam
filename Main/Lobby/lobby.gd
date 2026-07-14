@@ -26,7 +26,7 @@ const PLAYER_SCN:PackedScene = preload("res://Objects/Player/Player.tscn")
 var available_colors:Array[StringName] = [] ##Stores generated colors for a match
 var player_idx:int = 0 ##Player number
 
-var contestants:Array[Player] = [] ##Array of players who are still in the running to win
+var contestants:Array[int] = [] ##Array of players who are still in the running to win
 
 #-------------------------------------------------------------------------------
 
@@ -218,14 +218,14 @@ func spawn_player(peer_id: int) -> void:
 	player.teleport.rpc(Vector2.ZERO)
 	
 	#add player to contestant list
-	contestants.append(player)
+	contestants.append(peer_id)
 
 func remove_player(peer_id: int) -> void:
 	# Find player node
 	var player: Player = get_player(peer_id)
 	if (player == null): return
 	
-	contestants.erase(player)
+	contestants.erase(peer_id)
 	
 	# Return character back to available list
 	available_colors.append(player.color_id)
@@ -237,7 +237,7 @@ func teleport_players(new_pos: Vector2) -> void:
 	for player: Player in get_players():
 		player.teleport.rpc(new_pos)
 
-func pick_rand_contestant()->Player:
+func pick_rand_contestant()->int:
 	return contestants.pick_random()
 
 func get_player_color_string(player:Player, color_word:String = "")->String:
@@ -248,7 +248,6 @@ func get_player_color_string(player:Player, color_word:String = "")->String:
 		return "[color=" + color + "]" + color_word + "[/color]"
 	
 	return "[color=" + color + "]" + p_name + "[/color]"
-	
 #-------------------------------------------------------------------------------
 
 # Level Events

@@ -1,17 +1,17 @@
 [
 	{
 		"id" : "name_change",
-		"weight" : 1,
+		"weight" : 0,
 	},
 	
 	{
 		"id" : "print_hi",
-		"weight" : 1,
+		"weight" : 0,
 	},
 	
 	{
 		"id" : "print_buh",
-		"weight" : 1,
+		"weight" : 0,
 	},
 	
 	{

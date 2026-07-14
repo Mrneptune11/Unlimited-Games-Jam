@@ -53,6 +53,8 @@ func match_event(event_id:StringName, lobby:Lobby):
 			event_call = func(): return "No event! Just wanted to say I hate you all (ㆆ_ㆆ)"
 		"name_change":
 			event_call = name_change.bind(lobby)
+		"someone_explode":
+			event_call = someone_explode.bind(lobby)
 		_:
 			event_call = func(): return "ERROR: Event " + event_id + " not found."
 	
@@ -64,10 +66,16 @@ func match_event(event_id:StringName, lobby:Lobby):
 #Event calls
 
 func name_change(lobby:Lobby)->String:
-		var subject:Player = lobby.pick_rand_contestant()
+		var subject:Player = lobby.get_player(lobby.pick_rand_contestant())
 		var return_str:String = lobby.get_player_color_string(subject, subject.player_name + "'s") + " name is now" + \
 		lobby.get_player_color_string(subject," Joshy") +"."
 		
 		subject.set_player_name.rpc("Joshy")
-		
 		return return_str
+
+func someone_explode(lobby:Lobby)->String:
+	var contestant:int = lobby.pick_rand_contestant()
+	var subject:Player = lobby.get_player(contestant)
+	subject.explode.rpc_id(contestant)
+	return lobby.get_player_color_string(subject) + " has been smited by a higher being."
+		

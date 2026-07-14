@@ -228,16 +228,20 @@ func _air_controls(input_v: Vector2, delta: float) -> void:
 
 #Explosion  logic
 
-#Wrapper for the rpc call
+@rpc("any_peer", "call_local", "reliable")
 func explode()->void:
 	spawn_explosion.rpc(global_position, Color(color_id))
 	self.mode = Mode.SPECTATE
 	$AnimatedSprite2D.play("ded")
 	$Sprite2D.modulate.a = .5
 	z_index = 100
+	
 	hide_player.rpc()
 	
+	var lobby:Lobby = get_tree().current_scene
+	lobby.contestants.erase(peer_id)
 	
+
 ##Explosion are not a syncronized object, but rather every player spawns one at the correct position
 @rpc("any_peer", "call_local", "reliable")
 func spawn_explosion(pos: Vector2, color: Color):
@@ -253,9 +257,6 @@ func hide_player():
 	hide()
 	$CollisionShape2D.queue_free()
 	my_label.queue_free()
-	
-
-	
 #-------------------------------------------------------------------------------
 
 ##Updates the player's label
