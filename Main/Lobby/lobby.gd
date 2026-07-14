@@ -1,12 +1,21 @@
 class_name Lobby extends Node2D
 
+#-------------------------------------------------------------------------------
+
 #enum used to prevent new server joins
 enum State {
 	MATCH = 0,
 	LOBBY = 1,
+	UNINIT = 2,
 }
 
-var server_status:State = State.LOBBY
+var server_status:State = State.UNINIT:
+	set(value):
+		match value:
+			State.LOBBY:
+				$UI.update_event_terminal("Waiting for host to begin match...")
+			State.MATCH:
+				$UI.update_event_terminal("The match is about to begin...")
 
 #-------------------------------------------------------------------------------
 
@@ -17,11 +26,12 @@ const PLAYER_SCN:PackedScene = preload("res://Objects/Player/Player.tscn")
 var available_colors:Array[StringName] = [] ##Stores generated colors for a match
 var player_idx:int = 0 ##Player number
 
+var contestants:Array[Player] = [] ##Array of players who are still in the running to win
+
 #-------------------------------------------------------------------------------
 
 var level:Level = null
 var level_idx:int = 1
-
 #-------------------------------------------------------------------------------
 
 # Lifecycle
@@ -46,7 +56,6 @@ func _ready() -> void:
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
 	multiplayer.connection_failed.connect(_on_connection_failed)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
-
 #-------------------------------------------------------------------------------
 
 
@@ -61,6 +70,8 @@ func gen_id()->StringName:
 # Network
 
 func _start_server_common() -> void:
+	server_status = State.LOBBY
+	
 	load_level(0) #start level scene
 	spawn_player(1) # server is always first player
 	$UI.init_start_btn()
@@ -166,11 +177,6 @@ func is_final_level() -> bool:
 	var level_spawner: MultiplayerSpawner = $LevelSpawner
 	return (level_idx == level_spawner.get_spawnable_scene_count() - 1)
 
-# Level Events
-
-func start_match()->void:
-	server_status = State.MATCH
-
 #-------------------------------------------------------------------------------
 
 
@@ -211,11 +217,16 @@ func spawn_player(peer_id: int) -> void:
 	# Add player to level and teleport to spawn position
 	$Players.add_child(player)
 	player.teleport.rpc(Vector2.ZERO)
+	
+	#add player to contestant list
+	contestants.append(player)
 
 func remove_player(peer_id: int) -> void:
 	# Find player node
 	var player: Player = get_player(peer_id)
 	if (player == null): return
+	
+	contestants.erase(player)
 	
 	# Return character back to available list
 	available_colors.append(player.color_id)
@@ -226,4 +237,13 @@ func remove_player(peer_id: int) -> void:
 func teleport_players(new_pos: Vector2) -> void:
 	for player: Player in get_players():
 		player.teleport.rpc(new_pos)
-	
+
+#-------------------------------------------------------------------------------
+
+# Level Events
+func start_match()->void:
+	server_status = State.MATCH
+	var timer:SceneTreeTimer = get_tree().create_timer(5)
+	$UI.active_timer = timer
+
+#-------------------------------------------------------------------------------

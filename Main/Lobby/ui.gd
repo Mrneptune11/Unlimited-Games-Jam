@@ -2,11 +2,24 @@ extends CanvasLayer
 
 @onready var lobby: Lobby = get_parent()
 
+var active_timer:SceneTreeTimer = null ##If there is an activetimer
+
 #-------------------------------------------------------------------------------
 
 const START_BTN_SCN = preload("res://UI/StartButton/StartGameButton.tscn")
 
 #-------------------------------------------------------------------------------
+
+func _process(_delta: float) -> void:
+	var timer_label:RichTextLabel = $EventTerminal/Timer
+	
+	if active_timer:
+		var time_left:float = active_timer.time_left
+		if time_left > 0.0:
+			timer_label.text = str((roundi(time_left)))
+		else:
+			timer_label.text = ""
+
 
 func _ready() -> void:
 	$Start/ENet/Join/VBox/Start.pressed.connect(_on_enet_join_pressed)
@@ -45,4 +58,6 @@ func init_start_btn()->void:
 	start_btn.pressed.connect(lobby.start_match)
 	start_btn.pressed.connect(start_btn.hide)
 	
-	
+
+func update_event_terminal(string:String)->void:
+	$EventTerminal.text = string

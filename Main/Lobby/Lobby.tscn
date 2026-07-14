@@ -3,6 +3,14 @@
 [ext_resource type="Script" uid="uid://3mtp3mvg1058" path="res://Main/Lobby/lobby.gd" id="1_0duqs"]
 [ext_resource type="Script" uid="uid://b3bltlekjmkx8" path="res://Main/Lobby/ui.gd" id="2_0duqs"]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_0duqs"]
+properties/0/path = NodePath(".:text")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath("Timer:text")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
 [node name="Lobby" type="Node2D" unique_id=2146104970]
 script = ExtResource("1_0duqs")
 
@@ -31,10 +39,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -50.0
-offset_top = -93.0
-offset_right = 108.0
-offset_bottom = 94.0
+offset_left = -79.0
+offset_top = -104.0
+offset_right = 79.0
+offset_bottom = 104.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -99,3 +107,29 @@ max_value = 1000000.0
 [node name="Start" type="Button" parent="UI/Start/ENet/Join/VBox" unique_id=1813664087]
 layout_mode = 2
 text = "Join"
+
+[node name="EventTerminal" type="RichTextLabel" parent="UI" unique_id=814155835]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -400.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 140.0
+grow_horizontal = 2
+theme_override_font_sizes/normal_font_size = 24
+text = "Host or Join a lobby."
+horizontal_alignment = 1
+
+[node name="Timer" type="RichTextLabel" parent="UI/EventTerminal" unique_id=479230774]
+layout_mode = 0
+offset_left = 360.0
+offset_top = 30.0
+offset_right = 440.0
+offset_bottom = 110.0
+theme_override_font_sizes/normal_font_size = 50
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="UI/EventTerminal" unique_id=1159857400]
+replication_config = SubResource("SceneReplicationConfig_0duqs")
