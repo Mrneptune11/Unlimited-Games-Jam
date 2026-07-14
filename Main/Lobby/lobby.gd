@@ -9,6 +9,7 @@ enum State {
 	UNINIT = 2,
 }
 
+#Current status of the server
 var server_status:State = State.UNINIT:
 	set(value):
 		match value:
@@ -37,6 +38,7 @@ var level_idx:int = 1
 # Lifecycle
 
 func _init()->void:
+	#generate the colors for this session
 	for i:int in range(MAX_PLAYERS):
 		while true:
 			var color:StringName = StringName(gen_id())
@@ -70,7 +72,7 @@ func gen_id()->StringName:
 # Network
 
 func _start_server_common() -> void:
-	server_status = State.LOBBY
+	server_status = State.LOBBY #Changes to LOBBY once a session is hosted
 	
 	load_level(0) #start level scene
 	spawn_player(1) # server is always first player
@@ -106,6 +108,7 @@ func start_websocket_client(url: String) -> void:
 	peer.create_client(url)
 	multiplayer.multiplayer_peer = peer
 
+#Handles clean up for all connected peers when its time for the server to end
 func handle_server_disconnect()->void:
 	for child:Node in $Players.get_children():
 		child.queue_free()
@@ -117,6 +120,7 @@ func handle_server_disconnect()->void:
 	multiplayer.multiplayer_peer = null
 	get_tree().change_scene_to_file("res://Main/Lobby/Lobby.tscn")
 
+#Forces a peer to disconnect from the server
 @rpc("authority", "reliable")
 func force_peer_exit(message:String)->void:
 	OS.alert(message)
@@ -150,7 +154,7 @@ func _on_connection_failed() -> void:
 	
 
 func _on_server_disconnected() -> void:
-	handle_server_disconnect()
+	handle_server_disconnect() #If a peer disconnects, handle the clean up
 #-------------------------------------------------------------------------------
 
 # Level Management
@@ -247,14 +251,17 @@ func teleport_players(new_pos: Vector2) -> void:
 	for player: Player in get_players():
 		player.teleport.rpc(new_pos)
 
+#select a random peer id
 func pick_rand_contestant()->int:
 	return contestants.pick_random()
 
+#RPC call to remove a contestant, can be called by any peer
 @rpc("any_peer", "call_local", "reliable")
 func remove_contestant(peer_id):
 	contestants.erase(peer_id)
 	
 
+#Allows bbcode labeling of any word using a player's current color
 func get_player_color_string(player:Player, color_word:String = "")->String:
 	var color:String = player.color_id
 	var p_name:String = player.player_name
@@ -267,16 +274,20 @@ func get_player_color_string(player:Player, color_word:String = "")->String:
 
 # Match Events
 
-func create_game_timer(time:float = 5)->SceneTreeTimer:
+#Timer helper that is hooked up to the in game display
+func create_game_timer(time:float = 5)->SceneTreeTimer: 
 	var timer:SceneTreeTimer = get_tree().create_timer(time)
 	$UI.active_timer = timer
 	return timer
 
+#Starts a match session
 func start_match()->void:
 	server_status = State.MATCH
 	create_game_timer().timeout.connect(event_cycle)
 
+#This is the primary game loop that runs until someone wins (or no one does)
 func event_cycle()->void:
+	#End cond checks
 	if contestants.size() == 1:
 		someone_wins(contestants[0])
 		return
@@ -284,17 +295,20 @@ func event_cycle()->void:
 		no_one_wins()
 		return
 	
+	#Prepare for the next event
 	$UI.update_event_terminal("Next event in:")
 	await create_game_timer(10).timeout
 	
+	#Event manager handles running an event
 	var new_event:StringName = EM.choose_event().id
 	$UI.update_event_terminal(new_event)
 	EM.match_event(new_event, self)
 	
-	await EM.event_complete
+	await EM.event_complete #Onve the event is complete, rerun the cycle
 	
 	event_cycle()
 
+#Handle game end when someone wins
 func someone_wins(peer:int)->void:
 	var winner = get_player(peer)
 	var win_message:String = "Congrations to the winner: " + get_player_color_string(winner)
@@ -303,6 +317,7 @@ func someone_wins(peer:int)->void:
 	
 	handle_server_disconnect()
 
+#Handle game end when nobody is left alive
 func no_one_wins()->void:
 	var end_message:String = "Nobody wins... Thats hilarious (●__●)"
 	$UI.update_event_terminal(end_message)

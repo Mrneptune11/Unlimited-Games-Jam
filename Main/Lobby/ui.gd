@@ -13,6 +13,7 @@ const START_BTN_SCN = preload("res://UI/StartButton/StartGameButton.tscn")
 func _process(_delta: float) -> void:
 	var timer_label:RichTextLabel = $EventTerminal/Timer
 	
+	#Keep the timer up to date when active, and blank when not needed
 	if active_timer:
 		var time_left:float = active_timer.time_left
 		if time_left > 0.0:
@@ -52,12 +53,14 @@ func _on_websocket_host_pressed():
 
 #-------------------------------------------------------------------------------
 
+#Host gets a start button to begin the match
 func init_start_btn()->void:
 	var start_btn:Button = START_BTN_SCN.instantiate()
 	add_child(start_btn)
 	start_btn.pressed.connect(lobby.start_match)
 	start_btn.pressed.connect(start_btn.hide)
 	
-
+	
+#Update the event terminal current message
 func update_event_terminal(string:String)->void:
 	$EventTerminal.text = string

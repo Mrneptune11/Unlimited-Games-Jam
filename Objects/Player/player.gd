@@ -83,7 +83,7 @@ func _enter_tree() -> void:
 	peer_id = int(name)
 	$ClientSync.set_multiplayer_authority(peer_id)
 	
-	if multiplayer.multiplayer_peer:
+	if multiplayer.multiplayer_peer: #confirm this player is still connected
 		print(player_name)
 		local = (peer_id == multiplayer.get_unique_id())
 
@@ -261,6 +261,8 @@ func hide_player():
 	my_label.queue_free()
 #-------------------------------------------------------------------------------
 
+#Player label and color logic
+
 ##Updates the player's label
 func update_label(label:String)->void:
 	#print(label)
@@ -277,6 +279,7 @@ func create_label() -> void:
 	
 	self.tree_exiting.connect(my_label.queue_free) #Ensure label dies with a given player
 
+#Rpc call to handle updates to the players color
 @rpc("any_peer", "call_local", "reliable")
 func update_color(color:String)->void:
 	color_id = color
