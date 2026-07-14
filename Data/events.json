@@ -26,6 +26,11 @@
 	
 	{
 		"id" : "os_check",
-		"weight" : 100,
+		"weight" : 1,
+	},
+	
+	{
+		"id" : "owe_money",
+		"weight" : 1,
 	},
 ]

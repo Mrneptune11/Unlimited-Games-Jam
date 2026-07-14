@@ -67,6 +67,8 @@ func match_event(event_id:StringName, lobby:Lobby):
 			event_call = color_change.bind(lobby)
 		"os_check":
 			event_call = os_check.bind(lobby)
+		"owe_money":
+			event_call = owe_money.bind(lobby)
 		_:
 			event_call = func(): return "ERROR: Event " + event_id + " not found."
 	
@@ -109,8 +111,8 @@ func color_change(lobby:Lobby)->String:
 	
 	end_event_by_timer(3)
 	
-	return lobby.get_player_color_string(subject) + "'s color has been changed to " + "[color=" + str(new_color) + "]" + \
-	new_color + "[/color]."
+	return lobby.get_player_color_string(subject, subject.player_name + "'s") + " color has been changed to " + \
+	"[color=" + str(new_color) + "]" + new_color + "[/color]."
 
 
 func os_check(lobby:Lobby)->String:
@@ -127,6 +129,21 @@ func os_check(lobby:Lobby)->String:
 	end_event_by_timer(3)
 	
 	return "Anyone running " + os_dict[os] + " explodes for being wrong."
+
+func owe_money(lobby:Lobby)->String:
+	var dup_contestants:Array[int] = lobby.contestants
+	var owe_con:int = dup_contestants.pick_random()
+	dup_contestants.erase(owe_con)
+	var ded_con:int = dup_contestants.pick_random()
+	
+	var ded_subject:Player = lobby.get_player(ded_con)
+	var owe_subject:Player = lobby.get_player(owe_con)
+	ded_subject.explode.rpc_id(ded_con)
+	
+	end_event_by_timer(4)
+	
+	return lobby.get_player_color_string(owe_subject) + " owes " + lobby.get_player_color_string(ded_subject) + \
+	 " $2 in real life for exploding them with their mind."
 	
 #-------------------------------------------------------------------------------
 
