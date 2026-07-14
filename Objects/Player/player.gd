@@ -43,7 +43,6 @@ var color_id:String = "#FFFFFF"
 
 ##Label for the player
 var my_label:Label = null
-var label_pos:Vector2 = Vector2.ZERO
 var label_offset:Vector2 = Vector2.ZERO
 
 var character: int = 0 : # Determines which character to display as
@@ -93,14 +92,6 @@ var size_scale:Size = Size.REGULAR:
 			
 		var new_scale:float = pow(2.0, value / 2.0)
 		scale = Vector2(new_scale,new_scale)
-		
-		var frame :Texture = $AnimatedSprite2D.sprite_frames.get_frame_texture(
-			$AnimatedSprite2D.animation,
-			$AnimatedSprite2D.frame
-		)
-
-		var half_height = frame.get_height() * 0.5 * 5 # zoom
-		label_offset.y = -(half_height * (new_scale - 1.0))
 #-------------------------------------------------------------------------------
 
 var death_scene:PackedScene = preload("res://Objects/Death/explosion.tscn") #Explosion scene
@@ -177,12 +168,11 @@ func _physics_process(delta: float) -> void:
 	
 
 func _process(_delta: float) -> void:
-	#Sync the ui labels with the player
-	var screen_pos = get_viewport().get_canvas_transform() * global_position
-	label_pos = screen_pos + label_offset
+	update_label_offset()
 	
+	#Sync the ui labels with the player
 	if my_label:
-		my_label.position = label_pos
+		my_label.position = (get_viewport().get_canvas_transform() * global_position) + label_offset
 
 #-------------------------------------------------------------------------------
 
@@ -293,6 +283,15 @@ func hide_player():
 #-------------------------------------------------------------------------------
 
 #Player label and color logic
+
+##Label offset calculations for when size changes happen
+func update_label_offset() :
+	var frame:Texture = $AnimatedSprite2D.sprite_frames.get_frame_texture(
+		$AnimatedSprite2D.animation,
+		$AnimatedSprite2D.frame
+	)
+	var half_height:float = frame.get_height() * 0.5 * 5
+	label_offset.y = -(half_height * (scale.y - 1.0))
 
 ##Updates the player's label
 func update_label(label:String)->void:
