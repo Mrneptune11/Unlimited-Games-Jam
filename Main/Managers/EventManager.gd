@@ -183,6 +183,10 @@ func fireballs(lobby:Lobby)->String:
 	
 	return "Fireballs are raining down from the sky. This is " + rand_subject_name + "'s fault somehow."
 
+#-------------------------------------------------------------------------------
+
+#Event helpers
+
 ## Helper function for the Fireballs event.
 ## Using RPC allows the event node to be instantiated on both the server & clients.
 @rpc("authority", "call_local", "reliable")
@@ -192,10 +196,6 @@ func fireballs_helper()->void:
 	
 	# When the event timer expires, destroy the node to stop spawning fireballs.
 	event_complete.connect(fireball_spawner.queue_free)
-
-#-------------------------------------------------------------------------------
-
-#Event helpers
 
 #RPC call used to check the operating systems of a give peer, and explode them if necessary
 @rpc("authority", "call_local", "reliable")

@@ -26,6 +26,15 @@ enum Mode {
 	SPECTATE = 2,
 }
 
+#Size states
+enum Size {
+	REGULAR = 0,
+	SMALL = -1,
+	TINY = -2,
+	BIG = 1,
+	HUGE = 2,
+}
+
 var peer_id: int = 1 # The peer that controls this player
 var local: bool = true # If this player belongs to the local peer
 
@@ -35,6 +44,7 @@ var color_id:String = "#FFFFFF"
 ##Label for the player
 var my_label:Label = null
 var label_pos:Vector2 = Vector2.ZERO
+var label_offset:Vector2 = Vector2.ZERO
 
 var character: int = 0 : # Determines which character to display as
 	set(value):
@@ -72,6 +82,25 @@ var direction: float = 1.0 : # Which direction the player is facing
 var player_name:String = "" :
 	set(value):
 		player_name = value
+		
+
+var size_scale:Size = Size.REGULAR:
+	set(value):
+		size_scale = value
+		
+		if (abs(value) > 2):
+			explode()
+			
+		var new_scale:float = pow(2.0, value / 2.0)
+		scale = Vector2(new_scale,new_scale)
+		
+		var frame :Texture = $AnimatedSprite2D.sprite_frames.get_frame_texture(
+			$AnimatedSprite2D.animation,
+			$AnimatedSprite2D.frame
+		)
+
+		var half_height = frame.get_height() * 0.5 * 5 # zoom
+		label_offset.y = -(half_height * (new_scale - 1.0))
 #-------------------------------------------------------------------------------
 
 var death_scene:PackedScene = preload("res://Objects/Death/explosion.tscn") #Explosion scene
@@ -108,9 +137,11 @@ func teleport(new_pos: Vector2) -> void:
 func _input(_event: InputEvent) -> void:
 	if (!local || mode == Mode.PAUSE): return #Prevent input from others / during pause
 		
-	##Test for explosions
+	###Test for size
 	#if Input.is_key_label_pressed(KEY_0):
-		#explode()
+		#size_scale = (size_scale + 1) as Size
+	#if Input.is_key_label_pressed(KEY_9):
+		#size_scale = (size_scale - 1) as Size
 
 func _physics_process(delta: float) -> void:
 	# Only process physics if local
@@ -148,7 +179,7 @@ func _physics_process(delta: float) -> void:
 func _process(_delta: float) -> void:
 	#Sync the ui labels with the player
 	var screen_pos = get_viewport().get_canvas_transform() * global_position
-	label_pos = screen_pos
+	label_pos = screen_pos + label_offset
 	
 	if my_label:
 		my_label.position = label_pos
@@ -311,3 +342,12 @@ func set_player_name(new_name: String):
 	player_name = new_name
 	my_label.text = new_name
 	my_label.modulate = Color(color_id)
+
+#-------------------------------------------------------------------------------
+
+#Player mutation logic
+
+##Change a players size
+@rpc("any_peer", "call_local")
+func change_size(change:int)->void:
+	size_scale = (size_scale + change) as Size
