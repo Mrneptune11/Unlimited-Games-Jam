@@ -35,21 +35,24 @@ func _ready() -> void:
 
 #Event logic 
 
+#Loads json data and creates the global banks for events and their weights
 func prep_events(events:Array)->void:
 	for i:int in range(events.size()):
 		var event:Dictionary = events[i]
 		event_list.append(EventData.new(event.id,event.weight))
 		event_weights.append(events[i].weight)
 
+#Chooses an event based on their weights
 func choose_event(events:Array[EventData] = event_list,weights:Array[float] = event_weights)->EventData:
 	var rng:RandomNumberGenerator = RandomNumberGenerator.new()
 	return(events[rng.rand_weighted(weights)])
 	
-	
+#Handles executing the logic tied to a given event
 func match_event(event_id:StringName, lobby:Lobby):
 	var event_text:String = ""
 	var event_call:Callable
 	
+	#Given event ID is matched with a callable and updates the event terminal text accordingly
 	match event_id:
 		"print_hi":
 			event_call = func(): 
@@ -70,12 +73,13 @@ func match_event(event_id:StringName, lobby:Lobby):
 		"owe_money":
 			event_call = owe_money.bind(lobby)
 		_:
-			event_call = func(): return "ERROR: Event " + event_id + " not found."
+			event_call = func(): return "ERROR: Event " + event_id + " not found." #Event id not recognized during match
 	
+	#After matching, the event is run and returns the terminal text
 	event_text = event_call.call()
 	lobby.get_node("UI").update_event_terminal(event_text)
 
-
+#Helper func used to streamline ending events that are solely time based
 func end_event_by_timer(time:float)->void:
 	get_tree().create_timer(time).timeout.connect(event_complete.emit)
 	
@@ -83,6 +87,7 @@ func end_event_by_timer(time:float)->void:
 
 #Event calls
 
+#A random players name is changed to a random name from a json file
 func name_change(lobby:Lobby)->String:
 	var new_name:String = NAME_DICT.pick_random()
 	
@@ -95,6 +100,7 @@ func name_change(lobby:Lobby)->String:
 	subject.set_player_name.rpc(new_name)
 	return return_str
 
+# A random player is "smited" (explodes)
 func someone_explode(lobby:Lobby)->String:
 	var contestant:int = lobby.pick_rand_contestant()
 	var subject:Player = lobby.get_player(contestant)
@@ -104,6 +110,7 @@ func someone_explode(lobby:Lobby)->String:
 	
 	return lobby.get_player_color_string(subject) + " has been smited by a higher being."
 
+#A random player is changed to a random color (Note there is no duplicate color validation as of now)
 func color_change(lobby:Lobby)->String:
 	var subject:Player = lobby.get_player(lobby.pick_rand_contestant())
 	var new_color:StringName = lobby.gen_id()
@@ -115,6 +122,7 @@ func color_change(lobby:Lobby)->String:
 	"[color=" + str(new_color) + "]" + new_color + "[/color]."
 
 
+#OS checks are performed across all peers, and if players have a randomly drawn os they explode
 func os_check(lobby:Lobby)->String:
 	var os_dict:Dictionary[String,String] ={
 		"windows" : "Windows",
@@ -130,6 +138,7 @@ func os_check(lobby:Lobby)->String:
 	
 	return "Anyone running " + os_dict[os] + " explodes for being wrong."
 
+#A random player is selected as the reason another player explodes and owes them money in real life for real legally binding
 func owe_money(lobby:Lobby)->String:
 	var dup_contestants:Array[int] = lobby.contestants
 	var owe_con:int = dup_contestants.pick_random()
@@ -149,6 +158,7 @@ func owe_money(lobby:Lobby)->String:
 
 #Event helpers
 
+#RPC call used to check the operating systems of a give peer, and explode them if necessary
 @rpc("authority", "call_local", "reliable")
 func check_banned_os(os:String, contestant:int)->void:
 	var subject:Player = get_tree().current_scene.get_player(contestant)
