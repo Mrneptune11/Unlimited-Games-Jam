@@ -1,5 +1,17 @@
 extends Node
 
+# Event-specific Parameters
+
+# ---------- Fireballs ----------
+
+## How long (in seconds) the Fireballs event lasts for.
+const _FIREBALLS_EVENT_DURATION: float = 10.0
+
+## Reference to the Fireball Spawner scene.
+const _FIREBALLS_EVENT_SPAWNER_SCENE: PackedScene = preload("res://Events/Fireballs/FireballSpawner.tscn")
+
+#-------------------------------------------------------------------------------
+
 signal event_complete #singal used to indicate an event is finished
 
 #-------------------------------------------------------------------------------
@@ -72,6 +84,8 @@ func match_event(event_id:StringName, lobby:Lobby):
 			event_call = os_check.bind(lobby)
 		"owe_money":
 			event_call = owe_money.bind(lobby)
+		"fireballs":
+			event_call = fireballs.bind(lobby)
 		_:
 			event_call = func(): return "ERROR: Event " + event_id + " not found." #Event id not recognized during match
 	
@@ -153,7 +167,32 @@ func owe_money(lobby:Lobby)->String:
 	
 	return lobby.get_player_color_string(owe_subject) + " owes " + lobby.get_player_color_string(ded_subject) + \
 	 " $2 in real life for exploding them with their mind."
+
+func fireballs(lobby:Lobby)->String:
+	# Setup Fireball Spawner node.
+	# This will generate a constant flurry of fireballs until the node is deleted.
+	fireballs_helper.rpc()
 	
+	# Then, set the event timer.
+	end_event_by_timer(_FIREBALLS_EVENT_DURATION)
+	
+	# Get random contestant name for return String.
+	var rand_contestant_id: int = lobby.contestants.pick_random()
+	var rand_subject: Player = lobby.get_player(rand_contestant_id)
+	var rand_subject_name: String = lobby.get_player_color_string(rand_subject)
+	
+	return "Fireballs are raining down from the sky. This is " + rand_subject_name + "'s fault somehow."
+
+## Helper function for the Fireballs event.
+## Using RPC allows the event node to be instantiated on both the server & clients.
+@rpc("authority", "call_local", "reliable")
+func fireballs_helper()->void:
+	var fireball_spawner: FireballSpawner = _FIREBALLS_EVENT_SPAWNER_SCENE.instantiate()
+	get_tree().current_scene.add_child(fireball_spawner)
+	
+	# When the event timer expires, destroy the node to stop spawning fireballs.
+	event_complete.connect(fireball_spawner.queue_free)
+
 #-------------------------------------------------------------------------------
 
 #Event helpers

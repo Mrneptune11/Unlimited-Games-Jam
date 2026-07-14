@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bhwdr3lxev2pm"]
+
+[ext_resource type="Script" uid="uid://0raw51n58vrp" path="res://Events/Fireballs/fireball_spawner.gd" id="1_56cu7"]
+[ext_resource type="PackedScene" uid="uid://i1yoloe0cl2a" path="res://Events/Fireballs/FireballProjectile/fireball_projectile.tscn" id="2_j2tgq"]
+
+[node name="FireballSpawner" type="Node2D" unique_id=1498200931]
+script = ExtResource("1_56cu7")
+fireball_projectile_scene = ExtResource("2_j2tgq")
+
+[node name="SpawnTimer" type="Timer" parent="." unique_id=1220344499]
+unique_name_in_owner = true
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=572859354]
+_spawnable_scenes = PackedStringArray("uid://i1yoloe0cl2a")
+spawn_path = NodePath("..")
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
