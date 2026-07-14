@@ -33,4 +33,9 @@
 		"id" : "owe_money",
 		"weight" : 1,
 	},
+	
+	{
+		"id" : "fireballs",
+		"weight" : 1,
+	},
 ]

@@ -1,5 +1,5 @@
-extends Event
-class_name FireballEvent
+extends Node2D
+class_name FireballSpawner
 
 @export var fireball_projectile_scene: PackedScene
 
@@ -13,8 +13,6 @@ var sec_between_fireballs: float = 0.5
 @onready var spawn_timer: Timer = %SpawnTimer
 
 func _ready() -> void:
-	super()
-	
 	spawn_timer.start(sec_between_fireballs)
 
 func _spawn_fireball() -> void:
@@ -33,7 +31,7 @@ func _spawn_fireball() -> void:
 	projectile.global_position = target_position + fireball_offset
 	add_child(projectile, true)
 	
-	print("Spawned fireball")
+	#print("Spawned fireball")
 
 func _on_spawn_timer_timeout() -> void:
 	if multiplayer.is_server():
