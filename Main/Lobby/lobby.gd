@@ -265,7 +265,7 @@ func get_player_color_string(player:Player, color_word:String = "")->String:
 	return "[color=" + color + "]" + p_name + "[/color]"
 #-------------------------------------------------------------------------------
 
-# Level Events
+# Match Events
 
 func create_game_timer(time:float = 5)->SceneTreeTimer:
 	var timer:SceneTreeTimer = get_tree().create_timer(time)
@@ -287,13 +287,11 @@ func event_cycle()->void:
 	$UI.update_event_terminal("Next event in:")
 	await create_game_timer(10).timeout
 	
-	
-	
 	var new_event:StringName = EM.choose_event().id
 	$UI.update_event_terminal(new_event)
 	EM.match_event(new_event, self)
 	
-	await get_tree().create_timer(5).timeout
+	await EM.event_complete
 	
 	event_cycle()
 

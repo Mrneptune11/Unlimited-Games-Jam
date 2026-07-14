@@ -28,7 +28,7 @@ text = "Enter a Name:"
 [node name="Entry" type="LineEdit" parent="HBox" unique_id=1490367714]
 custom_minimum_size = Vector2(94, 0)
 layout_mode = 2
-max_length = 8
+max_length = 9
 
 [node name="Button" type="Button" parent="HBox" unique_id=381439818]
 layout_mode = 2
