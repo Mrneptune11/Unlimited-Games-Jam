@@ -84,6 +84,10 @@ func match_event(event_id:StringName, lobby:Lobby):
 			event_call = os_check.bind(lobby)
 		"owe_money":
 			event_call = owe_money.bind(lobby)
+		"increase_size":
+			event_call = change_size.bind(lobby, 1)
+		"decrease_size":
+			event_call = change_size.bind(lobby, -1)
 		"fireballs":
 			event_call = fireballs.bind(lobby)
 		_:
@@ -168,6 +172,17 @@ func owe_money(lobby:Lobby)->String:
 	return lobby.get_player_color_string(owe_subject) + " owes " + lobby.get_player_color_string(ded_subject) + \
 	 " $2 in real life for exploding them with their mind."
 
+func change_size(lobby:Lobby, change:int) -> String:
+	var contestant:int = lobby.pick_rand_contestant()
+	var subject:Player = lobby.get_player(contestant)
+	subject.change_size.rpc_id(contestant, change)
+	end_event_by_timer(3)
+	
+	if change > 0:
+		return lobby.get_player_color_string(subject) + " has increased in size! Don't get too big now..."
+
+	return lobby.get_player_color_string(subject) + " has decreased in size! Don't get too small now..."
+
 func fireballs(lobby:Lobby)->String:
 	# Setup Fireball Spawner node.
 	# This will generate a constant flurry of fireballs until the node is deleted.
@@ -183,6 +198,10 @@ func fireballs(lobby:Lobby)->String:
 	
 	return "Fireballs are raining down from the sky. This is " + rand_subject_name + "'s fault somehow."
 
+#-------------------------------------------------------------------------------
+
+#Event helpers
+
 ## Helper function for the Fireballs event.
 ## Using RPC allows the event node to be instantiated on both the server & clients.
 @rpc("authority", "call_local", "reliable")
@@ -192,10 +211,6 @@ func fireballs_helper()->void:
 	
 	# When the event timer expires, destroy the node to stop spawning fireballs.
 	event_complete.connect(fireball_spawner.queue_free)
-
-#-------------------------------------------------------------------------------
-
-#Event helpers
 
 #RPC call used to check the operating systems of a give peer, and explode them if necessary
 @rpc("authority", "call_local", "reliable")

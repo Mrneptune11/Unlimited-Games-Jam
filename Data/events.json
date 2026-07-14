@@ -38,4 +38,14 @@
 		"id" : "fireballs",
 		"weight" : 1,
 	},
+	
+	{
+		"id" : "increase_size",
+		"weight" : 1,
+	},
+	
+	{
+		"id" : "decrease_size",
+		"weight" : 1,
+	},
 ]
