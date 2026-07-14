@@ -77,5 +77,6 @@ func someone_explode(lobby:Lobby)->String:
 	var contestant:int = lobby.pick_rand_contestant()
 	var subject:Player = lobby.get_player(contestant)
 	subject.explode.rpc_id(contestant)
+	lobby.contestants.erase(contestant)
 	return lobby.get_player_color_string(subject) + " has been smited by a higher being."
 		

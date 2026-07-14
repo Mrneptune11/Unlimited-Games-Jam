@@ -83,7 +83,10 @@ func _enter_tree() -> void:
 	# Set node authority
 	peer_id = int(name)
 	$ClientSync.set_multiplayer_authority(peer_id)
-	local = (peer_id == multiplayer.get_unique_id())
+	
+	if multiplayer.multiplayer_peer:
+		print(player_name)
+		local = (peer_id == multiplayer.get_unique_id())
 
 func _ready() -> void:
 	if (local):
@@ -237,9 +240,6 @@ func explode()->void:
 	z_index = 100
 	
 	hide_player.rpc()
-	
-	var lobby:Lobby = get_tree().current_scene
-	lobby.contestants.erase(peer_id)
 	
 
 ##Explosion are not a syncronized object, but rather every player spawns one at the correct position

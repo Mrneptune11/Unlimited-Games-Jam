@@ -105,7 +105,17 @@ func start_websocket_client(url: String) -> void:
 	var peer: WebSocketMultiplayerPeer = WebSocketMultiplayerPeer.new()
 	peer.create_client(url)
 	multiplayer.multiplayer_peer = peer
+
+func handle_server_disconnect()->void:
+	for child:Node in $Players.get_children():
+		child.queue_free()
 	
+	for child:Node in $Level.get_children():
+		child.queue_free()
+	
+	multiplayer.multiplayer_peer.close()
+	multiplayer.multiplayer_peer = null
+	get_tree().change_scene_to_file("res://Main/Lobby/Lobby.tscn")
 
 @rpc("authority", "reliable")
 func force_peer_exit(message:String)->void:
@@ -140,7 +150,7 @@ func _on_connection_failed() -> void:
 	
 
 func _on_server_disconnected() -> void:
-	pass
+	handle_server_disconnect()
 #-------------------------------------------------------------------------------
 
 # Level Management
@@ -262,6 +272,13 @@ func start_match()->void:
 	create_game_timer().timeout.connect(event_cycle)
 
 func event_cycle()->void:
+	if contestants.size() == 1:
+		someone_wins(contestants[0])
+		return
+	elif contestants.size() == 0:
+		no_one_wins()
+		return
+	
 	$UI.update_event_terminal("Next event in:")
 	await create_game_timer(10).timeout
 	
@@ -272,6 +289,22 @@ func event_cycle()->void:
 	EM.match_event(new_event, self)
 	
 	await get_tree().create_timer(5).timeout
+	
 	event_cycle()
+
+func someone_wins(peer:int)->void:
+	var winner = get_player(peer)
+	var win_message:String = "Congrations to the winner: " + get_player_color_string(winner)
+	$UI.update_event_terminal(win_message)
+	await create_game_timer(10).timeout
+	
+	handle_server_disconnect()
+
+func no_one_wins()->void:
+	var end_message:String = "Nobody wins... Thats hilarious (●__●)"
+	$UI.update_event_terminal(end_message)
+	await create_game_timer(10).timeout
+	
+	handle_server_disconnect()
 
 #-------------------------------------------------------------------------------
