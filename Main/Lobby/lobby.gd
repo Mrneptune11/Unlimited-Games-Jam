@@ -250,6 +250,11 @@ func teleport_players(new_pos: Vector2) -> void:
 func pick_rand_contestant()->int:
 	return contestants.pick_random()
 
+@rpc("any_peer", "call_local", "reliable")
+func remove_contestant(peer_id):
+	contestants.erase(peer_id)
+	
+
 func get_player_color_string(player:Player, color_word:String = "")->String:
 	var color:String = player.color_id
 	var p_name:String = player.player_name

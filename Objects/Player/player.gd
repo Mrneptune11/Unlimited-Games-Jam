@@ -109,9 +109,9 @@ func teleport(new_pos: Vector2) -> void:
 func _input(_event: InputEvent) -> void:
 	if (!local || mode == Mode.PAUSE): return #Prevent input from others / during pause
 		
-	#Test for explosions
-	if Input.is_key_label_pressed(KEY_0):
-		explode()
+	##Test for explosions
+	#if Input.is_key_label_pressed(KEY_0):
+		#explode()
 
 func _physics_process(delta: float) -> void:
 	# Only process physics if local
@@ -240,6 +240,9 @@ func explode()->void:
 	z_index = 100
 	
 	hide_player.rpc()
+	
+	var lobby:Lobby = get_tree().current_scene
+	lobby.remove_contestant.rpc_id(1, peer_id)
 	
 
 ##Explosion are not a syncronized object, but rather every player spawns one at the correct position
