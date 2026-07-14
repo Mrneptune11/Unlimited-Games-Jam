@@ -23,4 +23,9 @@
 		"id" : "color_change",
 		"weight" : 1,
 	},
+	
+	{
+		"id" : "os_check",
+		"weight" : 100,
+	},
 ]

@@ -65,6 +65,8 @@ func match_event(event_id:StringName, lobby:Lobby):
 			event_call = someone_explode.bind(lobby)
 		"color_change":
 			event_call = color_change.bind(lobby)
+		"os_check":
+			event_call = os_check.bind(lobby)
 		_:
 			event_call = func(): return "ERROR: Event " + event_id + " not found."
 	
@@ -109,3 +111,30 @@ func color_change(lobby:Lobby)->String:
 	
 	return lobby.get_player_color_string(subject) + "'s color has been changed to " + "[color=" + str(new_color) + "]" + \
 	new_color + "[/color]."
+
+
+func os_check(lobby:Lobby)->String:
+	var os_dict:Dictionary[String,String] ={
+		"windows" : "Windows",
+		"linux" : "Linux",
+		"macos" : "macOS",
+	}
+	var os:String = os_dict.keys().pick_random()
+	
+	for contestant:int in lobby.contestants:
+		check_banned_os.rpc_id(contestant, os, contestant)
+			
+	end_event_by_timer(3)
+	
+	return "Anyone running " + os_dict[os] + " explodes for being wrong."
+	
+#-------------------------------------------------------------------------------
+
+#Event helpers
+
+@rpc("authority", "call_local", "reliable")
+func check_banned_os(os:String, contestant:int)->void:
+	var subject:Player = get_tree().current_scene.get_player(contestant)
+	if OS.has_feature(os):
+		subject.explode.rpc_id.call_deferred(contestant)
+		
