@@ -12,5 +12,10 @@
 	{
 		"id" : "print_buh",
 		"weight" : 1,
-	}
+	},
+	
+	{
+		"id" : "someone_explode",
+		"weight" : 1,
+	},
 ]

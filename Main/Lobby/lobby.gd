@@ -179,7 +179,6 @@ func is_final_level() -> bool:
 
 #-------------------------------------------------------------------------------
 
-
 # Player Management
 
 func get_player(peer_id: int) -> Player:
@@ -238,12 +237,42 @@ func teleport_players(new_pos: Vector2) -> void:
 	for player: Player in get_players():
 		player.teleport.rpc(new_pos)
 
+func pick_rand_contestant()->Player:
+	return contestants.pick_random()
+
+func get_player_color_string(player:Player, color_word:String = "")->String:
+	var color:String = player.color_id
+	var p_name:String = player.player_name
+	
+	if color_word:
+		return "[color=" + color + "]" + color_word + "[/color]"
+	
+	return "[color=" + color + "]" + p_name + "[/color]"
+	
 #-------------------------------------------------------------------------------
 
 # Level Events
+
+func create_game_timer(time:float = 5)->SceneTreeTimer:
+	var timer:SceneTreeTimer = get_tree().create_timer(time)
+	$UI.active_timer = timer
+	return timer
+
 func start_match()->void:
 	server_status = State.MATCH
-	var timer:SceneTreeTimer = get_tree().create_timer(5)
-	$UI.active_timer = timer
+	create_game_timer().timeout.connect(event_cycle)
+
+func event_cycle()->void:
+	$UI.update_event_terminal("Next event in:")
+	await create_game_timer(10).timeout
+	
+	
+	
+	var new_event:StringName = EM.choose_event().id
+	$UI.update_event_terminal(new_event)
+	EM.match_event(new_event, self)
+	
+	await get_tree().create_timer(5).timeout
+	event_cycle()
 
 #-------------------------------------------------------------------------------
