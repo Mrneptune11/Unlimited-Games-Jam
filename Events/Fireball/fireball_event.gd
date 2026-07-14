@@ -17,7 +17,6 @@ func _ready() -> void:
 	
 	spawn_timer.start(sec_between_fireballs)
 
-@rpc("authority", "call_local", "reliable")
 func _spawn_fireball() -> void:
 	# Get a random tile position in the level.
 	# This will be the fireball's target position.
@@ -37,4 +36,5 @@ func _spawn_fireball() -> void:
 	print("Spawned fireball")
 
 func _on_spawn_timer_timeout() -> void:
-	_spawn_fireball.rpc()
+	if multiplayer.is_server():
+		_spawn_fireball()
