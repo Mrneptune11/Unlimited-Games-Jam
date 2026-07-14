@@ -18,4 +18,9 @@
 		"id" : "someone_explode",
 		"weight" : 1,
 	},
+	
+	{
+		"id" : "color_change",
+		"weight" : 1,
+	},
 ]

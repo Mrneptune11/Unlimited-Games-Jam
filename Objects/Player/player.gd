@@ -42,7 +42,6 @@ var character: int = 0 : # Determines which character to display as
 		character = clampi(value, 0, 50)
 		# Update sprite to display as the new character
 		$Sprite2D.modulate = Color(color_id)
-		print(color_id)
 
 var state: State = State.IDLE : # The current state the player is in
 	set(value):
@@ -267,6 +266,7 @@ func update_label(label:String)->void:
 	#print(label)
 	player_name = label
 	my_label.text = player_name
+	my_label.modulate = Color(color_id)
 
 ##Instantiates the players label and adds it to the UI
 func create_label() -> void:
@@ -276,6 +276,12 @@ func create_label() -> void:
 	get_node("/root/Lobby/UI").add_child(player_label)
 	
 	self.tree_exiting.connect(my_label.queue_free) #Ensure label dies with a given player
+
+@rpc("any_peer", "call_local", "reliable")
+func update_color(color:String)->void:
+	color_id = color
+	my_label.modulate = Color(color)
+	$Sprite2D.modulate = Color(color)
 
 ##Request for players to name themselves
 #TODO probably needs better validation
@@ -301,3 +307,4 @@ func ask_name()->void:
 func set_player_name(new_name: String):
 	player_name = new_name
 	my_label.text = new_name
+	my_label.modulate = Color(color_id)

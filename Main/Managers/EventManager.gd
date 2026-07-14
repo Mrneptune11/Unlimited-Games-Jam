@@ -63,6 +63,8 @@ func match_event(event_id:StringName, lobby:Lobby):
 			event_call = name_change.bind(lobby)
 		"someone_explode":
 			event_call = someone_explode.bind(lobby)
+		"color_change":
+			event_call = color_change.bind(lobby)
 		_:
 			event_call = func(): return "ERROR: Event " + event_id + " not found."
 	
@@ -97,4 +99,13 @@ func someone_explode(lobby:Lobby)->String:
 	end_event_by_timer(3)
 	
 	return lobby.get_player_color_string(subject) + " has been smited by a higher being."
-		
+
+func color_change(lobby:Lobby)->String:
+	var subject:Player = lobby.get_player(lobby.pick_rand_contestant())
+	var new_color:StringName = lobby.gen_id()
+	subject.update_color.rpc(new_color)
+	
+	end_event_by_timer(3)
+	
+	return lobby.get_player_color_string(subject) + "'s color has been changed to " + "[color=" + str(new_color) + "]" + \
+	new_color + "[/color]."
