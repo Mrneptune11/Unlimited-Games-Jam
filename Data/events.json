@@ -1,0 +1,36 @@
+[
+	{
+		"id" : "name_change",
+		"weight" : 1,
+	},
+	
+	{
+		"id" : "print_hi",
+		"weight" : 0.5,
+	},
+	
+	{
+		"id" : "print_buh",
+		"weight" : 0.5,
+	},
+	
+	{
+		"id" : "someone_explode",
+		"weight" : 1,
+	},
+	
+	{
+		"id" : "color_change",
+		"weight" : 1,
+	},
+	
+	{
+		"id" : "os_check",
+		"weight" : 1,
+	},
+	
+	{
+		"id" : "owe_money",
+		"weight" : 1,
+	},
+]

@@ -42,7 +42,6 @@ var character: int = 0 : # Determines which character to display as
 		character = clampi(value, 0, 50)
 		# Update sprite to display as the new character
 		$Sprite2D.modulate = Color(color_id)
-		print(color_id)
 
 var state: State = State.IDLE : # The current state the player is in
 	set(value):
@@ -83,7 +82,10 @@ func _enter_tree() -> void:
 	# Set node authority
 	peer_id = int(name)
 	$ClientSync.set_multiplayer_authority(peer_id)
-	local = (peer_id == multiplayer.get_unique_id())
+	
+	if multiplayer.multiplayer_peer: #confirm this player is still connected
+		print(player_name)
+		local = (peer_id == multiplayer.get_unique_id())
 
 func _ready() -> void:
 	if (local):
@@ -106,9 +108,9 @@ func teleport(new_pos: Vector2) -> void:
 func _input(_event: InputEvent) -> void:
 	if (!local || mode == Mode.PAUSE): return #Prevent input from others / during pause
 		
-	#Test for explosions
-	if Input.is_key_label_pressed(KEY_0):
-		explode()
+	##Test for explosions
+	#if Input.is_key_label_pressed(KEY_0):
+		#explode()
 
 func _physics_process(delta: float) -> void:
 	# Only process physics if local
@@ -228,16 +230,20 @@ func _air_controls(input_v: Vector2, delta: float) -> void:
 
 #Explosion  logic
 
-#Wrapper for the rpc call
+@rpc("any_peer", "call_local", "reliable")
 func explode()->void:
 	spawn_explosion.rpc(global_position, Color(color_id))
 	self.mode = Mode.SPECTATE
 	$AnimatedSprite2D.play("ded")
 	$Sprite2D.modulate.a = .5
 	z_index = 100
+	
 	hide_player.rpc()
 	
+	var lobby:Lobby = get_tree().current_scene
+	lobby.remove_contestant.rpc_id(1, peer_id)
 	
+
 ##Explosion are not a syncronized object, but rather every player spawns one at the correct position
 @rpc("any_peer", "call_local", "reliable")
 func spawn_explosion(pos: Vector2, color: Color):
@@ -253,16 +259,16 @@ func hide_player():
 	hide()
 	$CollisionShape2D.queue_free()
 	my_label.queue_free()
-	
-
-	
 #-------------------------------------------------------------------------------
+
+#Player label and color logic
 
 ##Updates the player's label
 func update_label(label:String)->void:
 	#print(label)
 	player_name = label
 	my_label.text = player_name
+	my_label.modulate = Color(color_id)
 
 ##Instantiates the players label and adds it to the UI
 func create_label() -> void:
@@ -273,6 +279,13 @@ func create_label() -> void:
 	
 	self.tree_exiting.connect(my_label.queue_free) #Ensure label dies with a given player
 
+#Rpc call to handle updates to the players color
+@rpc("any_peer", "call_local", "reliable")
+func update_color(color:String)->void:
+	color_id = color
+	my_label.modulate = Color(color)
+	$Sprite2D.modulate = Color(color)
+
 ##Request for players to name themselves
 #TODO probably needs better validation
 func ask_name()->void:
@@ -282,9 +295,14 @@ func ask_name()->void:
 	
 	var name_box:EntryBox = preload("res://Objects/Entry Box/EntryBox.tscn").instantiate()
 	get_node("/root/Lobby/UI").add_child(name_box)
+	
 	name_box.my_button.pressed.connect(func():
-		set_player_name.rpc(name_box.my_entry.text)
+		var name_text:String = name_box.my_entry.text
+		if name_text.is_empty(): return
+		
+		set_player_name.rpc(name_text)
 		mode = Mode.PLAY
+		name_box.queue_free.call_deferred()
 	)
 
 ##Synchronize name changes across clients
@@ -292,3 +310,4 @@ func ask_name()->void:
 func set_player_name(new_name: String):
 	player_name = new_name
 	my_label.text = new_name
+	my_label.modulate = Color(color_id)

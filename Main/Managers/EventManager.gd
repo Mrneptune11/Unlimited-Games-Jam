@@ -1,0 +1,167 @@
+extends Node
+
+signal event_complete #singal used to indicate an event is finished
+
+#-------------------------------------------------------------------------------
+
+#Inner class for event data
+
+class EventData:
+	var id: StringName
+	var weight:float = 1.0
+	
+	func _init(new_id:StringName, new_weight:int) -> void:
+		id = new_id
+		weight = new_weight
+
+#-------------------------------------------------------------------------------
+
+#Globals
+
+const EVENT_DICT:Array = preload("res://Data/events.json").data
+const NAME_DICT:Array = preload("res://Data/epic_names.json").data
+
+var event_list:Array[EventData] = []
+var event_weights:Array[float] = []
+
+#-------------------------------------------------------------------------------
+
+#Lifecycle
+
+func _ready() -> void:
+	prep_events(EVENT_DICT)
+
+#-------------------------------------------------------------------------------
+
+#Event logic 
+
+#Loads json data and creates the global banks for events and their weights
+func prep_events(events:Array)->void:
+	for i:int in range(events.size()):
+		var event:Dictionary = events[i]
+		event_list.append(EventData.new(event.id,event.weight))
+		event_weights.append(events[i].weight)
+
+#Chooses an event based on their weights
+func choose_event(events:Array[EventData] = event_list,weights:Array[float] = event_weights)->EventData:
+	var rng:RandomNumberGenerator = RandomNumberGenerator.new()
+	return(events[rng.rand_weighted(weights)])
+	
+#Handles executing the logic tied to a given event
+func match_event(event_id:StringName, lobby:Lobby):
+	var event_text:String = ""
+	var event_call:Callable
+	
+	#Given event ID is matched with a callable and updates the event terminal text accordingly
+	match event_id:
+		"print_hi":
+			event_call = func(): 
+				end_event_by_timer(3)
+				return "No event! Just wanted to say hi ╰(*°▽°*)╯"
+		"print_buh":
+			event_call = func(): 
+				end_event_by_timer(3)
+				return "No event! Just wanted to say I hate you all (ㆆ_ㆆ)"
+		"name_change":
+			event_call = name_change.bind(lobby)
+		"someone_explode":
+			event_call = someone_explode.bind(lobby)
+		"color_change":
+			event_call = color_change.bind(lobby)
+		"os_check":
+			event_call = os_check.bind(lobby)
+		"owe_money":
+			event_call = owe_money.bind(lobby)
+		_:
+			event_call = func(): return "ERROR: Event " + event_id + " not found." #Event id not recognized during match
+	
+	#After matching, the event is run and returns the terminal text
+	event_text = event_call.call()
+	lobby.get_node("UI").update_event_terminal(event_text)
+
+#Helper func used to streamline ending events that are solely time based
+func end_event_by_timer(time:float)->void:
+	get_tree().create_timer(time).timeout.connect(event_complete.emit)
+	
+#-------------------------------------------------------------------------------
+
+#Event calls
+
+#A random players name is changed to a random name from a json file
+func name_change(lobby:Lobby)->String:
+	var new_name:String = NAME_DICT.pick_random()
+	
+	var subject:Player = lobby.get_player(lobby.pick_rand_contestant())
+	var return_str:String = lobby.get_player_color_string(subject, subject.player_name + "'s") + " name is now" + \
+	lobby.get_player_color_string(subject," " + new_name) +"."
+	
+	end_event_by_timer(3)
+	
+	subject.set_player_name.rpc(new_name)
+	return return_str
+
+# A random player is "smited" (explodes)
+func someone_explode(lobby:Lobby)->String:
+	var contestant:int = lobby.pick_rand_contestant()
+	var subject:Player = lobby.get_player(contestant)
+	subject.explode.rpc_id(contestant)
+	
+	end_event_by_timer(3)
+	
+	return lobby.get_player_color_string(subject) + " has been smited by a higher being."
+
+#A random player is changed to a random color (Note there is no duplicate color validation as of now)
+func color_change(lobby:Lobby)->String:
+	var subject:Player = lobby.get_player(lobby.pick_rand_contestant())
+	var new_color:StringName = lobby.gen_id()
+	subject.update_color.rpc(new_color)
+	
+	end_event_by_timer(3)
+	
+	return lobby.get_player_color_string(subject, subject.player_name + "'s") + " color has been changed to " + \
+	"[color=" + str(new_color) + "]" + new_color + "[/color]."
+
+
+#OS checks are performed across all peers, and if players have a randomly drawn os they explode
+func os_check(lobby:Lobby)->String:
+	var os_dict:Dictionary[String,String] ={
+		"windows" : "Windows",
+		"linux" : "Linux",
+		"macos" : "macOS",
+	}
+	var os:String = os_dict.keys().pick_random()
+	
+	for contestant:int in lobby.contestants:
+		check_banned_os.rpc_id(contestant, os, contestant)
+			
+	end_event_by_timer(3)
+	
+	return "Anyone running " + os_dict[os] + " explodes for being wrong."
+
+#A random player is selected as the reason another player explodes and owes them money in real life for real legally binding
+func owe_money(lobby:Lobby)->String:
+	var dup_contestants:Array[int] = lobby.contestants
+	var owe_con:int = dup_contestants.pick_random()
+	dup_contestants.erase(owe_con)
+	var ded_con:int = dup_contestants.pick_random()
+	
+	var ded_subject:Player = lobby.get_player(ded_con)
+	var owe_subject:Player = lobby.get_player(owe_con)
+	ded_subject.explode.rpc_id(ded_con)
+	
+	end_event_by_timer(4)
+	
+	return lobby.get_player_color_string(owe_subject) + " owes " + lobby.get_player_color_string(ded_subject) + \
+	 " $2 in real life for exploding them with their mind."
+	
+#-------------------------------------------------------------------------------
+
+#Event helpers
+
+#RPC call used to check the operating systems of a give peer, and explode them if necessary
+@rpc("authority", "call_local", "reliable")
+func check_banned_os(os:String, contestant:int)->void:
+	var subject:Player = get_tree().current_scene.get_player(contestant)
+	if OS.has_feature(os):
+		subject.explode.rpc_id.call_deferred(contestant)
+		
