@@ -299,6 +299,14 @@ func event_cycle()->void:
 	$UI.update_event_terminal("Next event in:")
 	await create_game_timer(10).timeout
 	
+	#Safety check to account for async contestant removal beahvior
+	if contestants.size() == 1:
+		someone_wins(contestants[0])
+		return
+	elif contestants.size() == 0:
+		no_one_wins()
+		return
+	
 	#Event manager handles running an event
 	var new_event:StringName = EM.choose_event().id
 	$UI.update_event_terminal(new_event)

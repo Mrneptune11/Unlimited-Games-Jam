@@ -45,6 +45,8 @@ var color_id:String = "#FFFFFF"
 var my_label:Label = null
 var label_offset:Vector2 = Vector2.ZERO
 
+signal duel_complete ##Singal indicating a duel terminated
+
 var character: int = 0 : # Determines which character to display as
 	set(value):
 		# Limit the value to the bounds of CHARACTERS
@@ -76,6 +78,12 @@ var direction: float = 1.0 : # Which direction the player is facing
 		direction = 1.0 if (value > 0.0) else -1.0
 		# Flip sprite
 		$AnimatedSprite2D.flip_h = (direction < 0.0)
+		
+		#Socket updates with direction
+		var socket:Marker2D = $Socket
+		if socket:
+			socket.scale.x = value
+			socket.position.x = value * 12
 
 
 var player_name:String = "" :
@@ -127,12 +135,9 @@ func teleport(new_pos: Vector2) -> void:
 
 func _input(_event: InputEvent) -> void:
 	if (!local || mode == Mode.PAUSE): return #Prevent input from others / during pause
-		
-	###Test for size
-	#if Input.is_key_label_pressed(KEY_0):
-		#size_scale = (size_scale + 1) as Size
-	#if Input.is_key_label_pressed(KEY_9):
-		#size_scale = (size_scale - 1) as Size
+	
+	if Input.is_key_label_pressed(KEY_0):
+		pass
 
 func _physics_process(delta: float) -> void:
 	# Only process physics if local
@@ -257,6 +262,9 @@ func explode()->void:
 	self.mode = Mode.SPECTATE
 	$AnimatedSprite2D.play("ded")
 	$Sprite2D.modulate.a = .5
+	
+	unequip_weapon() #Exploding makes one lose their weapon
+	
 	z_index = 100
 	
 	hide_player.rpc()
@@ -278,8 +286,14 @@ func spawn_explosion(pos: Vector2, color: Color):
 @rpc("any_peer", "call_remote", "reliable")
 func hide_player():
 	hide()
-	$CollisionShape2D.queue_free()
-	my_label.queue_free()
+	
+	var collider:CollisionShape2D = $CollisionShape2D #safer collider removal
+	if collider:
+		collider.queue_free()
+		my_label.queue_free()
+	
+	unequip_weapon() #hidden players should not have weapons
+	 
 #-------------------------------------------------------------------------------
 
 #Player label and color logic
@@ -309,13 +323,6 @@ func create_label() -> void:
 	
 	self.tree_exiting.connect(my_label.queue_free) #Ensure label dies with a given player
 
-#Rpc call to handle updates to the players color
-@rpc("any_peer", "call_local", "reliable")
-func update_color(color:String)->void:
-	color_id = color
-	my_label.modulate = Color(color)
-	$Sprite2D.modulate = Color(color)
-
 ##Request for players to name themselves
 #TODO probably needs better validation
 func ask_name()->void:
@@ -335,13 +342,6 @@ func ask_name()->void:
 		name_box.queue_free.call_deferred()
 	)
 
-##Synchronize name changes across clients
-@rpc("any_peer", "call_local")
-func set_player_name(new_name: String):
-	player_name = new_name
-	my_label.text = new_name
-	my_label.modulate = Color(color_id)
-
 #-------------------------------------------------------------------------------
 
 #Player mutation logic
@@ -350,3 +350,36 @@ func set_player_name(new_name: String):
 @rpc("any_peer", "call_local")
 func change_size(change:int)->void:
 	size_scale = (size_scale + change) as Size
+
+##Synchronize name changes across clients
+@rpc("any_peer", "call_local")
+func set_player_name(new_name: String):
+	player_name = new_name
+	my_label.text = new_name
+	my_label.modulate = Color(color_id)
+
+#Rpc call to handle updates to the players color
+@rpc("any_peer", "call_local", "reliable")
+func update_color(color:String)->void:
+	color_id = color
+	my_label.modulate = Color(color)
+	$Sprite2D.modulate = Color(color)
+
+#-------------------------------------------------------------------------------
+
+#Weapon logic
+
+#Adds a weapon to a player socket
+@rpc("any_peer", "call_local")
+func equip_weapon(weapon_scn:String, target:int, weapon_owner:int)->void:
+	var weapon:Weapon = load(weapon_scn).instantiate()
+	weapon.set_up(target, weapon_owner)
+	$Socket.equip_weapon(weapon)
+
+#Removes a weapon from a player's socket
+@rpc("any_peer", "call_local")
+func unequip_weapon()->void:
+	var potential_weapon:Node2D = $Socket.get_node_or_null("Weapon")
+	if potential_weapon: potential_weapon.queue_free()
+	
+	duel_complete.emit() #Removing a weapon emits the duel complete signal used by the EM
