@@ -10,6 +10,9 @@ const _FIREBALLS_EVENT_DURATION: float = 10.0
 ## Reference to the Fireball Spawner scene.
 const _FIREBALLS_EVENT_SPAWNER_SCENE: PackedScene = preload("res://Events/Fireballs/FireballSpawner.tscn")
 
+#Ref to gun scene
+const GUN_SCN:String =  "res://Objects/Weapons/Gun/Gun.tscn"
+
 #-------------------------------------------------------------------------------
 
 signal event_complete #singal used to indicate an event is finished
@@ -90,6 +93,8 @@ func match_event(event_id:StringName, lobby:Lobby):
 			event_call = change_size.bind(lobby, -1)
 		"fireballs":
 			event_call = fireballs.bind(lobby)
+		"gun_fight": 
+			event_call = gun_fight.bind(lobby)
 		_:
 			event_call = func(): return "ERROR: Event " + event_id + " not found." #Event id not recognized during match
 	
@@ -158,7 +163,7 @@ func os_check(lobby:Lobby)->String:
 
 #A random player is selected as the reason another player explodes and owes them money in real life for real legally binding
 func owe_money(lobby:Lobby)->String:
-	var dup_contestants:Array[int] = lobby.contestants
+	var dup_contestants:Array[int] = lobby.contestants.duplicate_deep()
 	var owe_con:int = dup_contestants.pick_random()
 	dup_contestants.erase(owe_con)
 	var ded_con:int = dup_contestants.pick_random()
@@ -198,6 +203,26 @@ func fireballs(lobby:Lobby)->String:
 	
 	return "Fireballs are raining down from the sky. This is " + rand_subject_name + "'s fault somehow."
 
+func gun_fight(lobby:Lobby)->String:
+	for contestant in lobby.contestants:
+		print(lobby.get_player(contestant))
+	
+	
+	var dup_contestants:Array[int] = lobby.contestants.duplicate_deep()
+	var first_con:int = dup_contestants.pick_random()
+	dup_contestants.erase(first_con)
+	var second_con:int = dup_contestants.pick_random()
+	
+	var first_player:Player = lobby.get_player(first_con)
+	var second_player:Player = lobby.get_player(second_con)
+	
+	first_player.equip_weapon.rpc(GUN_SCN,second_con, first_con)
+	second_player.equip_weapon.rpc(GUN_SCN,first_con, second_con)
+	
+	first_player.duel_complete.connect(weapon_fight_timer) #End event when the duel terminates
+	
+	return lobby.get_player_color_string(first_player) +" and " + lobby.get_player_color_string(second_player) + " must duel " +  \
+	" to the death with guns!"
 #-------------------------------------------------------------------------------
 
 #Event helpers
@@ -218,3 +243,8 @@ func check_banned_os(os:String, contestant:int)->void:
 	var subject:Player = get_tree().current_scene.get_player(contestant)
 	if OS.has_feature(os):
 		subject.explode.rpc_id.call_deferred(contestant)
+
+#Grace period after a weapon fight ends
+func weapon_fight_timer()->void:
+	await get_tree().create_timer(2).timeout
+	event_complete.emit()

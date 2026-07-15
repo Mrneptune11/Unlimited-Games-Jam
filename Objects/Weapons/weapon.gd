@@ -17,7 +17,7 @@ func _process(delta: float) -> void:
 	if !can_attack:
 		cool_timer += delta
 		if cool_timer >= cool_down:
-			cool_down = 0
+			cool_timer = 0
 			can_attack = true
 	
 func _input(_event: InputEvent) -> void:
@@ -25,10 +25,18 @@ func _input(_event: InputEvent) -> void:
 	
 	if Input.is_action_pressed("action") && can_attack:
 		_attack()
+		can_attack = false
 
 func _attack()->void:
 	pass
 
 func validate_target(potential_target:int)->void:
+	var my_player:Player = lobby.get_player(my_owner)
+	var my_target:Player = lobby.get_player(target)
+	
 	if potential_target != target:
-		lobby.get_player(my_owner).explode.rpc_id(my_owner)
+		my_player.explode.rpc_id(my_owner)
+	
+	my_player.unequip_weapon.rpc()
+	my_target.unequip_weapon.rpc()
+	

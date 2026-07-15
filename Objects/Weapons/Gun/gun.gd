@@ -4,6 +4,9 @@ const BULLET_SCN:PackedScene = preload("res://Objects/Weapons/Gun/Bullet.tscn")
 
 const BULLET_SPEED:float = 200
 
+func _ready() -> void:
+	cool_down = .75
+
 func _attack()->void:
 	spawn_projectile.rpc(my_owner)
 	
@@ -14,7 +17,7 @@ func spawn_projectile(my_subject:int)->void:
 	var player:Player = get_tree().current_scene.get_player(my_subject)
 	
 	var dir:Vector2 = Vector2(player.direction,0)
-	bullet.set_up(dir * BULLET_SPEED, 5)
+	bullet.set_up(dir * BULLET_SPEED, 5, my_subject, lobby)
 	bullet.global_position = self.global_position
 	
 	lobby.get_node("Projectiles").add_child(bullet)

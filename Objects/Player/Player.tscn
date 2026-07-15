@@ -5,7 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://xtu6gk86tanv" path="res://Assets/SpriteSheets/char_test-Sheet.png" id="1_we6tp"]
 [ext_resource type="Texture2D" uid="uid://bg7mtpr2qe4na" path="res://Assets/sprites/ghost.png" id="3_b0me6"]
 [ext_resource type="Script" uid="uid://c2ffnvyj4unmc" path="res://Objects/Player/socket.gd" id="5_1qpp8"]
-[ext_resource type="PackedScene" uid="uid://lupyi2d51iov" path="res://Objects/Weapons/Gun/Gun.tscn" id="6_1qpp8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oansn"]
 atlas = ExtResource("1_we6tp")
@@ -110,5 +109,3 @@ replication_config = SubResource("SceneReplicationConfig_b0me6")
 [node name="Socket" type="Marker2D" parent="." unique_id=552284437]
 position = Vector2(12, 0)
 script = ExtResource("5_1qpp8")
-
-[node name="Weapon" parent="Socket" unique_id=1179641535 instance=ExtResource("6_1qpp8")]

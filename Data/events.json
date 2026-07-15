@@ -48,4 +48,9 @@
 		"id" : "decrease_size",
 		"weight" : 1,
 	},
+
+	{
+		"id" : "gun_fight",
+		"weight" : 10000,
+	},
 ]
