@@ -263,7 +263,12 @@ func explode()->void:
 	$AnimatedSprite2D.play("ded")
 	$Sprite2D.modulate.a = .5
 	
-	unequip_weapon() #Exploding makes one lose their weapon
+	#Unequip weapons if necessary
+	var weapon:Weapon = $Socket.get_node_or_null("Weapon")
+	if weapon:
+		get_tree().current_scene.get_player(weapon.target).unequip_weapon.rpc()
+		unequip_weapon.rpc() 
+	
 	
 	z_index = 100
 	
