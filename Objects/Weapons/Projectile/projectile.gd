@@ -3,6 +3,7 @@ class_name Projectile extends Area2D
 var velocity:Vector2 
 var life_time:float = 0
 var time_alive:float = 0
+var destroying:bool = false
 
 signal hit_player(player:int)
 
@@ -24,16 +25,23 @@ func handle_collision(body:Node2D)->void:
 	
 	destroy.rpc()
 
-func _physics_process(_delta: float) -> void:
-	position += velocity
-
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	position += velocity * delta
+	
 	if !is_multiplayer_authority(): return
 	time_alive += delta
 	
 	if time_alive >= life_time:
-		destroy.rpc()
+		try_destroy()
+		
+func try_destroy()->void:
+	if destroying:
+		return
+
+	destroying = true
+	destroy.rpc()
 
 @rpc("call_local","reliable")
 func destroy()->void:
-	self.queue_free.call_deferred()
+	await get_tree().process_frame
+	self.queue_free()
