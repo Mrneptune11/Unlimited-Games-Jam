@@ -40,6 +40,11 @@
 	},
 	
 	{
+		"id" : "bouncy_balls",
+		"weight" : 1,
+	},
+	
+	{
 		"id" : "increase_size",
 		"weight" : 1,
 	},

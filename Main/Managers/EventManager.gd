@@ -10,6 +10,16 @@ const _FIREBALLS_EVENT_DURATION: float = 10.0
 ## Reference to the Fireball Spawner scene.
 const _FIREBALLS_EVENT_SPAWNER_SCENE: PackedScene = preload("res://Events/Fireballs/FireballSpawner.tscn")
 
+# ---------- Bouncy Balls ----------
+
+## How long (in seconds) the Bouncy Balls event lasts for.
+const _BOUNCY_BALLS_EVENT_DURATION: float = 20.0
+
+## Reference to the Ball Spawner scene.
+const _BOUNCY_BALLS_EVENT_SPAWNER_SCENE: PackedScene = preload("res://Events/BouncyBalls/BallSpawner.tscn")
+
+# ---------- Gun Fight ----------
+
 #Ref to gun scene
 const GUN_SCN:String =  "res://Objects/Weapons/Gun/Gun.tscn"
 
@@ -93,6 +103,8 @@ func match_event(event_id:StringName, lobby:Lobby):
 			event_call = change_size.bind(lobby, -1)
 		"fireballs":
 			event_call = fireballs.bind(lobby)
+		"bouncy_balls":
+			event_call = bouncy_balls.bind(lobby)
 		"gun_fight": 
 			event_call = gun_fight.bind(lobby)
 		_:
@@ -204,6 +216,16 @@ func fireballs(lobby:Lobby)->String:
 	
 	return "Fireballs are raining down from the sky. This is " + rand_subject_name + "'s fault somehow."
 
+func bouncy_balls(_lobby:Lobby)->String:
+	# Setup Ball Spawner node.
+	# This will continuousely spawn bouncy balls until the node is deleted.
+	bouncy_balls_helper.rpc()
+	
+	# Then, set the event timer.
+	end_event_by_timer(_BOUNCY_BALLS_EVENT_DURATION)
+	
+	return "The circus is dropping bouncy balls everywhere!"
+
 #Begins a gun fight between two random players
 func gun_fight(lobby:Lobby)->String:
 	for contestant in lobby.contestants:
@@ -239,6 +261,16 @@ func fireballs_helper()->void:
 	
 	# When the event timer expires, destroy the node to stop spawning fireballs.
 	event_complete.connect(fireball_spawner.queue_free)
+
+## Helper function for the Bouncy Balls event.
+## Using RPC allows the event node to be instantiated on both the server & clients.
+@rpc("authority", "call_local", "reliable")
+func bouncy_balls_helper()->void:
+	var ball_spawner: BallSpawner = _BOUNCY_BALLS_EVENT_SPAWNER_SCENE.instantiate()
+	get_tree().current_scene.add_child(ball_spawner)
+	
+	# When the event timer expires, destroy the node to stop spawning balls.
+	event_complete.connect(func(): ball_spawner.spawning = false)
 
 #RPC call used to check the operating systems of a give peer, and explode them if necessary
 @rpc("authority", "call_local", "reliable")
