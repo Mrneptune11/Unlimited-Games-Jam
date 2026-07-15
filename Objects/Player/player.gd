@@ -77,8 +77,10 @@ var direction: float = 1.0 : # Which direction the player is facing
 		# Flip sprite
 		$AnimatedSprite2D.flip_h = (direction < 0.0)
 		
-		$Socket.scale.x = value
-		$Socket.position.x = value * 12
+		var socket:Marker2D = $Socket
+		if socket:
+			socket.scale.x = value
+			socket.position.x = value * 12
 
 
 var player_name:String = "" :
@@ -119,7 +121,7 @@ func _ready() -> void:
 	create_label() 
 	ask_name()
 	
-	$Socket/Weapon.set_up(20,peer_id)
+	$Socket/Weapon.set_up(1,peer_id)
 
 #Teleports peers to a specific position
 @rpc("authority", "call_local", "reliable")
@@ -256,6 +258,10 @@ func explode()->void:
 	self.mode = Mode.SPECTATE
 	$AnimatedSprite2D.play("ded")
 	$Sprite2D.modulate.a = .5
+	
+	var potential_weapon:Node2D = $Socket.get_node_or_null("Weapon")
+	if potential_weapon: potential_weapon.queue_free()
+	
 	z_index = 100
 	
 	hide_player.rpc()
@@ -277,8 +283,16 @@ func spawn_explosion(pos: Vector2, color: Color):
 @rpc("any_peer", "call_remote", "reliable")
 func hide_player():
 	hide()
-	$CollisionShape2D.queue_free()
-	my_label.queue_free()
+	
+	var collider:CollisionShape2D = $CollisionShape2D
+	if collider:
+		collider.queue_free()
+		my_label.queue_free()
+	
+	var potential_weapon:Node2D = $Socket.get_node_or_null("Weapon")
+	if potential_weapon: potential_weapon.queue_free()
+	 
+	
 #-------------------------------------------------------------------------------
 
 #Player label and color logic
