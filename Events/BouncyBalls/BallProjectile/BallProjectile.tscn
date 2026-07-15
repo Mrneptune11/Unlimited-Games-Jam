@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://cjh4ydklf8sec"]
+
+[ext_resource type="Script" uid="uid://qir8pk12t4wc" path="res://Events/BouncyBalls/BallProjectile/ball_projectile.gd" id="1_5nj5c"]
+[ext_resource type="Texture2D" uid="uid://d2heawl5ty88q" path="res://Assets/sprites/white_square.png" id="2_bkuh3"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_f7cfs"]
+friction = 0.6
+bounce = 0.8
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4xi1n"]
+radius = 9.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_hdgf6"]
+properties/0/path = NodePath(".:replicated_position")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:replicated_rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath(".:replicated_linear_velocity")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath(".:replicated_angular_velocity")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+
+[node name="BallProjectile" type="RigidBody2D" unique_id=1147786900]
+mass = 5.0
+physics_material_override = SubResource("PhysicsMaterial_f7cfs")
+script = ExtResource("1_5nj5c")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=751189044]
+modulate = Color(0.48333794, 0.6493677, 1, 1)
+texture_filter = 1
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_bkuh3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1550808346]
+shape = SubResource("CircleShape2D_4xi1n")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1157916286]
+replication_config = SubResource("SceneReplicationConfig_hdgf6")
+visibility_update_mode = 1

@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://i32qs5f2a2c7"]
+
+[ext_resource type="Script" uid="uid://ds3acv8nheyju" path="res://Events/BouncyBalls/ball_spawner.gd" id="1_ay0ja"]
+[ext_resource type="PackedScene" uid="uid://cjh4ydklf8sec" path="res://Events/BouncyBalls/BallProjectile/BallProjectile.tscn" id="2_62td5"]
+
+[node name="BallSpawner" type="Node2D" unique_id=1498200931]
+script = ExtResource("1_ay0ja")
+_ball_projectile_scene = ExtResource("2_62td5")
+
+[node name="SpawnTimer" type="Timer" parent="." unique_id=1220344499]
+unique_name_in_owner = true
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=572859354]
+_spawnable_scenes = PackedStringArray("uid://cjh4ydklf8sec")
+spawn_path = NodePath("..")
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
