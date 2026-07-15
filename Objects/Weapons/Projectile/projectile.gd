@@ -16,6 +16,8 @@ func _ready()->void:
 func handle_collision(body:Node2D)->void:
 	if !is_multiplayer_authority(): return
 	if body is Player:
+		if body.mode == Player.Mode.SPECTATE: return
+		
 		var peer:int = body.peer_id
 		hit_player.emit(peer)
 		body.explode.rpc_id(peer)
@@ -34,4 +36,4 @@ func _process(delta: float) -> void:
 
 @rpc("call_local","reliable")
 func destroy()->void:
-	self.queue_free()
+	self.queue_free.call_deferred()
