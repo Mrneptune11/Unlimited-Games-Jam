@@ -51,6 +51,6 @@
 
 	{
 		"id" : "gun_fight",
-		"weight" : 10000,
+		"weight" : 1,
 	},
 ]
