@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://lupyi2d51iov"]
+
+[ext_resource type="PackedScene" uid="uid://bmfya0toul7o6" path="res://Objects/Weapons/Weapon.tscn" id="1_kqttf"]
+[ext_resource type="Script" uid="uid://b1galt8x7dnvv" path="res://Objects/Weapons/Gun/gun.gd" id="2_6nyj1"]
+
+[node name="Weapon" unique_id=1179641535 instance=ExtResource("1_kqttf")]
+script = ExtResource("2_6nyj1")

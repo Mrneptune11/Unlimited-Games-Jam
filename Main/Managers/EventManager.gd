@@ -18,6 +18,11 @@ const _BOUNCY_BALLS_EVENT_DURATION: float = 20.0
 ## Reference to the Ball Spawner scene.
 const _BOUNCY_BALLS_EVENT_SPAWNER_SCENE: PackedScene = preload("res://Events/BouncyBalls/BallSpawner.tscn")
 
+# ---------- Gun Fight ----------
+
+#Ref to gun scene
+const GUN_SCN:String =  "res://Objects/Weapons/Gun/Gun.tscn"
+
 #-------------------------------------------------------------------------------
 
 signal event_complete #singal used to indicate an event is finished
@@ -92,10 +97,16 @@ func match_event(event_id:StringName, lobby:Lobby):
 			event_call = os_check.bind(lobby)
 		"owe_money":
 			event_call = owe_money.bind(lobby)
+		"increase_size":
+			event_call = change_size.bind(lobby, 1)
+		"decrease_size":
+			event_call = change_size.bind(lobby, -1)
 		"fireballs":
 			event_call = fireballs.bind(lobby)
 		"bouncy_balls":
 			event_call = bouncy_balls.bind(lobby)
+		"gun_fight": 
+			event_call = gun_fight.bind(lobby)
 		_:
 			event_call = func(): return "ERROR: Event " + event_id + " not found." #Event id not recognized during match
 	
@@ -164,7 +175,7 @@ func os_check(lobby:Lobby)->String:
 
 #A random player is selected as the reason another player explodes and owes them money in real life for real legally binding
 func owe_money(lobby:Lobby)->String:
-	var dup_contestants:Array[int] = lobby.contestants
+	var dup_contestants:Array[int] = lobby.contestants.duplicate_deep()
 	var owe_con:int = dup_contestants.pick_random()
 	dup_contestants.erase(owe_con)
 	var ded_con:int = dup_contestants.pick_random()
@@ -177,6 +188,18 @@ func owe_money(lobby:Lobby)->String:
 	
 	return lobby.get_player_color_string(owe_subject) + " owes " + lobby.get_player_color_string(ded_subject) + \
 	 " $2 in real life for exploding them with their mind."
+
+#Changes the size of a random contestant
+func change_size(lobby:Lobby, change:int) -> String:
+	var contestant:int = lobby.pick_rand_contestant()
+	var subject:Player = lobby.get_player(contestant)
+	subject.change_size.rpc_id(contestant, change)
+	end_event_by_timer(3)
+	
+	if change > 0:
+		return lobby.get_player_color_string(subject) + " has increased in size! Don't get too big now..."
+
+	return lobby.get_player_color_string(subject) + " has decreased in size! Don't get too small now..."
 
 func fireballs(lobby:Lobby)->String:
 	# Setup Fireball Spawner node.
@@ -193,16 +216,6 @@ func fireballs(lobby:Lobby)->String:
 	
 	return "Fireballs are raining down from the sky. This is " + rand_subject_name + "'s fault somehow."
 
-## Helper function for the Fireballs event.
-## Using RPC allows the event node to be instantiated on both the server & clients.
-@rpc("authority", "call_local", "reliable")
-func fireballs_helper()->void:
-	var fireball_spawner: FireballSpawner = _FIREBALLS_EVENT_SPAWNER_SCENE.instantiate()
-	get_tree().current_scene.add_child(fireball_spawner)
-	
-	# When the event timer expires, destroy the node to stop spawning fireballs.
-	event_complete.connect(fireball_spawner.queue_free)
-
 func bouncy_balls(_lobby:Lobby)->String:
 	# Setup Ball Spawner node.
 	# This will continuousely spawn bouncy balls until the node is deleted.
@@ -213,6 +226,42 @@ func bouncy_balls(_lobby:Lobby)->String:
 	
 	return "The circus is dropping bouncy balls everywhere!"
 
+#Begins a gun fight between two random players
+func gun_fight(lobby:Lobby)->String:
+	for contestant in lobby.contestants:
+		print(lobby.get_player(contestant))
+	
+	#Pick two different rand contestants
+	var dup_contestants:Array[int] = lobby.contestants.duplicate_deep()
+	var first_con:int = dup_contestants.pick_random()
+	dup_contestants.erase(first_con)
+	var second_con:int = dup_contestants.pick_random()
+	
+	var first_player:Player = lobby.get_player(first_con)
+	var second_player:Player = lobby.get_player(second_con)
+	
+	#Equip their guns
+	first_player.equip_weapon.rpc(GUN_SCN,second_con, first_con)
+	second_player.equip_weapon.rpc(GUN_SCN,first_con, second_con)
+	
+	first_player.duel_complete.connect(weapon_fight_timer) #End event when the duel terminates
+	
+	return lobby.get_player_color_string(first_player) +" and " + lobby.get_player_color_string(second_player) + " must duel " +  \
+	" to the death with guns! Don't hurt any bystanders though..."
+#-------------------------------------------------------------------------------
+
+#Event helpers
+
+## Helper function for the Fireballs event.
+## Using RPC allows the event node to be instantiated on both the server & clients.
+@rpc("authority", "call_remote", "reliable")
+func fireballs_helper()->void:
+	var fireball_spawner: FireballSpawner = _FIREBALLS_EVENT_SPAWNER_SCENE.instantiate()
+	get_tree().current_scene.add_child(fireball_spawner)
+	
+	# When the event timer expires, destroy the node to stop spawning fireballs.
+	event_complete.connect(fireball_spawner.queue_free)
+
 ## Helper function for the Bouncy Balls event.
 ## Using RPC allows the event node to be instantiated on both the server & clients.
 @rpc("authority", "call_local", "reliable")
@@ -222,9 +271,6 @@ func bouncy_balls_helper()->void:
 	
 	# When the event timer expires, destroy the node to stop spawning balls.
 	event_complete.connect(func(): ball_spawner.spawning = false)
-#-------------------------------------------------------------------------------
-
-#Event helpers
 
 #RPC call used to check the operating systems of a give peer, and explode them if necessary
 @rpc("authority", "call_local", "reliable")
@@ -232,4 +278,8 @@ func check_banned_os(os:String, contestant:int)->void:
 	var subject:Player = get_tree().current_scene.get_player(contestant)
 	if OS.has_feature(os):
 		subject.explode.rpc_id.call_deferred(contestant)
-		
+
+#Grace period after a weapon fight ends helper, emits event complete cond
+func weapon_fight_timer()->void:
+	await get_tree().create_timer(2).timeout
+	event_complete.emit()

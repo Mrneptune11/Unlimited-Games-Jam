@@ -26,6 +26,15 @@ enum Mode {
 	SPECTATE = 2,
 }
 
+#Size states
+enum Size {
+	REGULAR = 0,
+	SMALL = -1,
+	TINY = -2,
+	BIG = 1,
+	HUGE = 2,
+}
+
 var peer_id: int = 1 # The peer that controls this player
 var local: bool = true # If this player belongs to the local peer
 
@@ -34,7 +43,9 @@ var color_id:String = "#FFFFFF"
 
 ##Label for the player
 var my_label:Label = null
-var label_pos:Vector2 = Vector2.ZERO
+var label_offset:Vector2 = Vector2.ZERO
+
+signal duel_complete ##Singal indicating a duel terminated
 
 var character: int = 0 : # Determines which character to display as
 	set(value):
@@ -67,11 +78,28 @@ var direction: float = 1.0 : # Which direction the player is facing
 		direction = 1.0 if (value > 0.0) else -1.0
 		# Flip sprite
 		$AnimatedSprite2D.flip_h = (direction < 0.0)
+		
+		#Socket updates with direction
+		var socket:Marker2D = $Socket
+		if socket:
+			socket.scale.x = value
+			socket.position.x = value * 12
 
 
 var player_name:String = "" :
 	set(value):
 		player_name = value
+		
+
+var size_scale:Size = Size.REGULAR:
+	set(value):
+		size_scale = value
+		
+		if (abs(value) > 2):
+			explode()
+			
+		var new_scale:float = pow(2.0, value / 2.0)
+		scale = Vector2(new_scale,new_scale)
 #-------------------------------------------------------------------------------
 
 var death_scene:PackedScene = preload("res://Objects/Death/explosion.tscn") #Explosion scene
@@ -107,10 +135,9 @@ func teleport(new_pos: Vector2) -> void:
 
 func _input(_event: InputEvent) -> void:
 	if (!local || mode == Mode.PAUSE): return #Prevent input from others / during pause
-		
-	##Test for explosions
-	#if Input.is_key_label_pressed(KEY_0):
-		#explode()
+	
+	if Input.is_key_label_pressed(KEY_0):
+		pass
 
 func _physics_process(delta: float) -> void:
 	# Only process physics if local
@@ -146,12 +173,11 @@ func _physics_process(delta: float) -> void:
 	
 
 func _process(_delta: float) -> void:
-	#Sync the ui labels with the player
-	var screen_pos = get_viewport().get_canvas_transform() * global_position
-	label_pos = screen_pos
+	update_label_offset()
 	
+	#Sync the ui labels with the player
 	if my_label:
-		my_label.position = label_pos
+		my_label.position = (get_viewport().get_canvas_transform() * global_position) + label_offset
 
 #-------------------------------------------------------------------------------
 
@@ -236,6 +262,9 @@ func explode()->void:
 	self.mode = Mode.SPECTATE
 	$AnimatedSprite2D.play("ded")
 	$Sprite2D.modulate.a = .5
+	
+	unequip_weapon() #Exploding makes one lose their weapon
+	
 	z_index = 100
 	
 	hide_player.rpc()
@@ -257,11 +286,26 @@ func spawn_explosion(pos: Vector2, color: Color):
 @rpc("any_peer", "call_remote", "reliable")
 func hide_player():
 	hide()
-	$CollisionShape2D.queue_free()
-	my_label.queue_free()
+	
+	var collider:CollisionShape2D = $CollisionShape2D #safer collider removal
+	if collider:
+		collider.queue_free()
+		my_label.queue_free()
+	
+	unequip_weapon() #hidden players should not have weapons
+	 
 #-------------------------------------------------------------------------------
 
 #Player label and color logic
+
+##Label offset calculations for when size changes happen
+func update_label_offset() :
+	var frame:Texture = $AnimatedSprite2D.sprite_frames.get_frame_texture(
+		$AnimatedSprite2D.animation,
+		$AnimatedSprite2D.frame
+	)
+	var half_height:float = frame.get_height() * 0.5 * 5
+	label_offset.y = -(half_height * (scale.y - 1.0))
 
 ##Updates the player's label
 func update_label(label:String)->void:
@@ -278,13 +322,6 @@ func create_label() -> void:
 	get_node("/root/Lobby/UI").add_child(player_label)
 	
 	self.tree_exiting.connect(my_label.queue_free) #Ensure label dies with a given player
-
-#Rpc call to handle updates to the players color
-@rpc("any_peer", "call_local", "reliable")
-func update_color(color:String)->void:
-	color_id = color
-	my_label.modulate = Color(color)
-	$Sprite2D.modulate = Color(color)
 
 ##Request for players to name themselves
 #TODO probably needs better validation
@@ -305,9 +342,44 @@ func ask_name()->void:
 		name_box.queue_free.call_deferred()
 	)
 
+#-------------------------------------------------------------------------------
+
+#Player mutation logic
+
+##Change a players size
+@rpc("any_peer", "call_local")
+func change_size(change:int)->void:
+	size_scale = (size_scale + change) as Size
+
 ##Synchronize name changes across clients
 @rpc("any_peer", "call_local")
 func set_player_name(new_name: String):
 	player_name = new_name
 	my_label.text = new_name
 	my_label.modulate = Color(color_id)
+
+#Rpc call to handle updates to the players color
+@rpc("any_peer", "call_local", "reliable")
+func update_color(color:String)->void:
+	color_id = color
+	my_label.modulate = Color(color)
+	$Sprite2D.modulate = Color(color)
+
+#-------------------------------------------------------------------------------
+
+#Weapon logic
+
+#Adds a weapon to a player socket
+@rpc("any_peer", "call_local")
+func equip_weapon(weapon_scn:String, target:int, weapon_owner:int)->void:
+	var weapon:Weapon = load(weapon_scn).instantiate()
+	weapon.set_up(target, weapon_owner)
+	$Socket.equip_weapon(weapon)
+
+#Removes a weapon from a player's socket
+@rpc("any_peer", "call_local")
+func unequip_weapon()->void:
+	var potential_weapon:Node2D = $Socket.get_node_or_null("Weapon")
+	if potential_weapon: potential_weapon.queue_free()
+	
+	duel_complete.emit() #Removing a weapon emits the duel complete signal used by the EM

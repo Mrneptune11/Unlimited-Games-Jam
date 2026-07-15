@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://d2heawl5ty88q" path="res://Assets/sprites/white_square.png" id="1_oansn"]
 [ext_resource type="Texture2D" uid="uid://xtu6gk86tanv" path="res://Assets/SpriteSheets/char_test-Sheet.png" id="1_we6tp"]
 [ext_resource type="Texture2D" uid="uid://bg7mtpr2qe4na" path="res://Assets/sprites/ghost.png" id="3_b0me6"]
+[ext_resource type="Script" uid="uid://c2ffnvyj4unmc" path="res://Objects/Player/socket.gd" id="5_1qpp8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oansn"]
 atlas = ExtResource("1_we6tp")
@@ -62,10 +63,10 @@ properties/1/replication_mode = 2
 properties/2/path = NodePath(".:direction")
 properties/2/spawn = true
 properties/2/replication_mode = 2
-properties/3/path = NodePath(".:label_pos")
+properties/3/path = NodePath("Sprite2D:modulate")
 properties/3/spawn = true
 properties/3/replication_mode = 2
-properties/4/path = NodePath("Sprite2D:modulate")
+properties/4/path = NodePath(".:scale")
 properties/4/spawn = true
 properties/4/replication_mode = 2
 
@@ -104,3 +105,7 @@ replication_config = SubResource("SceneReplicationConfig_cac6a")
 
 [node name="ServerSync" type="MultiplayerSynchronizer" parent="." unique_id=1418538309]
 replication_config = SubResource("SceneReplicationConfig_b0me6")
+
+[node name="Socket" type="Marker2D" parent="." unique_id=552284437]
+position = Vector2(12, 0)
+script = ExtResource("5_1qpp8")

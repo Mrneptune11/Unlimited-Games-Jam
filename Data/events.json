@@ -40,7 +40,21 @@
 	},
 	
 	{
+<<<<<<< HEAD
 		"id" : "bouncy_balls",
+=======
+		"id" : "increase_size",
+		"weight" : 1,
+	},
+	
+	{
+		"id" : "decrease_size",
+		"weight" : 1,
+	},
+
+	{
+		"id" : "gun_fight",
+>>>>>>> origin/main
 		"weight" : 1,
 	},
 ]

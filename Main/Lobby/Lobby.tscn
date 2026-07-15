@@ -3,6 +3,14 @@
 [ext_resource type="Script" uid="uid://3mtp3mvg1058" path="res://Main/Lobby/lobby.gd" id="1_0duqs"]
 [ext_resource type="Script" uid="uid://b3bltlekjmkx8" path="res://Main/Lobby/ui.gd" id="2_0duqs"]
 
+[sub_resource type="GDScript" id="GDScript_0duqs"]
+script/source = "extends Node2D
+
+const BULLET_SCN:PackedScene = preload(\"res://Objects/Weapons/Gun/Bullet.tscn\")
+
+const BULLET_SPEED:float = 200
+"
+
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_0duqs"]
 properties/0/path = NodePath(".:text")
 properties/0/spawn = true
@@ -19,6 +27,9 @@ script = ExtResource("1_0duqs")
 [node name="Players" type="Node2D" parent="." unique_id=2132795720]
 
 [node name="Effects" type="Node2D" parent="." unique_id=174491174]
+
+[node name="Projectiles" type="Node2D" parent="." unique_id=1653782465]
+script = SubResource("GDScript_0duqs")
 
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="." unique_id=892560041]
 _spawnable_scenes = PackedStringArray("uid://byro3ciqr2064")
