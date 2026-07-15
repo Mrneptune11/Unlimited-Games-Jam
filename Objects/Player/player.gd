@@ -76,6 +76,9 @@ var direction: float = 1.0 : # Which direction the player is facing
 		direction = 1.0 if (value > 0.0) else -1.0
 		# Flip sprite
 		$AnimatedSprite2D.flip_h = (direction < 0.0)
+		
+		$Socket.scale.x = value
+		$Socket.position.x = value * 12
 
 
 var player_name:String = "" :
@@ -115,6 +118,8 @@ func _ready() -> void:
 	#Create the player label and ask their name
 	create_label() 
 	ask_name()
+	
+	$Socket/Weapon.set_up(20,peer_id)
 
 #Teleports peers to a specific position
 @rpc("authority", "call_local", "reliable")
@@ -127,12 +132,6 @@ func teleport(new_pos: Vector2) -> void:
 
 func _input(_event: InputEvent) -> void:
 	if (!local || mode == Mode.PAUSE): return #Prevent input from others / during pause
-		
-	###Test for size
-	#if Input.is_key_label_pressed(KEY_0):
-		#size_scale = (size_scale + 1) as Size
-	#if Input.is_key_label_pressed(KEY_9):
-		#size_scale = (size_scale - 1) as Size
 
 func _physics_process(delta: float) -> void:
 	# Only process physics if local

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://3mtp3mvg1058" path="res://Main/Lobby/lobby.gd" id="1_0duqs"]
 [ext_resource type="Script" uid="uid://b3bltlekjmkx8" path="res://Main/Lobby/ui.gd" id="2_0duqs"]
+[ext_resource type="Script" uid="uid://duv6tnyoy0mcv" path="res://Main/Lobby/projectiles.gd" id="2_owp0v"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_0duqs"]
 properties/0/path = NodePath(".:text")
@@ -20,6 +21,9 @@ script = ExtResource("1_0duqs")
 
 [node name="Effects" type="Node2D" parent="." unique_id=174491174]
 
+[node name="Projectiles" type="Node2D" parent="." unique_id=1653782465]
+script = ExtResource("2_owp0v")
+
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="." unique_id=892560041]
 _spawnable_scenes = PackedStringArray("uid://byro3ciqr2064")
 spawn_path = NodePath("../Players")
@@ -29,6 +33,10 @@ spawn_limit = 50
 _spawnable_scenes = PackedStringArray("uid://dwwa4u4id4t2m")
 spawn_path = NodePath("../Level")
 spawn_limit = 1
+
+[node name="ProjectileSpawner" type="MultiplayerSpawner" parent="." unique_id=1275486068]
+_spawnable_scenes = PackedStringArray("uid://cp4b2pq44hqp0")
+spawn_path = NodePath("../Projectiles")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1150281040]
 script = ExtResource("2_0duqs")

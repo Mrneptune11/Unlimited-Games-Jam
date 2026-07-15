@@ -204,7 +204,7 @@ func fireballs(lobby:Lobby)->String:
 
 ## Helper function for the Fireballs event.
 ## Using RPC allows the event node to be instantiated on both the server & clients.
-@rpc("authority", "call_local", "reliable")
+@rpc("authority", "call_remote", "reliable")
 func fireballs_helper()->void:
 	var fireball_spawner: FireballSpawner = _FIREBALLS_EVENT_SPAWNER_SCENE.instantiate()
 	get_tree().current_scene.add_child(fireball_spawner)
@@ -218,4 +218,3 @@ func check_banned_os(os:String, contestant:int)->void:
 	var subject:Player = get_tree().current_scene.get_player(contestant)
 	if OS.has_feature(os):
 		subject.explode.rpc_id.call_deferred(contestant)
-		

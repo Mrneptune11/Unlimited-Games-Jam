@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://baj10uofqhx5l"]
+
+[ext_resource type="PackedScene" uid="uid://cp4b2pq44hqp0" path="res://Objects/Weapons/Projectile/Projectile.tscn" id="1_g3unq"]
+[ext_resource type="Script" uid="uid://fyysesdycpdj" path="res://Objects/Weapons/Projectile/projectile.gd" id="2_aaf82"]
+[ext_resource type="Texture2D" uid="uid://d2heawl5ty88q" path="res://Assets/sprites/white_square.png" id="2_j2354"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_aaf82"]
+radius = 3.5
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_aaf82"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="Projectile" unique_id=1121484163 instance=ExtResource("1_g3unq")]
+script = ExtResource("2_aaf82")
+
+[node name="Sprite2D" parent="." index="0" unique_id=827429628]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_j2354")
+
+[node name="CollisionShape2D" parent="." index="1" unique_id=1814601285]
+shape = SubResource("CircleShape2D_aaf82")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." index="2" unique_id=683208199]
+replication_config = SubResource("SceneReplicationConfig_aaf82")
