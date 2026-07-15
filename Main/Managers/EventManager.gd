@@ -177,6 +177,7 @@ func owe_money(lobby:Lobby)->String:
 	return lobby.get_player_color_string(owe_subject) + " owes " + lobby.get_player_color_string(ded_subject) + \
 	 " $2 in real life for exploding them with their mind."
 
+#Changes the size of a random contestant
 func change_size(lobby:Lobby, change:int) -> String:
 	var contestant:int = lobby.pick_rand_contestant()
 	var subject:Player = lobby.get_player(contestant)
@@ -203,11 +204,12 @@ func fireballs(lobby:Lobby)->String:
 	
 	return "Fireballs are raining down from the sky. This is " + rand_subject_name + "'s fault somehow."
 
+#Begins a gun fight between two random players
 func gun_fight(lobby:Lobby)->String:
 	for contestant in lobby.contestants:
 		print(lobby.get_player(contestant))
 	
-	
+	#Pick two different rand contestants
 	var dup_contestants:Array[int] = lobby.contestants.duplicate_deep()
 	var first_con:int = dup_contestants.pick_random()
 	dup_contestants.erase(first_con)
@@ -216,13 +218,14 @@ func gun_fight(lobby:Lobby)->String:
 	var first_player:Player = lobby.get_player(first_con)
 	var second_player:Player = lobby.get_player(second_con)
 	
+	#Equip their guns
 	first_player.equip_weapon.rpc(GUN_SCN,second_con, first_con)
 	second_player.equip_weapon.rpc(GUN_SCN,first_con, second_con)
 	
 	first_player.duel_complete.connect(weapon_fight_timer) #End event when the duel terminates
 	
 	return lobby.get_player_color_string(first_player) +" and " + lobby.get_player_color_string(second_player) + " must duel " +  \
-	" to the death with guns!"
+	" to the death with guns! Don't hurt any bystanders though..."
 #-------------------------------------------------------------------------------
 
 #Event helpers
@@ -244,7 +247,7 @@ func check_banned_os(os:String, contestant:int)->void:
 	if OS.has_feature(os):
 		subject.explode.rpc_id.call_deferred(contestant)
 
-#Grace period after a weapon fight ends
+#Grace period after a weapon fight ends helper, emits event complete cond
 func weapon_fight_timer()->void:
 	await get_tree().create_timer(2).timeout
 	event_complete.emit()

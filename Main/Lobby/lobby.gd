@@ -299,6 +299,7 @@ func event_cycle()->void:
 	$UI.update_event_terminal("Next event in:")
 	await create_game_timer(10).timeout
 	
+	#Safety check to account for async contestant removal beahvior
 	if contestants.size() == 1:
 		someone_wins(contestants[0])
 		return

@@ -79,6 +79,7 @@ var direction: float = 1.0 : # Which direction the player is facing
 		# Flip sprite
 		$AnimatedSprite2D.flip_h = (direction < 0.0)
 		
+		#Socket updates with direction
 		var socket:Marker2D = $Socket
 		if socket:
 			socket.scale.x = value
@@ -262,7 +263,7 @@ func explode()->void:
 	$AnimatedSprite2D.play("ded")
 	$Sprite2D.modulate.a = .5
 	
-	unequip_weapon()
+	unequip_weapon() #Exploding makes one lose their weapon
 	
 	z_index = 100
 	
@@ -286,12 +287,12 @@ func spawn_explosion(pos: Vector2, color: Color):
 func hide_player():
 	hide()
 	
-	var collider:CollisionShape2D = $CollisionShape2D
+	var collider:CollisionShape2D = $CollisionShape2D #safer collider removal
 	if collider:
 		collider.queue_free()
 		my_label.queue_free()
 	
-	unequip_weapon()
+	unequip_weapon() #hidden players should not have weapons
 	 
 #-------------------------------------------------------------------------------
 
@@ -368,15 +369,17 @@ func update_color(color:String)->void:
 
 #Weapon logic
 
+#Adds a weapon to a player socket
 @rpc("any_peer", "call_local")
 func equip_weapon(weapon_scn:String, target:int, weapon_owner:int)->void:
 	var weapon:Weapon = load(weapon_scn).instantiate()
 	weapon.set_up(target, weapon_owner)
 	$Socket.equip_weapon(weapon)
 
+#Removes a weapon from a player's socket
 @rpc("any_peer", "call_local")
 func unequip_weapon()->void:
 	var potential_weapon:Node2D = $Socket.get_node_or_null("Weapon")
 	if potential_weapon: potential_weapon.queue_free()
 	
-	duel_complete.emit()
+	duel_complete.emit() #Removing a weapon emits the duel complete signal used by the EM
