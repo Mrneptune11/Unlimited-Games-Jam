@@ -263,7 +263,12 @@ func explode()->void:
 	$AnimatedSprite2D.play("ded")
 	$Sprite2D.modulate.a = .5
 	
-	unequip_weapon() #Exploding makes one lose their weapon
+	#Unequip weapons if necessary
+	var weapon:Weapon = $Socket.get_node_or_null("Weapon")
+	if weapon:
+		get_tree().current_scene.get_player(weapon.target).unequip_weapon.rpc()
+		unequip_weapon.rpc() 
+	
 	
 	z_index = 100
 	
@@ -271,6 +276,12 @@ func explode()->void:
 	
 	var lobby:Lobby = get_tree().current_scene
 	lobby.remove_contestant.rpc_id(1, peer_id)
+	
+	#Delete an entry box if necessary
+	var lobby_ui:Array[Node] = lobby.get_node("UI").get_children()
+	for child:Node in lobby_ui:
+		if child is EntryBox:
+			child.queue_free()
 	
 
 ##Explosion are not a syncronized object, but rather every player spawns one at the correct position
@@ -328,19 +339,20 @@ func create_label() -> void:
 func ask_name()->void:
 	if (!local): return
 	
-	mode = Mode.PAUSE
+	mode = Mode.PAUSE  #pause player
 	
 	var name_box:EntryBox = preload("res://Objects/Entry Box/EntryBox.tscn").instantiate()
 	get_node("/root/Lobby/UI").add_child(name_box)
 	
-	name_box.my_button.pressed.connect(func():
+	name_box.set_up(func(): #Set up entry box to name the player
 		var name_text:String = name_box.my_entry.text
 		if name_text.is_empty(): return
 		
 		set_player_name.rpc(name_text)
 		mode = Mode.PLAY
-		name_box.queue_free.call_deferred()
-	)
+		name_box.queue_free.call_deferred(),
+		9,
+		"Enter a Name:")
 
 #-------------------------------------------------------------------------------
 
