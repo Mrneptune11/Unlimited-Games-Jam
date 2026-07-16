@@ -26,10 +26,11 @@ const _LAVA_EVENT_WAIT_DURATION: float = 7.0
 ## Reference to the Lava scene.
 const _LAVA_EVENT_SCENE: PackedScene = preload("res://Events/Lava/Lava.tscn")
 
-# ---------- Gun Fight ----------
+# ---------- Weapon Fights ----------
 
 #Ref to gun scene
 const GUN_SCN:String =  "res://Objects/Weapons/Gun/Gun.tscn"
+const SWORD_SCN:String = "res://Objects/Weapons/Sword/sword.tscn"
 
 #-------------------------------------------------------------------------------
 
@@ -120,7 +121,9 @@ func match_event(event_id:StringName, lobby:Lobby):
 		"lava":
 			event_call = lava.bind(lobby)
 		"gun_fight": 
-			event_call = gun_fight.bind(lobby)
+			event_call = weapon_fight.bind(lobby, GUN_SCN, "guns")
+		"sword_fight":
+			event_call = weapon_fight.bind(lobby, SWORD_SCN, "katanas")
 		"spelling_bee": 
 			event_call = spelling_bee.bind(lobby)
 		_:
@@ -257,7 +260,7 @@ func lava(lobby:Lobby)->String:
 	return "Lava is rising upward! Get to higher ground!"
 
 #Begins a gun fight between two random players
-func gun_fight(lobby:Lobby)->String:
+func weapon_fight(lobby:Lobby, weapon_path:String, weapon_type:String)->String:
 	for contestant in lobby.contestants:
 		print(lobby.get_player(contestant))
 	
@@ -271,13 +274,13 @@ func gun_fight(lobby:Lobby)->String:
 	var second_player:Player = lobby.get_player(second_con)
 	
 	#Equip their guns
-	first_player.equip_weapon.rpc(GUN_SCN,second_con, first_con)
-	second_player.equip_weapon.rpc(GUN_SCN,first_con, second_con)
+	first_player.equip_weapon.rpc(weapon_path,second_con, first_con)
+	second_player.equip_weapon.rpc(weapon_path,first_con, second_con)
 	
-	first_player.duel_complete.connect(weapon_fight_timer) #End event when the duel terminates
+	first_player.duel_complete.connect(weapon_fight_timer, CONNECT_ONE_SHOT) #End event when the duel terminates
 	
 	return lobby.get_player_color_string(first_player) +" and " + lobby.get_player_color_string(second_player) + " must duel " +  \
-	" to the death with guns! Don't hurt any bystanders though..."
+	" to the death with " + weapon_type + "! Don't hurt any bystanders though..."
 
 #Prompt players to submit an answer as quick as they can 
 func spelling_bee(lobby:Lobby)->String:

@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://cw1sf4elosvv0"]
+
+[ext_resource type="PackedScene" uid="uid://bmfya0toul7o6" path="res://Objects/Weapons/Weapon.tscn" id="1_782xi"]
+[ext_resource type="Script" uid="uid://mo44j8hi7vp7" path="res://Objects/Weapons/Sword/sword.gd" id="2_uh0sh"]
+[ext_resource type="Texture2D" uid="uid://bvevr10j2py0x" path="res://Assets/temp/katana.png" id="3_4qq1x"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_r76a6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_4qq1x")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Weapon" unique_id=1179641535 instance=ExtResource("1_782xi")]
+script = ExtResource("2_uh0sh")
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=1527165884]
+sprite_frames = SubResource("SpriteFrames_r76a6")
+offset = Vector2(-1000, 200)

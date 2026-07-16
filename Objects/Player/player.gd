@@ -136,8 +136,8 @@ func teleport(new_pos: Vector2) -> void:
 func _input(_event: InputEvent) -> void:
 	if (!local || mode == Mode.PAUSE): return #Prevent input from others / during pause
 	
-	if Input.is_key_label_pressed(KEY_0):
-		pass
+	#if Input.is_key_label_pressed(KEY_0):
+		#equip_weapon("res://Objects/Weapons/Sword/sword.tscn", 1,1)
 
 func _physics_process(delta: float) -> void:
 	# Only process physics if local

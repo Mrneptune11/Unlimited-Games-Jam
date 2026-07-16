@@ -1,8 +1,11 @@
 [gd_scene format=3 uid="uid://cp4b2pq44hqp0"]
 
+[ext_resource type="Script" uid="uid://fyysesdycpdj" path="res://Objects/Weapons/Projectile/projectile.gd" id="1_ta1dt"]
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_g4v7s"]
 
 [node name="Projectile" type="Area2D" unique_id=402566226]
+script = ExtResource("1_ta1dt")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=827429628]
 

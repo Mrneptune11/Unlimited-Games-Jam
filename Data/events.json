@@ -68,4 +68,9 @@
 		"id" : "spelling_bee",
 		"weight" : 1,
 	},
+	
+	{
+		"id" : "sword_fight",
+		"weight" : 10000,
+	}
 ]
