@@ -63,4 +63,9 @@
 		"id" : "gun_fight",
 		"weight" : 1,
 	},
+	
+		{
+		"id" : "spelling_bee",
+		"weight" : 1,
+	},
 ]
