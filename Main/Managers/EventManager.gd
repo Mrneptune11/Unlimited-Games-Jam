@@ -281,7 +281,7 @@ func spelling_bee(lobby:Lobby)->String:
 
 ## Helper function for the Fireballs event.
 ## Using RPC allows the event node to be instantiated on both the server & clients.
-@rpc("authority", "call_remote", "reliable")
+@rpc("authority", "call_local", "reliable")
 func fireballs_helper()->void:
 	var fireball_spawner: FireballSpawner = _FIREBALLS_EVENT_SPAWNER_SCENE.instantiate()
 	get_tree().current_scene.add_child(fireball_spawner)

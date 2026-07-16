@@ -6,5 +6,6 @@ func _ready()->void:
 func handle_collision(body:Node2D)->void:
 	if body is Player:
 		body.explode()
+		return
 	
 	body.queue_free()
