@@ -262,6 +262,7 @@ func explode()->void:
 	self.mode = Mode.SPECTATE
 	$AnimatedSprite2D.play("ded")
 	$Sprite2D.modulate.a = .5
+	$CollisionShape2D.set_deferred("disabled",true)
 	
 	#Unequip weapons if necessary
 	var weapon:Weapon = $Socket.get_node_or_null("Weapon")

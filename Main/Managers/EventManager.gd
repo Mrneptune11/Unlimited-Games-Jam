@@ -321,7 +321,9 @@ func bouncy_balls_helper()->void:
 	get_tree().current_scene.add_child(ball_spawner)
 	
 	# When the event timer expires, destroy the node to stop spawning balls.
-	event_complete.connect(func(): ball_spawner.spawning = false)
+	event_complete.connect(func(): 
+		if ball_spawner:
+			ball_spawner.spawning = false)
 
 ##--OS Events--
 
