@@ -298,7 +298,7 @@ func spawn_explosion(pos: Vector2, color: Color):
 func hide_player():
 	hide()
 	
-	var collider:CollisionShape2D = $CollisionShape2D #safer collider removal
+	var collider:CollisionShape2D = get_node_or_null("CollisionShape2D") #safer collider removal
 	if collider:
 		collider.queue_free()
 		my_label.queue_free()
