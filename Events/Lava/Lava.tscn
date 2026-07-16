@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://68gfy5rf8aet" path="res://Events/Lava/lava.gd" id="1_7ljpk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4xi1n"]
-size = Vector2(1000, 500)
+size = Vector2(1792, 500)
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_7ljpk"]
 properties/0/path = NodePath(".:position")
@@ -17,7 +17,7 @@ script = ExtResource("1_7ljpk")
 [node name="Sprite2D" type="Polygon2D" parent="." unique_id=2038695244]
 position = Vector2(0, 250)
 color = Color(0.9411765, 0.2, 0, 1)
-polygon = PackedVector2Array(-500, -250, 500, -250, 500, 250, -500, 250)
+polygon = PackedVector2Array(-896, -250, 896, -250, 896, 22, 896, 262, -896, 246, -896, 6)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=348210516]
 position = Vector2(0, 250)
