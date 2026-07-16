@@ -18,6 +18,14 @@ const _BOUNCY_BALLS_EVENT_DURATION: float = 20.0
 ## Reference to the Ball Spawner scene.
 const _BOUNCY_BALLS_EVENT_SPAWNER_SCENE: PackedScene = preload("res://Events/BouncyBalls/BallSpawner.tscn")
 
+# ---------- Lava ----------
+
+## AFTER the lava has reached its max height, how long to wait before ending the event.
+const _LAVA_EVENT_WAIT_DURATION: float = 7.0
+
+## Reference to the Lava scene.
+const _LAVA_EVENT_SCENE: PackedScene = preload("res://Events/Lava/Lava.tscn")
+
 # ---------- Gun Fight ----------
 
 #Ref to gun scene
@@ -109,6 +117,8 @@ func match_event(event_id:StringName, lobby:Lobby):
 			event_call = fireballs.bind(lobby)
 		"bouncy_balls":
 			event_call = bouncy_balls.bind(lobby)
+		"lava":
+			event_call = lava.bind(lobby)
 		"gun_fight": 
 			event_call = gun_fight.bind(lobby)
 		"spelling_bee": 
@@ -231,6 +241,20 @@ func bouncy_balls(_lobby:Lobby)->String:
 	end_event_by_timer(_BOUNCY_BALLS_EVENT_DURATION)
 	
 	return "The circus is dropping bouncy balls everywhere!"
+
+## Spawns lava, which slowly rises upward and kills any players who touch it.
+## Uses the Lobby node's HazardSpawner to sync server & client.
+func lava(lobby:Lobby)->String:
+	var lava_scene: Lava = _LAVA_EVENT_SCENE.instantiate()
+	lobby.add_child(lava_scene)
+	
+	# When the lava reaches its max height, wait for a moment before finishing the event.
+	lava_scene.max_height_reached.connect(end_event_by_timer.bind(_LAVA_EVENT_WAIT_DURATION))
+	
+	# When the event timer expires, destroy the lava.
+	event_complete.connect(lava_scene.queue_free)
+	
+	return "Lava is rising upward! Get to higher ground!"
 
 #Begins a gun fight between two random players
 func gun_fight(lobby:Lobby)->String:
