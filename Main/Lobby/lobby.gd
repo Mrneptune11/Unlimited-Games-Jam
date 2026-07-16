@@ -176,8 +176,16 @@ func load_level(new_level_idx: int) -> void:
 	level_idx = new_level_idx
 	$Level.add_child.call_deferred(level, true)
 	
-	#spawn players to 0,0
-	teleport_players(Vector2.ZERO)
+	print(new_level_idx)
+	if new_level_idx == 1:
+		var spawn_pos:Array[Node] = level.get_node("Spawns").get_children()
+		var players:Array[Player] = get_players()
+		for i:int in range(contestants.size()):
+			players[i].teleport.rpc(spawn_pos[i].position)
+	
+	else:
+		#spawn players to 0,0
+		teleport_players(Vector2.ZERO)
 
 func unload_level() -> void:
 	if (level != null): level.queue_free()
