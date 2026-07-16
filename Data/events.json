@@ -45,6 +45,11 @@
 	},
 	
 	{
+		"id" : "lava",
+		"weight" : 1,
+	},
+	
+	{
 		"id" : "increase_size",
 		"weight" : 1,
 	},
