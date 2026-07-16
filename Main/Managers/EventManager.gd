@@ -264,7 +264,7 @@ func spelling_bee(lobby:Lobby)->String:
 	var lobby_path:NodePath = lobby.get_path()
 	
 	for contestant:int in lobby.contestants:
-		text_prompt.rpc_id(contestant,lobby_path, "spelling_bee", 30, word, "")
+		text_prompt.rpc_id(contestant,lobby_path, "spelling_bee", 40, word, "")
 		
 	var timer:SceneTreeTimer = get_tree().create_timer(10)
 	lobby.get_node("UI").active_timer = timer
