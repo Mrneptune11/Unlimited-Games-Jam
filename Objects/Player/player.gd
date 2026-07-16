@@ -277,6 +277,11 @@ func explode()->void:
 	var lobby:Lobby = get_tree().current_scene
 	lobby.remove_contestant.rpc_id(1, peer_id)
 	
+	var lobby_ui:Array[Node] = lobby.get_node("UI").get_children()
+	for child:Node in lobby_ui:
+		if child is EntryBox:
+			child.queue_free()
+	
 
 ##Explosion are not a syncronized object, but rather every player spawns one at the correct position
 @rpc("any_peer", "call_local", "reliable")
@@ -345,7 +350,7 @@ func ask_name()->void:
 		set_player_name.rpc(name_text)
 		mode = Mode.PLAY
 		name_box.queue_free.call_deferred(),
-		
+		9,
 		"Enter a Name:")
 
 #-------------------------------------------------------------------------------
@@ -389,3 +394,7 @@ func unequip_weapon()->void:
 	if potential_weapon: potential_weapon.queue_free()
 	
 	duel_complete.emit() #Removing a weapon emits the duel complete signal used by the EM
+
+#-------------------------------------------------------------------------------
+
+#Event Logic

@@ -45,9 +45,13 @@ class EventData:
 
 const EVENT_DICT:Array = preload("res://Data/events.json").data
 const NAME_DICT:Array = preload("res://Data/epic_names.json").data
+const WORDS:Array[String] = preload("res://Data/words.json").data
 
 var event_list:Array[EventData] = []
 var event_weights:Array[float] = []
+
+var completed_goal:Dictionary[int,float] = {} #Tracks players that complete a given event goal
+var goal_completed:bool = false #used to track goal state on a given event
 
 #-------------------------------------------------------------------------------
 
@@ -107,6 +111,8 @@ func match_event(event_id:StringName, lobby:Lobby):
 			event_call = bouncy_balls.bind(lobby)
 		"gun_fight": 
 			event_call = gun_fight.bind(lobby)
+		"spelling_bee": 
+			event_call = spelling_bee.bind(lobby)
 		_:
 			event_call = func(): return "ERROR: Event " + event_id + " not found." #Event id not recognized during match
 	
@@ -248,9 +254,28 @@ func gun_fight(lobby:Lobby)->String:
 	
 	return lobby.get_player_color_string(first_player) +" and " + lobby.get_player_color_string(second_player) + " must duel " +  \
 	" to the death with guns! Don't hurt any bystanders though..."
+
+#Prompt players to submit an answer as quick as they can 
+func spelling_bee(lobby:Lobby)->String:
+	completed_goal.clear() #clear old contestant data
+	goal_completed = false
+	
+	var word:String = WORDS.pick_random()
+	var lobby_path:NodePath = lobby.get_path()
+	
+	for contestant:int in lobby.contestants:
+		text_prompt.rpc_id(contestant,lobby_path, "spelling_bee", 30, word, "")
+		
+	var timer:SceneTreeTimer = get_tree().create_timer(10)
+	lobby.get_node("UI").active_timer = timer
+	timer.timeout.connect(eval_completion.bind(completed_goal,lobby_path))
+
+	return "Time for a spelling bee! Last to answer explodes!"
 #-------------------------------------------------------------------------------
 
 #Event helpers
+
+##--Ball Events--
 
 ## Helper function for the Fireballs event.
 ## Using RPC allows the event node to be instantiated on both the server & clients.
@@ -272,6 +297,8 @@ func bouncy_balls_helper()->void:
 	# When the event timer expires, destroy the node to stop spawning balls.
 	event_complete.connect(func(): ball_spawner.spawning = false)
 
+##--OS Events--
+
 #RPC call used to check the operating systems of a give peer, and explode them if necessary
 @rpc("authority", "call_local", "reliable")
 func check_banned_os(os:String, contestant:int)->void:
@@ -279,7 +306,83 @@ func check_banned_os(os:String, contestant:int)->void:
 	if OS.has_feature(os):
 		subject.explode.rpc_id.call_deferred(contestant)
 
+##--Weapon Events--
+
 #Grace period after a weapon fight ends helper, emits event complete cond
 func weapon_fight_timer()->void:
 	await get_tree().create_timer(2).timeout
 	event_complete.emit()
+
+##--Text Prompt Events--
+
+#Sends a text prompt to players
+@rpc("authority", "call_local", "reliable")
+func text_prompt(lobby_path:NodePath, to_call:String, max_length:int, word:String, start_text:String = "")->void:
+	var caller:Callable 
+	var prompt:String = "Type the word: " + word
+	
+	var entry_box:EntryBox = preload("res://Objects/Entry Box/EntryBox.tscn").instantiate()
+	get_node("/root/Lobby/UI").add_child(entry_box)
+	var start_time = Time.get_ticks_usec()
+	
+	var player:Player = get_node(lobby_path).get_player(multiplayer.get_unique_id())
+	player.mode = player.Mode.PAUSE
+	
+	match to_call:
+		"spelling_bee":
+			caller = (func(entry_path:NodePath, solution:String):
+				var text_box:EntryBox = get_node(entry_path)
+				if text_box.get_node("HBox").get_node("Entry").text !=  solution: return
+				EM.goal_complete.rpc_id(1,Time.get_ticks_usec() - start_time, lobby_path)
+				player.mode = player.Mode.PLAY
+				text_box.queue_free()
+				)
+		_:
+			printerr("valid text prompt callable not found")
+	
+	entry_box.set_up(caller.bind(entry_box.get_path(),word), \
+	max_length, prompt, start_text)
+	
+@rpc("any_peer", "call_local", "reliable")
+func goal_complete(time:float, lobby_path:NodePath)->void: 
+	if !multiplayer.is_server(): return
+	
+	var peer:int = multiplayer.get_remote_sender_id()
+	completed_goal[peer] =  time
+	 
+	if completed_goal.size() >= get_node(lobby_path).contestants.size():
+		print("All players reached goal complete")
+		eval_completion(completed_goal,lobby_path)
+		
+
+func eval_completion(completed:Dictionary[int, float], lobby_path:NodePath)->void:
+	var contest:Array[int] = get_node(lobby_path).contestants
+	
+	if !goal_completed:
+		if completed_goal.size() < contest.size():
+			var unfinished:Array[int] = contest.duplicate_deep().filter( \
+					func(item:int): 
+						if !completed_goal.keys().has(item): 
+							return item
+			)
+			
+			for peer:int in unfinished:
+				get_node(lobby_path).get_player(peer).explode.rpc_id(peer)
+		else:
+		
+			var slowest_peer:int = -1
+			var slowest_time:float = 0.0
+			
+			for peer:int in completed.keys():
+				var test_time:float = completed[peer]
+				if test_time >= slowest_time:
+					slowest_time = test_time
+					slowest_peer = peer
+			
+			get_node(lobby_path).get_player(slowest_peer).explode.rpc_id(slowest_peer)
+	
+	goal_completed = true
+	
+	await get_tree().create_timer(3).timeout
+	event_complete.emit()
+	
