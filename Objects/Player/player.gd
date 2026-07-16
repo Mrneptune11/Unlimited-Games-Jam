@@ -277,6 +277,7 @@ func explode()->void:
 	var lobby:Lobby = get_tree().current_scene
 	lobby.remove_contestant.rpc_id(1, peer_id)
 	
+	#Delete an entry box if necessary
 	var lobby_ui:Array[Node] = lobby.get_node("UI").get_children()
 	for child:Node in lobby_ui:
 		if child is EntryBox:
@@ -338,12 +339,12 @@ func create_label() -> void:
 func ask_name()->void:
 	if (!local): return
 	
-	mode = Mode.PAUSE
+	mode = Mode.PAUSE  #pause player
 	
 	var name_box:EntryBox = preload("res://Objects/Entry Box/EntryBox.tscn").instantiate()
 	get_node("/root/Lobby/UI").add_child(name_box)
 	
-	name_box.set_up(func():
+	name_box.set_up(func(): #Set up entry box to name the player
 		var name_text:String = name_box.my_entry.text
 		if name_text.is_empty(): return
 		
@@ -394,7 +395,3 @@ func unequip_weapon()->void:
 	if potential_weapon: potential_weapon.queue_free()
 	
 	duel_complete.emit() #Removing a weapon emits the duel complete signal used by the EM
-
-#-------------------------------------------------------------------------------
-
-#Event Logic

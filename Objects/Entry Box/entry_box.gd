@@ -5,6 +5,7 @@ class_name EntryBox extends PanelContainer
 @onready var my_button:Button = $HBox/Button ##Submit Button
 @onready var my_entry:LineEdit = $HBox/Entry ##line entry
 
+#Set up function gives entry box the necessary info to operate
 func set_up(to_call:Callable, max_length:int = 9, prompt:String = "", start_text:String ="")->void:
 	my_button.pressed.connect(to_call)
 	$HBox/NameLabel.text = prompt
