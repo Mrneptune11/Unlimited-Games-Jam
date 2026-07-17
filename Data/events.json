@@ -36,7 +36,7 @@
 	
 	{
 		"id" : "fireballs",
-		"weight" : 1,
+		"weight" : 10000,
 	},
 	
 	{
@@ -71,7 +71,7 @@
 	
 	{
 		"id" : "sword_fight",
-		"weight" : 10000,
+		"weight" : 1,
 	},
 
 	{
