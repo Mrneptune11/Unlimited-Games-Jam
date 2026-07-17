@@ -55,6 +55,7 @@ class EventData:
 const EVENT_DICT:Array = preload("res://Data/events.json").data
 const NAME_DICT:Array = preload("res://Data/epic_names.json").data
 const WORDS:Array[String] = preload("res://Data/words.json").data
+const TRIVIA:Array[Dictionary] = preload("res://Data/questions.json").data
 
 var event_list:Array[EventData] = []
 var event_weights:Array[float] = []
@@ -126,6 +127,8 @@ func match_event(event_id:StringName, lobby:Lobby):
 			event_call = weapon_fight.bind(lobby, SWORD_SCN, "katanas")
 		"spelling_bee": 
 			event_call = spelling_bee.bind(lobby)
+		"trivia_time": 
+			event_call = trivia_time.bind(lobby)
 		_:
 			event_call = func(): return "ERROR: Event " + event_id + " not found." #Event id not recognized during match
 	
@@ -300,6 +303,16 @@ func spelling_bee(lobby:Lobby)->String:
 	timer.timeout.connect(eval_completion.bind(completed_goal,lobby_path))
 
 	return "Time for a spelling bee! Last to answer explodes!"
+
+func trivia_time(lobby:Lobby)->String:
+	var trivia:Dictionary = TRIVIA.pick_random()
+	var lobby_path:NodePath = lobby.get_path()
+	
+		#All contestants have to spell the word
+	for contestant:int in lobby.contestants:
+		text_prompt.rpc_id(contestant,lobby_path, "trivia_time", 1, trivia["answer"], "",trivia)
+	
+	return "Trivia time! Answer correctly or you explode."
 #-------------------------------------------------------------------------------
 
 #Event helpers
@@ -348,23 +361,28 @@ func weapon_fight_timer()->void:
 
 #Sends a text prompt to players
 @rpc("authority", "call_local", "reliable")
-func text_prompt(lobby_path:NodePath, to_call:String, max_length:int, word:String, start_text:String = "")->void:
+func text_prompt(lobby_path:NodePath, to_call:String, max_length:int, word:String, start_text:String = "", 
+		misc_data:Dictionary = {})->void:
 	#Set up information
 	var caller:Callable 
-	var prompt:String = "Type the word: " + word
+	var prompt:String = ""
 	
 	#Create the entry box
 	var entry_box:EntryBox = preload("res://Objects/Entry Box/EntryBox.tscn").instantiate()
 	get_node("/root/Lobby/UI").add_child(entry_box)
 	var start_time = Time.get_ticks_usec() #Start tracking how long a peer takes to answer
 	
+	var lobby:Lobby = get_node(lobby_path)
+	
 	#Pause the player
-	var player:Player = get_node(lobby_path).get_player(multiplayer.get_unique_id())
+	var player:Player = lobby.get_player(multiplayer.get_unique_id())
 	player.mode = player.Mode.PAUSE
 	
 	#handle what completion function to call
 	match to_call:
 		"spelling_bee":
+			prompt = "Type the word: " + word
+			
 			caller = (func(entry_path:NodePath, solution:String):
 				var text_box:EntryBox = get_node(entry_path)
 				if text_box.get_node("HBox").get_node("Entry").text !=  solution: return #Check correct solution
@@ -372,6 +390,26 @@ func text_prompt(lobby_path:NodePath, to_call:String, max_length:int, word:Strin
 				EM.goal_complete.rpc_id(1,Time.get_ticks_usec() - start_time, lobby_path) #Client tells host they completed the goal
 				player.mode = player.Mode.PLAY #Player can play again
 				text_box.queue_free() #entry box is removed
+				)
+		"trivia_time":
+			prompt = misc_data["question"] + "\n A:" + misc_data["A"] + "| B:" + misc_data["B"] + \
+			"| C:" + misc_data["C"] + "| D:" + misc_data["D"]
+			
+			var timer:SceneTreeTimer = get_tree().create_timer(10) 
+			timer.timeout.connect(player.explode)
+		
+			if multiplayer.is_server():
+				lobby.get_node("UI").active_timer = timer
+				timer.timeout.connect(weapon_fight_timer)
+
+			caller = (func(entry_path:NodePath, solution:String):
+				var text_box:EntryBox = get_node(entry_path)
+				if text_box.get_node("HBox").get_node("Entry").text.to_upper() !=  solution:  #Check correct solution
+					player.explode()
+				else:
+					timer.timeout.disconnect(player.explode)
+					player.mode = player.Mode.PLAY #Player can play again
+					text_box.queue_free() #entry box is removed
 				)
 		_:
 			printerr("valid text prompt callable not found")
