@@ -15,6 +15,9 @@ func set_up(new_target:int, new_owner:int) ->void:
 	target = new_target
 	my_owner = new_owner
 
+func _ready() -> void:
+	$AnimatedSprite2D.modulate = Color(lobby.get_player(my_owner).color_id)
+
 #Handles cooldown logic
 func _process(delta: float) -> void:
 	if !can_attack:

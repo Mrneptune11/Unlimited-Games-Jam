@@ -15,9 +15,9 @@ animations = [{
 }]
 
 [node name="Weapon" type="Node2D" unique_id=1179641535]
+texture_filter = 1
 script = ExtResource("1_1c0wm")
 metadata/_custom_type_script = "uid://drn5mbn6ohyh3"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1527165884]
-scale = Vector2(0.01, 0.01)
 sprite_frames = SubResource("SpriteFrames_g4v7s")

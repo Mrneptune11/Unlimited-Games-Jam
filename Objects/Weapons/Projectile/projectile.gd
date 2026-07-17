@@ -16,7 +16,13 @@ func set_up(new_velocity:Vector2, new_life:float, my_peer:int, lobby:Lobby)->voi
 	life_time = new_life
 	my_player = my_peer
 	
-	modulate = Color(lobby.get_player(my_peer).color_id)
+	var player:Player = lobby.get_player(my_peer)
+	
+	$Sprite2D.modulate = Color(player.color_id)
+	var anim:AnimatedSprite2D = $AnimatedSprite2D
+	if anim:
+			anim.modulate = Color(player.color_id)
+	scale.x = player.direction
 
 func _ready()->void:
 	body_entered.connect(handle_collision) #Hitting a body triggers collision handling

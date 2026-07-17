@@ -6,6 +6,7 @@ const BULLET_SPEED:float = 200 #Bullet speed constant
 
 func _ready() -> void:
 	cool_down = .75 #Ready sets the gun weapon classs cool down
+	super._ready()
 
 #Overriden attack spawns a projectile owned by this gun's owner
 func _attack()->void:

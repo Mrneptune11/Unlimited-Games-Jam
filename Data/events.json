@@ -71,7 +71,7 @@
 	
 	{
 		"id" : "sword_fight",
-		"weight" : 1,
+		"weight" : 10000,
 	},
 
 	{
