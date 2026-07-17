@@ -96,6 +96,10 @@ autoplay = "default"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1991172779]
 zoom = Vector2(5, 5)
+limit_left = -736
+limit_top = -304
+limit_right = 736
+limit_bottom = 448
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1611372691]
 shape = SubResource("RectangleShape2D_g4v7s")
