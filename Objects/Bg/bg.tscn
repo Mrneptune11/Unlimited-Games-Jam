@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://fmm44p2dxj8k"]
+
+[ext_resource type="Texture2D" uid="uid://hwfynfqpy0kn" path="res://Assets/sprites/bg.png" id="1_lj8nn"]
+
+[node name="Parallax2D" type="Parallax2D" unique_id=1872672102]
+texture_filter = 1
+scroll_scale = Vector2(0.5, 0.5)
+repeat_size = Vector2(128, 128)
+autoscroll = Vector2(16, 16)
+repeat_times = 12
+ignore_camera_scroll = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1919796283]
+texture = ExtResource("1_lj8nn")

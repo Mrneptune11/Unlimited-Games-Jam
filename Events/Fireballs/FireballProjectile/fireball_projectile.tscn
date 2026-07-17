@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://i1yoloe0cl2a"]
 
 [ext_resource type="Script" uid="uid://dftgyif060w77" path="res://Events/Fireballs/FireballProjectile/fireball_projectile.gd" id="1_23haa"]
-[ext_resource type="Texture2D" uid="uid://d2heawl5ty88q" path="res://Assets/sprites/white_square.png" id="2_y0vg8"]
+[ext_resource type="Texture2D" uid="uid://cdaqxaoa3ah3w" path="res://Assets/sprites/fireball.png" id="2_23haa"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4xi1n"]
 radius = 15.0
@@ -17,14 +17,12 @@ script = ExtResource("1_23haa")
 speed = 100.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=751189044]
-modulate = Color(1, 0.19607843, 0, 1)
 texture_filter = 1
 position = Vector2(0, -18)
-scale = Vector2(2.5, 2.5)
-texture = ExtResource("2_y0vg8")
+texture = ExtResource("2_23haa")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1550808346]
-position = Vector2(0, -18)
+position = Vector2(0, -16)
 shape = SubResource("CircleShape2D_4xi1n")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1157916286]

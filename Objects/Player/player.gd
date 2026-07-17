@@ -61,12 +61,13 @@ var state: State = State.IDLE : # The current state the player is in
 		# Limit the value to the bounds of State
 		state = clampi(value, 0, State.size() - 1) as State
 		#TODO Change sprite animation based on state
+		sprite.play("default")
 		if state != State.WALK:
 			sprite.frame = 0
 			sprite.pause()
-		else:
-			sprite.play()
-			
+		
+		if state == State.JUMP || state == State.FALL:
+			$AnimatedSprite2D.play("jump")
 
 var mode: Mode = Mode.PAUSE :
 	set (value):
@@ -178,6 +179,20 @@ func _process(_delta: float) -> void:
 	#Sync the ui labels with the player
 	if my_label:
 		my_label.position = (get_viewport().get_canvas_transform() * global_position) + label_offset
+	
+	#handle map borders
+	handle_bounds()
+
+func handle_bounds()->void:
+	var camera:Camera2D = $Camera2D
+	if global_position.x >= camera.limit_right:
+		global_position.x = camera.limit_left + 16
+	if global_position.x <= camera.limit_left:
+		global_position.x = camera.limit_right -16
+	if global_position.y >= camera.limit_bottom:
+		global_position.y = camera.limit_top + 16
+	if global_position.y <= camera.limit_top:
+		global_position.y = camera.limit_bottom - 16
 
 #-------------------------------------------------------------------------------
 

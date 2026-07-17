@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cjh4ydklf8sec"]
 
 [ext_resource type="Script" uid="uid://qir8pk12t4wc" path="res://Events/BouncyBalls/BallProjectile/ball_projectile.gd" id="1_5nj5c"]
-[ext_resource type="Texture2D" uid="uid://d2heawl5ty88q" path="res://Assets/sprites/white_square.png" id="2_bkuh3"]
+[ext_resource type="Texture2D" uid="uid://m4jmaof7gjf3" path="res://Assets/sprites/ball.png" id="2_5nj5c"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_f7cfs"]
 friction = 0.6
@@ -30,10 +30,8 @@ physics_material_override = SubResource("PhysicsMaterial_f7cfs")
 script = ExtResource("1_5nj5c")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=751189044]
-modulate = Color(0.48333794, 0.6493677, 1, 1)
 texture_filter = 1
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_bkuh3")
+texture = ExtResource("2_5nj5c")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1550808346]
 shape = SubResource("CircleShape2D_4xi1n")

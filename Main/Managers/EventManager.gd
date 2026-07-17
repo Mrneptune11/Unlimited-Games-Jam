@@ -260,7 +260,7 @@ func lava(lobby:Lobby)->String:
 	# When the event timer expires, destroy the lava.
 	event_complete.connect(lava_scene.queue_free)
 	
-	return "Lava is rising upward! Get to higher ground!"
+	return "Corrupted data is is rising upward! Get to higher ground!"
 
 #Begins a gun fight between two random players
 func weapon_fight(lobby:Lobby, weapon_path:String, weapon_type:String)->String:
