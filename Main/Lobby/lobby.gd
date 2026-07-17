@@ -12,6 +12,7 @@ enum State {
 #Current status of the server
 var server_status:State = State.UNINIT:
 	set(value):
+		server_status = value
 		match value:
 			State.LOBBY:
 				$UI.update_event_terminal("Waiting for host to begin match...")
@@ -34,6 +35,8 @@ var contestants:Array[int] = [] ##Array of players who are still in the running 
 var level:Level = null
 var level_idx:int = 1
 #-------------------------------------------------------------------------------
+
+signal only_server_left
 
 # Lifecycle
 
@@ -110,21 +113,23 @@ func start_websocket_client(url: String) -> void:
 
 #Handles clean up for all connected peers when its time for the server to end
 func handle_server_disconnect()->void:
-	for child:Node in $Players.get_children():
-		child.queue_free()
+	force_peer_exit.rpc("")
 	
-	for child:Node in $Level.get_children():
-		child.queue_free()
+	await get_tree().create_timer(.5).timeout
+	
+	if multiplayer.is_server():
+		multiplayer.multiplayer_peer.close()
+		multiplayer.multiplayer_peer = null
+		get_tree().change_scene_to_file("res://Main/Lobby/Lobby.tscn")
+
+#Forces a peer to disconnect from the server
+@rpc("any_peer", "reliable")
+func force_peer_exit(message:String)->void:
+	if message:
+		OS.alert(message)
 	
 	multiplayer.multiplayer_peer.close()
 	multiplayer.multiplayer_peer = null
-	get_tree().change_scene_to_file("res://Main/Lobby/Lobby.tscn")
-
-#Forces a peer to disconnect from the server
-@rpc("authority", "reliable")
-func force_peer_exit(message:String)->void:
-	OS.alert(message)
-	multiplayer.multiplayer_peer.close()
 	get_tree().change_scene_to_file("res://Main/Lobby/Lobby.tscn")
 #-------------------------------------------------------------------------------
 
@@ -132,8 +137,10 @@ func force_peer_exit(message:String)->void:
 
 func _on_peer_connected(peer_id: int) -> void:
 	#Don't allow new joins after the game starts
-	if !server_status: 
-		force_peer_exit.rpc("Can't join server during an active match")
+	if (!multiplayer.is_server()): return
+		
+	if server_status != State.LOBBY: 
+		force_peer_exit.rpc_id(peer_id,"Can't join server during an active match")
 		return
 		
 	#handle spawn if host
@@ -144,6 +151,9 @@ func _on_peer_disconnected(peer_id: int) -> void:
 	#handle removal if host
 	if (!multiplayer.is_server()): return
 	remove_player(peer_id)
+	
+	if get_players().size() == 1:
+		only_server_left.emit()
 
 func _on_connected_to_server() -> void:
 	pass
