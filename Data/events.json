@@ -36,7 +36,7 @@
 	
 	{
 		"id" : "fireballs",
-		"weight" : 10000,
+		"weight" : 1,
 	},
 	
 	{
@@ -46,7 +46,7 @@
 	
 	{
 		"id" : "lava",
-		"weight" : 1,
+		"weight" : 10000,
 	},
 	
 	{
