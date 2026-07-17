@@ -184,7 +184,6 @@ func _process(_delta: float) -> void:
 
 func handle_bounds()->void:
 	var camera:Camera2D = $Camera2D
-	
 	if global_position.x >= camera.limit_right:
 		global_position.x = camera.limit_left + 16
 	if global_position.x <= camera.limit_left:

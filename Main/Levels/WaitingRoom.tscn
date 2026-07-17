@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://df01en1boiqpy" path="res://Main/Levels/level.gd" id="1_g6jaf"]
 [ext_resource type="Texture2D" uid="uid://msmaau3d3825" path="res://Assets/SpriteSheets/tile_sheet.png" id="2_6sviy"]
+[ext_resource type="PackedScene" uid="uid://fmm44p2dxj8k" path="res://Objects/Bg/bg.tscn" id="2_g6jaf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i3w5c"]
 texture = ExtResource("2_6sviy")
@@ -63,6 +64,8 @@ sources/0 = SubResource("TileSetAtlasSource_i3w5c")
 
 [node name="Node2D" type="Node2D" unique_id=1188062101]
 script = ExtResource("1_g6jaf")
+
+[node name="Parallax2D" parent="." unique_id=1872672102 instance=ExtResource("2_g6jaf")]
 
 [node name="Effects" type="Node2D" parent="." unique_id=433243468]
 
