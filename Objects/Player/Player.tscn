@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://xtu6gk86tanv" path="res://Assets/SpriteSheets/char_test-Sheet.png" id="1_we6tp"]
 [ext_resource type="Texture2D" uid="uid://bg7mtpr2qe4na" path="res://Assets/sprites/ghost.png" id="3_b0me6"]
 [ext_resource type="Script" uid="uid://c2ffnvyj4unmc" path="res://Objects/Player/socket.gd" id="5_1qpp8"]
+[ext_resource type="Texture2D" uid="uid://yorrxa8meq7l" path="res://Assets/sprites/jump.png" id="5_nd6ml"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oansn"]
 atlas = ExtResource("1_we6tp")
@@ -48,6 +49,14 @@ animations = [{
 "loop": 1,
 "name": &"default",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_nd6ml")
+}],
+"loop": 1,
+"name": &"jump",
+"speed": 5.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
@@ -92,6 +101,7 @@ texture = ExtResource("1_oansn")
 process_mode = 3
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_mg473")
+animation = &"jump"
 autoplay = "default"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1991172779]

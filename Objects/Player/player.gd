@@ -61,12 +61,13 @@ var state: State = State.IDLE : # The current state the player is in
 		# Limit the value to the bounds of State
 		state = clampi(value, 0, State.size() - 1) as State
 		#TODO Change sprite animation based on state
+		sprite.play("default")
 		if state != State.WALK:
 			sprite.frame = 0
 			sprite.pause()
-		else:
-			sprite.play()
-			
+		
+		if state == State.JUMP || state == State.FALL:
+			$AnimatedSprite2D.play("jump")
 
 var mode: Mode = Mode.PAUSE :
 	set (value):
