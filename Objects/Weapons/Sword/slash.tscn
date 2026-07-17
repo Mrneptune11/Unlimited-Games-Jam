@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dqx7x7jvx8t44"]
+
+[ext_resource type="PackedScene" uid="uid://cp4b2pq44hqp0" path="res://Objects/Weapons/Projectile/Projectile.tscn" id="1_6o8j3"]
+[ext_resource type="Texture2D" uid="uid://d2heawl5ty88q" path="res://Assets/sprites/white_square.png" id="2_u2cjt"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_782xi"]
+radius = 2.0
+height = 14.0
+
+[node name="Projectile" unique_id=402566226 instance=ExtResource("1_6o8j3")]
+
+[node name="Sprite2D" parent="." index="0" unique_id=827429628]
+position = Vector2(0, -3.0000005)
+scale = Vector2(0.125, 1.125)
+texture = ExtResource("2_u2cjt")
+
+[node name="CollisionShape2D" parent="." index="1" unique_id=1814601285]
+position = Vector2(0, -3)
+shape = SubResource("CapsuleShape2D_782xi")

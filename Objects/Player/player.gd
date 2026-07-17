@@ -136,8 +136,8 @@ func teleport(new_pos: Vector2) -> void:
 func _input(_event: InputEvent) -> void:
 	if (!local || mode == Mode.PAUSE): return #Prevent input from others / during pause
 	
-	if Input.is_key_label_pressed(KEY_0):
-		pass
+	#if Input.is_key_label_pressed(KEY_0):
+		#equip_weapon("res://Objects/Weapons/Sword/sword.tscn", 1,1)
 
 func _physics_process(delta: float) -> void:
 	# Only process physics if local
@@ -262,6 +262,7 @@ func explode()->void:
 	self.mode = Mode.SPECTATE
 	$AnimatedSprite2D.play("ded")
 	$Sprite2D.modulate.a = .5
+	$CollisionShape2D.set_deferred("disabled",true)
 	
 	#Unequip weapons if necessary
 	var weapon:Weapon = $Socket.get_node_or_null("Weapon")
@@ -298,7 +299,7 @@ func spawn_explosion(pos: Vector2, color: Color):
 func hide_player():
 	hide()
 	
-	var collider:CollisionShape2D = $CollisionShape2D #safer collider removal
+	var collider:CollisionShape2D = get_node_or_null("CollisionShape2D") #safer collider removal
 	if collider:
 		collider.queue_free()
 		my_label.queue_free()

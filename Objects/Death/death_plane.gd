@@ -5,7 +5,8 @@ func _ready()->void:
 
 func handle_collision(body:Node2D)->void:
 	if body is Player:
-		body.explode()
+		body.explode.rpc_id(body.peer_id)
 		return
 	
-	body.queue_free()
+	if multiplayer.is_server():
+		body.queue_free.call_deferred()

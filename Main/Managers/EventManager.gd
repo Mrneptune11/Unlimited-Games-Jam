@@ -26,10 +26,11 @@ const _LAVA_EVENT_WAIT_DURATION: float = 7.0
 ## Reference to the Lava scene.
 const _LAVA_EVENT_SCENE: PackedScene = preload("res://Events/Lava/Lava.tscn")
 
-# ---------- Gun Fight ----------
+# ---------- Weapon Fights ----------
 
 #Ref to gun scene
 const GUN_SCN:String =  "res://Objects/Weapons/Gun/Gun.tscn"
+const SWORD_SCN:String = "res://Objects/Weapons/Sword/sword.tscn"
 
 #-------------------------------------------------------------------------------
 
@@ -54,6 +55,7 @@ class EventData:
 const EVENT_DICT:Array = preload("res://Data/events.json").data
 const NAME_DICT:Array = preload("res://Data/epic_names.json").data
 const WORDS:Array[String] = preload("res://Data/words.json").data
+const TRIVIA:Array[Dictionary] = preload("res://Data/questions.json").data
 
 var event_list:Array[EventData] = []
 var event_weights:Array[float] = []
@@ -120,9 +122,13 @@ func match_event(event_id:StringName, lobby:Lobby):
 		"lava":
 			event_call = lava.bind(lobby)
 		"gun_fight": 
-			event_call = gun_fight.bind(lobby)
+			event_call = weapon_fight.bind(lobby, GUN_SCN, "guns")
+		"sword_fight":
+			event_call = weapon_fight.bind(lobby, SWORD_SCN, "katanas")
 		"spelling_bee": 
 			event_call = spelling_bee.bind(lobby)
+		"trivia_time": 
+			event_call = trivia_time.bind(lobby)
 		_:
 			event_call = func(): return "ERROR: Event " + event_id + " not found." #Event id not recognized during match
 	
@@ -257,7 +263,7 @@ func lava(lobby:Lobby)->String:
 	return "Lava is rising upward! Get to higher ground!"
 
 #Begins a gun fight between two random players
-func gun_fight(lobby:Lobby)->String:
+func weapon_fight(lobby:Lobby, weapon_path:String, weapon_type:String)->String:
 	for contestant in lobby.contestants:
 		print(lobby.get_player(contestant))
 	
@@ -271,13 +277,13 @@ func gun_fight(lobby:Lobby)->String:
 	var second_player:Player = lobby.get_player(second_con)
 	
 	#Equip their guns
-	first_player.equip_weapon.rpc(GUN_SCN,second_con, first_con)
-	second_player.equip_weapon.rpc(GUN_SCN,first_con, second_con)
+	first_player.equip_weapon.rpc(weapon_path,second_con, first_con)
+	second_player.equip_weapon.rpc(weapon_path,first_con, second_con)
 	
-	first_player.duel_complete.connect(weapon_fight_timer) #End event when the duel terminates
+	first_player.duel_complete.connect(grace_period, CONNECT_ONE_SHOT) #End event when the duel terminates
 	
 	return lobby.get_player_color_string(first_player) +" and " + lobby.get_player_color_string(second_player) + " must duel " +  \
-	" to the death with guns! Don't hurt any bystanders though..."
+	" to the death with " + weapon_type + "! Don't hurt any bystanders though..."
 
 #Prompt players to submit an answer as quick as they can 
 func spelling_bee(lobby:Lobby)->String:
@@ -297,6 +303,16 @@ func spelling_bee(lobby:Lobby)->String:
 	timer.timeout.connect(eval_completion.bind(completed_goal,lobby_path))
 
 	return "Time for a spelling bee! Last to answer explodes!"
+
+func trivia_time(lobby:Lobby)->String:
+	var trivia:Dictionary = TRIVIA.pick_random()
+	var lobby_path:NodePath = lobby.get_path()
+	
+		#All contestants have to spell the word
+	for contestant:int in lobby.contestants:
+		text_prompt.rpc_id(contestant,lobby_path, "trivia_time", 1, trivia["answer"], "",trivia)
+	
+	return "Trivia time! Answer correctly or you explode."
 #-------------------------------------------------------------------------------
 
 #Event helpers
@@ -321,7 +337,9 @@ func bouncy_balls_helper()->void:
 	get_tree().current_scene.add_child(ball_spawner)
 	
 	# When the event timer expires, destroy the node to stop spawning balls.
-	event_complete.connect(func(): ball_spawner.spawning = false)
+	event_complete.connect(func(): 
+		if ball_spawner:
+			ball_spawner.spawning = false)
 
 ##--OS Events--
 
@@ -335,7 +353,7 @@ func check_banned_os(os:String, contestant:int)->void:
 ##--Weapon Events--
 
 #Grace period after a weapon fight ends helper, emits event complete cond
-func weapon_fight_timer()->void:
+func grace_period()->void:
 	await get_tree().create_timer(2).timeout
 	event_complete.emit()
 
@@ -343,30 +361,55 @@ func weapon_fight_timer()->void:
 
 #Sends a text prompt to players
 @rpc("authority", "call_local", "reliable")
-func text_prompt(lobby_path:NodePath, to_call:String, max_length:int, word:String, start_text:String = "")->void:
+func text_prompt(lobby_path:NodePath, to_call:String, max_length:int, word:String, start_text:String = "", 
+		misc_data:Dictionary = {})->void:
 	#Set up information
 	var caller:Callable 
-	var prompt:String = "Type the word: " + word
+	var prompt:String = ""
 	
 	#Create the entry box
 	var entry_box:EntryBox = preload("res://Objects/Entry Box/EntryBox.tscn").instantiate()
 	get_node("/root/Lobby/UI").add_child(entry_box)
 	var start_time = Time.get_ticks_usec() #Start tracking how long a peer takes to answer
 	
+	var lobby:Lobby = get_node(lobby_path)
+	
 	#Pause the player
-	var player:Player = get_node(lobby_path).get_player(multiplayer.get_unique_id())
+	var player:Player = lobby.get_player(multiplayer.get_unique_id())
 	player.mode = player.Mode.PAUSE
 	
 	#handle what completion function to call
 	match to_call:
 		"spelling_bee":
+			prompt = "Type the word: " + word
+			
 			caller = (func(entry_path:NodePath, solution:String):
 				var text_box:EntryBox = get_node(entry_path)
-				if text_box.get_node("HBox").get_node("Entry").text !=  solution: return #Check correct solution
+				if text_box.get_node("HBox").get_node("Entry").text.to_lower() !=  solution: return #Check correct solution
 				
 				EM.goal_complete.rpc_id(1,Time.get_ticks_usec() - start_time, lobby_path) #Client tells host they completed the goal
 				player.mode = player.Mode.PLAY #Player can play again
 				text_box.queue_free() #entry box is removed
+				)
+		"trivia_time":
+			prompt = misc_data["question"] + "\n A:" + misc_data["A"] + "| B:" + misc_data["B"] + \
+			"| C:" + misc_data["C"] + "| D:" + misc_data["D"]
+			
+			var timer:SceneTreeTimer = get_tree().create_timer(10) 
+			timer.timeout.connect(player.explode)
+		
+			if multiplayer.is_server():
+				lobby.get_node("UI").active_timer = timer
+				timer.timeout.connect(grace_period)
+
+			caller = (func(entry_path:NodePath, solution:String):
+				var text_box:EntryBox = get_node(entry_path)
+				if text_box.get_node("HBox").get_node("Entry").text.to_upper() !=  solution:  #Check correct solution
+					player.explode()
+				else:
+					timer.timeout.disconnect(player.explode)
+					player.mode = player.Mode.PLAY #Player can play again
+					text_box.queue_free() #entry box is removed
 				)
 		_:
 			printerr("valid text prompt callable not found")
