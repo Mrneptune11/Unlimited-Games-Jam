@@ -36,8 +36,6 @@ var level:Level = null
 var level_idx:int = 1
 #-------------------------------------------------------------------------------
 
-signal only_server_left
-
 # Lifecycle
 
 func _init()->void:
@@ -113,14 +111,9 @@ func start_websocket_client(url: String) -> void:
 
 #Handles clean up for all connected peers when its time for the server to end
 func handle_server_disconnect()->void:
-	force_peer_exit.rpc("")
-	
-	await get_tree().create_timer(.5).timeout
-	
-	if multiplayer.is_server():
-		multiplayer.multiplayer_peer.close()
-		multiplayer.multiplayer_peer = null
-		get_tree().change_scene_to_file("res://Main/Lobby/Lobby.tscn")
+	multiplayer.multiplayer_peer.close()
+	multiplayer.multiplayer_peer = null
+	get_tree().change_scene_to_file("res://Main/Lobby/Lobby.tscn")
 
 #Forces a peer to disconnect from the server
 @rpc("any_peer", "reliable")
@@ -151,9 +144,6 @@ func _on_peer_disconnected(peer_id: int) -> void:
 	#handle removal if host
 	if (!multiplayer.is_server()): return
 	remove_player(peer_id)
-	
-	if get_players().size() == 1:
-		only_server_left.emit()
 
 func _on_connected_to_server() -> void:
 	pass
