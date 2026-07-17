@@ -6,14 +6,6 @@
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i3w5c"]
 texture = ExtResource("2_01y7v")
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-1:0/0 = 0
-1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-2:0/0 = 0
-2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-3:0/0 = 0
-3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:1/0 = 0
 0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:1/0 = 0
@@ -31,12 +23,42 @@ texture = ExtResource("2_01y7v")
 2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:2/0 = 0
 3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+4:0/0 = 0
+4:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+5:0/0 = 0
+5:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+6:0/0 = 0
+6:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+7:0/0 = 0
+4:1/0 = 0
+4:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+5:1/0 = 0
+5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+6:1/0 = 0
+6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+7:1/0 = 0
+7:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+4:2/0 = 0
+4:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+4:3/0 = 0
+4:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+5:3/0 = 0
+5:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+5:2/0 = 0
+5:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+6:2/0 = 0
+7:2/0 = 0
+7:3/0 = 0
+6:3/0 = 0
+6:4/0 = 0
+5:4/0 = 0
+4:4/0 = 0
 0:3/0 = 0
-0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:3/0 = 0
-1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:3/0 = 0
+2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
-[sub_resource type="TileSet" id="TileSet_g4v7s"]
+[sub_resource type="TileSet" id="TileSet_38ca1"]
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_i3w5c")
 
@@ -47,8 +69,13 @@ script = ExtResource("1_i15iu")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1604709701]
 texture_filter = 1
-tile_map_data = PackedByteArray("AAD8/wEAAAAAAAAAAAD9/wEAAAABAAEAAAD+/wEAAAABAAEAAAD//wEAAAABAAAAAAAAAAEAAAACAAAAAAABAAEAAAABAAEAAAACAAEAAAABAAEAAAADAAEAAAADAAAAAAAHAAEAAAAAAAEAAAAIAAEAAAABAAEAAAAJAAEAAAACAAEAAAD2/wEAAAAAAAEAAAD3/wEAAAABAAEAAAD4/wEAAAACAAEAAADx////AAAAAAMAAAD0////AAABAAMAAADy////AAABAAAAAADz////AAACAAAAAAALAP//AAACAAIAAAAMAP//AAABAAAAAAANAP//AAACAAAAAAAOAP//AAADAAIAAAAIAP3/AAABAAIAAAD3//3/AAABAAIAAADt//3/AAABAAAAAADu//3/AAACAAAAAADv//3/AAADAAAAAAAQAP3/AAAAAAAAAAARAP3/AAABAAAAAAASAP3/AAACAAAAAAADAPz/AAAAAAMAAAAEAPz/AAADAAEAAAAFAPz/AAABAAMAAAATAP3/AAADAAAAAADs//3/AAAAAAAAAADw//n/AAABAAIAAAAKAPv/AAACAAIAAAAMAPv/AAABAAMAAAALAPv/AAADAAEAAAAPAPr/AAABAAAAAAAQAPr/AAACAAAAAAARAPr/AAABAAEAAAASAPr/AAADAAAAAAD5//z/AAAAAAEAAAD6//z/AAABAAEAAAD7//z/AAACAAEAAADs//n/AAAAAAAAAADt//n/AAADAAAAAADz//j/AAAAAAAAAAD0//j/AAABAAAAAAD1//j/AAACAAAAAAD2//j/AAADAAAAAAD4//b/AAABAAIAAADn//r/AAABAAIAAADp//v/AAAAAAMAAAAOAPr/AAAAAAAAAAAVAPn/AAABAAIAAAD8//b/AAAAAAEAAAD9//b/AAACAAEAAAAZAPj/AAACAAEAAAAYAPj/AAAAAAEAAAAbAPb/AAAAAAAAAAAcAPb/AAABAAAAAAAdAPb/AAACAAAAAAAeAPb/AAADAAAAAADq//v/AAABAAMAAAA=")
-tile_set = SubResource("TileSet_g4v7s")
+tile_map_data = PackedByteArray("AAD8/wEAAAAAAAEAAAD9/wEAAAABAAEAAAD+/wEAAAABAAEAAAABAAEAAAABAAEAAAACAAEAAAABAAEAAAADAAEAAAACAAEAAAAHAAEAAAAAAAEAAAAIAAEAAAABAAEAAAAJAAEAAAACAAEAAAD2/wEAAAAAAAEAAAD3/wEAAAABAAEAAAD4/wEAAAACAAEAAADx////AAAAAAEAAAD0////AAACAAEAAAALAP//AAAAAAEAAAAOAP//AAACAAEAAAAIAP3/AAABAAIAAAD3//3/AAABAAIAAADt//3/AAABAAEAAADu//3/AAABAAEAAADv//3/AAACAAEAAAADAPz/AAAAAAEAAAAEAPz/AAADAAEAAAAFAPz/AAACAAEAAADs//3/AAAAAAEAAADw//n/AAABAAIAAAAKAPv/AAAAAAEAAAAMAPv/AAACAAEAAAALAPv/AAADAAEAAAARAPr/AAABAAEAAAD5//z/AAAAAAEAAAD6//z/AAABAAEAAAD7//z/AAACAAEAAAD4//b/AAABAAIAAADn//r/AAABAAIAAADp//v/AAAAAAEAAAAVAPn/AAABAAIAAAD8//b/AAAAAAEAAAD9//b/AAACAAEAAAAZAPj/AAACAAEAAAAYAPj/AAAAAAEAAADq//v/AAACAAEAAADs//n/AAAAAAEAAADt//n/AAACAAEAAADz//j/AAAAAAEAAAD0//j/AAABAAEAAAD1//j/AAABAAEAAAD2//j/AAACAAEAAADy////AAABAAEAAADz////AAABAAEAAAD//wEAAAABAAEAAAAAAAEAAAABAAEAAAAMAP//AAABAAEAAAANAP//AAABAAEAAAASAPr/AAACAAEAAAAOAPr/AAAAAAEAAAAPAPr/AAABAAEAAAAQAPr/AAABAAEAAAAQAP3/AAAAAAEAAAATAP3/AAACAAEAAAARAP3/AAABAAEAAAASAP3/AAABAAEAAAAbAPb/AAAAAAEAAAAfAPb/AAACAAEAAAAcAPb/AAABAAEAAAAdAPb/AAABAAEAAAAeAPb/AAABAAEAAAA=")
+tile_set = SubResource("TileSet_38ca1")
+
+[node name="FrontLayer" type="TileMapLayer" parent="." unique_id=249622084]
+texture_filter = 1
+tile_map_data = PackedByteArray("AAD8/wEAAAAAAAMAAAD//wEAAAAEAAQAAAAAAAEAAAAFAAQAAADx////AAAAAAMAAAD0////AAABAAMAAADy////AAAEAAQAAADz////AAAFAAQAAAALAP//AAAGAAIAAAAMAP//AAAEAAQAAAANAP//AAAFAAQAAAAOAP//AAAHAAIAAADt//3/AAAEAAQAAADu//3/AAAFAAQAAAADAPz/AAAAAAMAAAAFAPz/AAABAAMAAAATAP3/AAAHAAIAAADs//3/AAAGAAMAAAAKAPv/AAAGAAMAAAAMAPv/AAABAAMAAAAQAPr/AAAGAAQAAAASAPr/AAAHAAMAAADs//n/AAAGAAIAAADt//n/AAAHAAIAAAD0//j/AAAEAAQAAAD1//j/AAAFAAQAAAD2//j/AAAHAAIAAADp//v/AAAAAAMAAAAOAPr/AAAGAAIAAADq//v/AAABAAMAAAAbAPb/AAAGAAMAAAAfAPb/AAAHAAMAAAAdAPb/AAAGAAQAAADz//j/AAAGAAIAAAAQAP3/AAAAAAMAAADv//3/AAAHAAMAAAADAAEAAAABAAMAAAA=")
+tile_set = SubResource("TileSet_38ca1")
 
 [node name="DeathPlane" parent="." unique_id=728339394 instance=ExtResource("3_i3w5c")]
 position = Vector2(0, 350)
