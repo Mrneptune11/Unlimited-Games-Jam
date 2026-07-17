@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://3ylse3ohwpo1"]
+
+[ext_resource type="PackedScene" uid="uid://bmfya0toul7o6" path="res://Objects/Weapons/Weapon.tscn" id="1_j0s8x"]
+[ext_resource type="Script" uid="uid://d387jiodg6sfj" path="res://Objects/Weapons/Bomb/bomb.gd" id="2_3gi3q"]
+[ext_resource type="Texture2D" uid="uid://bterymgq8ffwd" path="res://Assets/temp/kalhh-dynamite-4141654.png" id="3_3gi3q"]
+[ext_resource type="PackedScene" uid="uid://8xlbhslgcjmx" path="res://Objects/Weapons/Bomb/BlastParticles/BlastParticles.tscn" id="3_ovvok"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ovvok"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_3gi3q")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4xi1n"]
+radius = 40.0
+
+[node name="Weapon" unique_id=1179641535 instance=ExtResource("1_j0s8x")]
+z_index = 1
+script = ExtResource("2_3gi3q")
+blast_particles_scene = ExtResource("3_ovvok")
+fuse_time = 5.0
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=1527165884]
+position = Vector2(0, -1.5)
+scale = Vector2(0.003, 0.003)
+sprite_frames = SubResource("SpriteFrames_ovvok")
+
+[node name="FuseTimer" type="Timer" parent="." index="1" unique_id=655858758]
+unique_name_in_owner = true
+one_shot = true
+
+[node name="BlastZone" type="Area2D" parent="." index="2" unique_id=1909809706]
+unique_name_in_owner = true
+input_pickable = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BlastZone" index="0" unique_id=1280677268]
+shape = SubResource("CircleShape2D_4xi1n")
+
+[node name="Label" type="Label" parent="." index="3" unique_id=1031371649]
+unique_name_in_owner = true
+editor_description = "Text size is set to massive & scale is set low to ensure the text is not blurry or pixelated.
+
+Solution taken from:
+https://www.reddit.com/r/godot/comments/1djr48h/how_do_i_make_this_text_not_so_blurry_and/"
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -228.5
+offset_top = -562.0
+offset_right = 228.5
+offset_bottom = 529.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.02, 0.02)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 800
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="timeout" from="FuseTimer" to="." method="_on_fuse_timer_timeout"]

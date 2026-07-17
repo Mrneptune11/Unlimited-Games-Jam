@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://8xlbhslgcjmx"]
+
+[ext_resource type="Script" uid="uid://li6ycj27s0mm" path="res://Objects/Weapons/Bomb/BlastParticles/blast_particles.gd" id="1_7penc"]
+
+[sub_resource type="Curve" id="Curve_ulskg"]
+_data = [Vector2(0, 1), 0.0, 0.04157302, 0, 0, Vector2(1, 0), -0.07490634, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_gjd45"]
+curve = SubResource("Curve_ulskg")
+
+[sub_resource type="Gradient" id="Gradient_7penc"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_l6xdh"]
+gradient = SubResource("Gradient_7penc")
+
+[sub_resource type="Curve" id="Curve_rensp"]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 1.7191012), 0.0, 0.0, 0, 0, Vector2(1, 1.0786519), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_oq1sx"]
+curve = SubResource("Curve_rensp")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8dkrg"]
+particle_flag_disable_z = true
+angle_min = -720.0
+angle_max = 720.0
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_max = 129.03
+angular_velocity_min = 278.71
+angular_velocity_max = 719.99994
+gravity = Vector3(0, 30, 0)
+damping_min = 100.00001
+damping_max = 100.00001
+scale_max = 6.3799996
+scale_over_velocity_curve = SubResource("CurveTexture_oq1sx")
+color_ramp = SubResource("GradientTexture1D_l6xdh")
+alpha_curve = SubResource("CurveTexture_gjd45")
+
+[node name="BlastParticles" type="GPUParticles2D" unique_id=1607544439]
+emitting = false
+amount = 200
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_8dkrg")
+script = ExtResource("1_7penc")

@@ -291,10 +291,15 @@ func create_game_timer(time:float = 5)->SceneTreeTimer:
 #Starts a match session
 func start_match()->void:
 	server_status = State.MATCH
+	
 	var timer:SceneTreeTimer = create_game_timer()
 	timer.timeout.connect(next_level)
 	timer.timeout.connect(event_cycle)
 	
+	# Force all players into the PLAY mode.
+	for con in contestants:
+		var player: Player = get_player(con)
+		player.mode = Player.Mode.PLAY
 
 #This is the primary game loop that runs until someone wins (or no one does)
 func event_cycle()->void:

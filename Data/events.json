@@ -73,6 +73,11 @@
 		"id" : "sword_fight",
 		"weight" : 1,
 	},
+	
+	{
+		"id" : "kamikaze",
+		"weight" : 1,
+	},
 
 	{
 		"id" : "trivia_time",

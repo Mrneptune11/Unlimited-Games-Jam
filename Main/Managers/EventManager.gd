@@ -32,6 +32,11 @@ const _LAVA_EVENT_SCENE: PackedScene = preload("res://Events/Lava/Lava.tscn")
 const GUN_SCN:String =  "res://Objects/Weapons/Gun/Gun.tscn"
 const SWORD_SCN:String = "res://Objects/Weapons/Sword/sword.tscn"
 
+# ---------- Kamikaze ----------
+
+## Reference to the Bomb scene.
+const _BOMB_WEAPON_SCENE: String = "res://Objects/Weapons/Bomb/Bomb.tscn"
+
 #-------------------------------------------------------------------------------
 
 signal event_complete #singal used to indicate an event is finished
@@ -121,10 +126,12 @@ func match_event(event_id:StringName, lobby:Lobby):
 			event_call = bouncy_balls.bind(lobby)
 		"lava":
 			event_call = lava.bind(lobby)
-		"gun_fight": 
+		"gun_fight":
 			event_call = weapon_fight.bind(lobby, GUN_SCN, "guns")
 		"sword_fight":
 			event_call = weapon_fight.bind(lobby, SWORD_SCN, "katanas")
+		"kamikaze":
+			event_call = kamikaze.bind(lobby)
 		"spelling_bee": 
 			event_call = spelling_bee.bind(lobby)
 		"trivia_time": 
@@ -284,6 +291,20 @@ func weapon_fight(lobby:Lobby, weapon_path:String, weapon_type:String)->String:
 	
 	return lobby.get_player_color_string(first_player) +" and " + lobby.get_player_color_string(second_player) + " must duel " +  \
 	" to the death with " + weapon_type + "! Don't hurt any bystanders though..."
+
+## Give a random player a bomb, which will explode after a couple seconds.
+func kamikaze(lobby:Lobby)->String:
+	# Pick a random contestant to become a kamikaze.
+	var victim_con: int = lobby.contestants.pick_random()
+	var victim_player: Player = lobby.get_player(victim_con)
+	
+	# Equip the player with a bomb.
+	victim_player.equip_weapon.rpc(_BOMB_WEAPON_SCENE, victim_con, victim_con)
+	
+	# When the bomb explodes, the "duel" will complete & end the event shortly after.
+	victim_player.duel_complete.connect(grace_period, CONNECT_ONE_SHOT) #End event when the duel terminates
+	
+	return lobby.get_player_color_string(victim_player) + " has been gifted a bomb. Take out as many other contestants with you as possible!"
 
 #Prompt players to submit an answer as quick as they can 
 func spelling_bee(lobby:Lobby)->String:
