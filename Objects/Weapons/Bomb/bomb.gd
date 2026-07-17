@@ -8,6 +8,7 @@ var fuse_time: float = 5.0
 @onready var fuse: Timer = %FuseTimer
 @onready var blast_zone: Area2D = %BlastZone
 @onready var label: Label = %Label
+@onready var tick_sfx: AudioStreamPlayer2D = %TickSFX
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -18,7 +19,12 @@ func _process(_delta: float) -> void:
 	# If Weapon node is flipped, also flip label to preserve text orientation.
 	scale = scale.abs() * (get_parent() as Node2D).scale.sign()
 	
+	var prev_tick: int = int(label.text)
+	
 	label.text = str(int(fuse.time_left))
+	
+	if (int(label.text) != prev_tick):
+		tick_sfx.play()
 
 func _on_fuse_timer_timeout() -> void:
 	if not is_multiplayer_authority():	# Only run on server.

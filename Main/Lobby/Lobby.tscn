@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://3mtp3mvg1058" path="res://Main/Lobby/lobby.gd" id="1_0duqs"]
 [ext_resource type="Script" uid="uid://b3bltlekjmkx8" path="res://Main/Lobby/ui.gd" id="2_0duqs"]
+[ext_resource type="AudioStream" uid="uid://blavu273kye24" path="res://Assets/sfx/event_tick.wav" id="3_owp0v"]
 
 [sub_resource type="GDScript" id="GDScript_0duqs"]
 script/source = "extends Node2D
@@ -147,6 +148,12 @@ offset_bottom = 130.0
 theme_override_font_sizes/normal_font_size = 50
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="TickSFX" type="AudioStreamPlayer" parent="UI/EventTerminal/Timer" unique_id=738144189]
+unique_name_in_owner = true
+stream = ExtResource("3_owp0v")
+volume_db = -7.0
+pitch_scale = 2.0
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="UI/EventTerminal" unique_id=1159857400]
 replication_config = SubResource("SceneReplicationConfig_0duqs")

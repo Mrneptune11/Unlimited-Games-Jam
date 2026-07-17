@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://br7p3hh1cy2et"]
 
 [ext_resource type="Script" uid="uid://t3qhs6ent2qb" path="res://Objects/Death/explosion.gd" id="1_n5pwr"]
+[ext_resource type="AudioStream" uid="uid://d2ms7hkoias3c" path="res://Assets/sfx/player_explode.wav" id="2_ken6r"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_g4v7s"]
 particle_flag_disable_z = true
@@ -28,3 +29,9 @@ explosiveness = 0.5
 trail_lifetime = 0.01
 process_material = SubResource("ParticleProcessMaterial_g4v7s")
 script = ExtResource("1_n5pwr")
+
+[node name="ExplodeSFX" type="AudioStreamPlayer2D" parent="." unique_id=631565812]
+unique_name_in_owner = true
+stream = ExtResource("2_ken6r")
+volume_db = 3.0
+autoplay = true

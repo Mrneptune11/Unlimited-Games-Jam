@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://dftgyif060w77" path="res://Events/Fireballs/FireballProjectile/fireball_projectile.gd" id="1_23haa"]
 [ext_resource type="Texture2D" uid="uid://cdaqxaoa3ah3w" path="res://Assets/sprites/fireball.png" id="2_23haa"]
+[ext_resource type="AudioStream" uid="uid://cfe5w6k3ie253" path="res://Assets/sfx/fireball_ambience.ogg" id="3_fxyug"]
+[ext_resource type="AudioStream" uid="uid://8waaciyuqm0w" path="res://Assets/sfx/fireball_hit.wav" id="4_4mfl4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4xi1n"]
 radius = 15.0
@@ -27,5 +29,15 @@ shape = SubResource("CircleShape2D_4xi1n")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1157916286]
 replication_config = SubResource("SceneReplicationConfig_hdgf6")
+
+[node name="SFX" type="Node2D" parent="." unique_id=1178954184]
+
+[node name="AmbienceSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=1679219251]
+unique_name_in_owner = true
+stream = ExtResource("3_fxyug")
+
+[node name="HitSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=167212735]
+unique_name_in_owner = true
+stream = ExtResource("4_4mfl4")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

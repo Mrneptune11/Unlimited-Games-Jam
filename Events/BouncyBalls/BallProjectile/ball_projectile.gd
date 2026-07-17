@@ -7,6 +7,8 @@ class_name BallProjectile
 @export var replicated_linear_velocity: Vector2
 @export var replicated_angular_velocity: float
 
+@onready var bounce_sfx: AudioStreamPlayer2D = %BounceSFX
+
 func _ready() -> void:
 	if is_multiplayer_authority():
 		replicated_position = position
@@ -41,3 +43,8 @@ func _integrate_forces(_state : PhysicsDirectBodyState2D) -> void:
 		rotation = replicated_rotation
 		linear_velocity = replicated_linear_velocity
 		angular_velocity = replicated_angular_velocity
+
+
+func _on_body_entered(body: Node) -> void:
+	if !(body is Player):
+		bounce_sfx.play()

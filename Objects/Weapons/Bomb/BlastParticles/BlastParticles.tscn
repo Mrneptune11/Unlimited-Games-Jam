@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://8xlbhslgcjmx"]
 
 [ext_resource type="Script" uid="uid://li6ycj27s0mm" path="res://Objects/Weapons/Bomb/BlastParticles/blast_particles.gd" id="1_7penc"]
+[ext_resource type="AudioStream" uid="uid://cdev1ntg1ytk0" path="res://Assets/sfx/bomb_explode.wav" id="2_rensp"]
 
 [sub_resource type="Curve" id="Curve_ulskg"]
 _data = [Vector2(0, 1), 0.0, 0.04157302, 0, 0, Vector2(1, 0), -0.07490634, 0.0, 0, 0]
@@ -47,3 +48,10 @@ one_shot = true
 explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_8dkrg")
 script = ExtResource("1_7penc")
+
+[node name="ExplodeSFX" type="AudioStreamPlayer2D" parent="." unique_id=651706930]
+unique_name_in_owner = true
+stream = ExtResource("2_rensp")
+volume_db = 8.0
+autoplay = true
+attenuation = 0.0

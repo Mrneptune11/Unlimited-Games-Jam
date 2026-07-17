@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://qir8pk12t4wc" path="res://Events/BouncyBalls/BallProjectile/ball_projectile.gd" id="1_5nj5c"]
 [ext_resource type="Texture2D" uid="uid://m4jmaof7gjf3" path="res://Assets/sprites/ball.png" id="2_5nj5c"]
+[ext_resource type="AudioStream" uid="uid://4j0xqrknk650" path="res://Assets/sfx/bouncy_ball_hit.wav" id="3_egkj1"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_f7cfs"]
 friction = 0.6
@@ -27,6 +28,8 @@ properties/3/replication_mode = 2
 [node name="BallProjectile" type="RigidBody2D" unique_id=1147786900]
 mass = 5.0
 physics_material_override = SubResource("PhysicsMaterial_f7cfs")
+contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_5nj5c")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=751189044]
@@ -39,3 +42,13 @@ shape = SubResource("CircleShape2D_4xi1n")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1157916286]
 replication_config = SubResource("SceneReplicationConfig_hdgf6")
 visibility_update_mode = 1
+
+[node name="BounceSFX" type="AudioStreamPlayer2D" parent="." unique_id=1368890512]
+unique_name_in_owner = true
+stream = ExtResource("3_egkj1")
+volume_db = -6.0
+max_distance = 600.0
+attenuation = 2.0
+max_polyphony = 2
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
