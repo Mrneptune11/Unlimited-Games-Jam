@@ -76,6 +76,6 @@
 
 	{
 		"id" : "trivia_time",
-		"weight" : 1000000000000,
+		"weight" : 1,
 	},
 ]

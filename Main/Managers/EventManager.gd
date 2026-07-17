@@ -280,7 +280,7 @@ func weapon_fight(lobby:Lobby, weapon_path:String, weapon_type:String)->String:
 	first_player.equip_weapon.rpc(weapon_path,second_con, first_con)
 	second_player.equip_weapon.rpc(weapon_path,first_con, second_con)
 	
-	first_player.duel_complete.connect(weapon_fight_timer, CONNECT_ONE_SHOT) #End event when the duel terminates
+	first_player.duel_complete.connect(grace_period, CONNECT_ONE_SHOT) #End event when the duel terminates
 	
 	return lobby.get_player_color_string(first_player) +" and " + lobby.get_player_color_string(second_player) + " must duel " +  \
 	" to the death with " + weapon_type + "! Don't hurt any bystanders though..."
@@ -353,7 +353,7 @@ func check_banned_os(os:String, contestant:int)->void:
 ##--Weapon Events--
 
 #Grace period after a weapon fight ends helper, emits event complete cond
-func weapon_fight_timer()->void:
+func grace_period()->void:
 	await get_tree().create_timer(2).timeout
 	event_complete.emit()
 
@@ -385,7 +385,7 @@ func text_prompt(lobby_path:NodePath, to_call:String, max_length:int, word:Strin
 			
 			caller = (func(entry_path:NodePath, solution:String):
 				var text_box:EntryBox = get_node(entry_path)
-				if text_box.get_node("HBox").get_node("Entry").text !=  solution: return #Check correct solution
+				if text_box.get_node("HBox").get_node("Entry").text.to_lower() !=  solution: return #Check correct solution
 				
 				EM.goal_complete.rpc_id(1,Time.get_ticks_usec() - start_time, lobby_path) #Client tells host they completed the goal
 				player.mode = player.Mode.PLAY #Player can play again
@@ -400,7 +400,7 @@ func text_prompt(lobby_path:NodePath, to_call:String, max_length:int, word:Strin
 		
 			if multiplayer.is_server():
 				lobby.get_node("UI").active_timer = timer
-				timer.timeout.connect(weapon_fight_timer)
+				timer.timeout.connect(grace_period)
 
 			caller = (func(entry_path:NodePath, solution:String):
 				var text_box:EntryBox = get_node(entry_path)
