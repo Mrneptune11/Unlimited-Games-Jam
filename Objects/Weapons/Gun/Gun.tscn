@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bmfya0toul7o6" path="res://Objects/Weapons/Weapon.tscn" id="1_kqttf"]
 [ext_resource type="Script" uid="uid://b1galt8x7dnvv" path="res://Objects/Weapons/Gun/gun.gd" id="2_6nyj1"]
 [ext_resource type="Texture2D" uid="uid://c7kq6i6u0uahs" path="res://Assets/SpriteSheets/gun.png" id="3_73x5c"]
+[ext_resource type="AudioStream" uid="uid://egro1nb2ix7b" path="res://Assets/sfx/shoot.wav" id="4_jemuj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jemuj"]
 atlas = ExtResource("3_73x5c")
@@ -42,3 +43,8 @@ sprite_frames = SubResource("SpriteFrames_6nyj1")
 
 [node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="." index="1" unique_id=1960384052]
 sprite_frames = SubResource("SpriteFrames_jemuj")
+
+[node name="ShootSFX" type="AudioStreamPlayer2D" parent="." index="2" unique_id=283993940]
+unique_name_in_owner = true
+stream = ExtResource("4_jemuj")
+volume_db = 5.0
