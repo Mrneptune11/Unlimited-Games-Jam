@@ -413,8 +413,8 @@ func text_prompt(lobby_path:NodePath, to_call:String, max_length:int, word:Strin
 				text_box.queue_free() #entry box is removed
 				)
 		"trivia_time":
-			prompt = misc_data["question"] + "\n A:" + misc_data["A"] + "| B:" + misc_data["B"] + \
-			"| C:" + misc_data["C"] + "| D:" + misc_data["D"]
+			prompt = misc_data["question"] + "\n A: " + misc_data["A"] + "| B: " + misc_data["B"] + \
+			"| C: " + misc_data["C"] + "| D: " + misc_data["D"]
 			
 			var timer:SceneTreeTimer = get_tree().create_timer(10) 
 			timer.timeout.connect(player.explode)

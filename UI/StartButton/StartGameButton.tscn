@@ -1,13 +1,29 @@
 [gd_scene format=3 uid="uid://b1iet7d1j2e6j"]
 
+[ext_resource type="Theme" uid="uid://r2pc04ebi1k4" path="res://Objects/Entry Box/entry_box_theme.tres" id="1_3wuvv"]
+[ext_resource type="Script" uid="uid://b4oyulb05osh0" path="res://UI/StartButton/start_game_button.gd" id="1_qbq3d"]
+
 [node name="StartGameButton" type="Button" unique_id=1053650365]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -132.5
-offset_top = 100.0
+offset_top = 150.0
 offset_right = 132.5
-offset_bottom = 171.0
+offset_bottom = 221.0
 grow_horizontal = 2
+theme = ExtResource("1_3wuvv")
 theme_override_font_sizes/font_size = 45
-text = "Start Game "
+script = ExtResource("1_qbq3d")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1416276803]
+custom_minimum_size = Vector2(265, 71)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "[rainbow freq=.01]Start Game "
+horizontal_alignment = 1
+vertical_alignment = 1

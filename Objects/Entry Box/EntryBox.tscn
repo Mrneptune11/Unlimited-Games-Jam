@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://hxdqybynr1ro" path="res://Objects/Entry Box/entry_box.gd" id="1_vgqg1"]
 
 [node name="NameContainer" type="PanelContainer" unique_id=1066980682]
+z_index = 100
 custom_minimum_size = Vector2(200, 0)
 anchors_preset = 8
 anchor_left = 0.5
@@ -27,6 +28,8 @@ theme_override_constants/separation = 20
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
+text = "Duh Duh Duh
+"
 
 [node name="Entry" type="LineEdit" parent="HBox" unique_id=1490367714]
 custom_minimum_size = Vector2(94, 0)

@@ -1,0 +1,115 @@
+[gd_scene format=3 uid="uid://dmogu6arij7cw"]
+
+[ext_resource type="PackedScene" uid="uid://fmm44p2dxj8k" path="res://Objects/Bg/bg.tscn" id="1_37ka1"]
+[ext_resource type="FontFile" uid="uid://8diwfm1ncst5" path="res://Assets/Font/JetBrainsMono-Medium.ttf" id="2_ky8x5"]
+[ext_resource type="Theme" uid="uid://r2pc04ebi1k4" path="res://Objects/Entry Box/entry_box_theme.tres" id="3_ky8x5"]
+[ext_resource type="Script" uid="uid://bjebw1wm4wp2g" path="res://UI/Menus/Other/back_button.gd" id="4_1lfql"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ygqeo"]
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="MainMenu" type="Control" unique_id=1964875841]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_transform_enabled = true
+
+[node name="BG" type="Node2D" parent="." unique_id=1053547502]
+position = Vector2(970, 560)
+scale = Vector2(1.5, 1.5)
+
+[node name="Parallax2D" parent="BG" unique_id=1872672102 instance=ExtResource("1_37ka1")]
+scroll_offset = Vector2(376, 6)
+
+[node name="Title" type="RichTextLabel" parent="." unique_id=986482332]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -400.0
+offset_right = 400.0
+offset_bottom = 288.0
+grow_horizontal = 2
+offset_transform_enabled = true
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/normal_font = ExtResource("2_ky8x5")
+theme_override_font_sizes/normal_font_size = 70
+bbcode_enabled = true
+text = "[rainbow freq=.01][wave freq=5]Controls"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1937706904]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -260.0
+offset_right = 400.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 60
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=1548141796]
+custom_minimum_size = Vector2(800, 620)
+layout_mode = 2
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/normal_font_size = 60
+theme_override_styles/normal = SubResource("StyleBoxFlat_ygqeo")
+bbcode_enabled = true
+text = "[rainbow freq=.01]	Move: A and D | ← and→
+
+	Jump: Space | W | ↑
+	
+	Use Item:  O | P | Z | X
+
+	Click UI:  Enter | Space
+"
+tab_size = 1
+
+[node name="Back" type="Button" parent="." unique_id=1770326265]
+custom_minimum_size = Vector2(200, 75)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -105.0
+offset_right = 100.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("3_ky8x5")
+theme_override_font_sizes/font_size = 30
+script = ExtResource("4_1lfql")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Back" unique_id=59384718]
+custom_minimum_size = Vector2(200, 75)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "[rainbow freq=.01]Quit"
+horizontal_alignment = 1
+vertical_alignment = 1
