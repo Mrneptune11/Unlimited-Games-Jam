@@ -10,10 +10,10 @@ config_version=5
 
 [application]
 
-config/name="NetTest"
+config/name="SHUSW"
 run/main_scene="uid://duw5lck3jm6k3"
 config/features=PackedStringArray("4.7", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://chngy22xv6jbl"
 
 [autoload]
 
