@@ -2,11 +2,12 @@
 
 [ext_resource type="Script" uid="uid://3mtp3mvg1058" path="res://Main/Lobby/lobby.gd" id="1_0duqs"]
 [ext_resource type="Script" uid="uid://b3bltlekjmkx8" path="res://Main/Lobby/ui.gd" id="2_0duqs"]
-[ext_resource type="AudioStream" uid="uid://blavu273kye24" path="res://Assets/sfx/event_tick.wav" id="3_owp0v"]
-[ext_resource type="AudioStream" uid="uid://bvb22aw1qq8bu" path="res://Assets/sfx/event_start.wav" id="4_oh6hi"]
-[ext_resource type="AudioStream" uid="uid://da0dsx8gjqo30" path="res://Assets/sfx/event_end.wav" id="5_xnmcj"]
-[ext_resource type="AudioStream" uid="uid://bdcehpqds5s7n" path="res://Assets/sfx/winner_is_you.wav" id="6_b6yaa"]
-[ext_resource type="AudioStream" uid="uid://cgqqx6yndefbf" path="res://Assets/sfx/no_one_wins.wav" id="7_cpq7c"]
+[ext_resource type="PackedScene" uid="uid://fmm44p2dxj8k" path="res://Objects/Bg/bg.tscn" id="3_owp0v"]
+[ext_resource type="AudioStream" uid="uid://bvb22aw1qq8bu" path="res://Assets/sfx/event_start.wav" id="4_b6yaa"]
+[ext_resource type="AudioStream" uid="uid://blavu273kye24" path="res://Assets/sfx/event_tick.wav" id="4_cpq7c"]
+[ext_resource type="AudioStream" uid="uid://da0dsx8gjqo30" path="res://Assets/sfx/event_end.wav" id="5_cpq7c"]
+[ext_resource type="AudioStream" uid="uid://bdcehpqds5s7n" path="res://Assets/sfx/winner_is_you.wav" id="6_fwlmj"]
+[ext_resource type="AudioStream" uid="uid://cgqqx6yndefbf" path="res://Assets/sfx/no_one_wins.wav" id="7_kihbt"]
 
 [sub_resource type="GDScript" id="GDScript_0duqs"]
 script/source = "extends Node2D
@@ -15,6 +16,14 @@ const BULLET_SCN:PackedScene = preload(\"res://Objects/Weapons/Gun/Bullet.tscn\"
 
 const BULLET_SPEED:float = 200
 "
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g4v7s"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3wuvv"]
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_0duqs"]
 properties/0/path = NodePath(".:text")
@@ -54,6 +63,33 @@ spawn_path = NodePath("..")
 [node name="UI" type="CanvasLayer" parent="." unique_id=1150281040]
 script = ExtResource("2_0duqs")
 
+[node name="BG" type="Control" parent="UI" unique_id=1962388292]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 960.0
+offset_top = 540.0
+offset_right = 1000.0
+offset_bottom = 580.0
+
+[node name="Parallax2D" parent="UI/BG" unique_id=1872672102 instance=ExtResource("3_owp0v")]
+repeat_times = 16
+
+[node name="PanelContainer" type="PanelContainer" parent="UI/BG" unique_id=1031750815]
+custom_minimum_size = Vector2(800, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = -220.0
+offset_right = 380.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_g4v7s")
+
 [node name="Start" type="VBoxContainer" parent="UI" unique_id=1095290580]
 anchors_preset = 8
 anchor_left = 0.5
@@ -70,7 +106,7 @@ grow_vertical = 2
 [node name="Title" type="RichTextLabel" parent="UI/Start" unique_id=520906420]
 custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
-text = "Test Thy Net
+text = "Host or Join 
 "
 
 [node name="ENet" type="VBoxContainer" parent="UI/Start" unique_id=2036676489]
@@ -134,11 +170,14 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -600.0
-offset_top = 20.0
+offset_top = 19.0
 offset_right = 600.0
-offset_bottom = 140.0
+offset_bottom = 139.0
 grow_horizontal = 2
-theme_override_font_sizes/normal_font_size = 24
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/normal_font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxFlat_3wuvv")
 bbcode_enabled = true
 text = "Host or Join a lobby."
 horizontal_alignment = 1
@@ -149,38 +188,50 @@ offset_left = 540.0
 offset_top = 50.0
 offset_right = 620.0
 offset_bottom = 130.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
 theme_override_font_sizes/normal_font_size = 50
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="TickSFX" type="AudioStreamPlayer" parent="UI/EventTerminal/Timer" unique_id=738144189]
 unique_name_in_owner = true
-stream = ExtResource("3_owp0v")
+stream = ExtResource("4_cpq7c")
 volume_db = -20.0
 pitch_scale = 2.0
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="UI/EventTerminal" unique_id=1159857400]
 replication_config = SubResource("SceneReplicationConfig_0duqs")
 
-[node name="SFX" type="Node" parent="." unique_id=1309670275]
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/EventTerminal" unique_id=1911232227]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 10.0
+offset_right = 120.0
+offset_bottom = 110.0
+theme_override_font_sizes/normal_font_size = 20
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="EventStartSFX" type="AudioStreamPlayer" parent="SFX" unique_id=1173079753]
+[node name="SFX" type="Node" parent="." unique_id=845318948]
+
+[node name="EventStartSFX" type="AudioStreamPlayer" parent="SFX" unique_id=1864614984]
 unique_name_in_owner = true
-stream = ExtResource("4_oh6hi")
+stream = ExtResource("4_b6yaa")
 volume_db = -8.0
 pitch_scale = 1.2
 
-[node name="EventEndSFX" type="AudioStreamPlayer" parent="SFX" unique_id=1811272553]
+[node name="EventEndSFX" type="AudioStreamPlayer" parent="SFX" unique_id=1615366054]
 unique_name_in_owner = true
-stream = ExtResource("5_xnmcj")
+stream = ExtResource("5_cpq7c")
 volume_db = -8.0
 
-[node name="WinSFX" type="AudioStreamPlayer" parent="SFX" unique_id=2048364424]
+[node name="WinSFX" type="AudioStreamPlayer" parent="SFX" unique_id=2088562645]
 unique_name_in_owner = true
-stream = ExtResource("6_b6yaa")
+stream = ExtResource("6_fwlmj")
 volume_db = -5.0
 
-[node name="NoOneWinsSFX" type="AudioStreamPlayer" parent="SFX" unique_id=1984783632]
+[node name="NoOneWinsSFX" type="AudioStreamPlayer" parent="SFX" unique_id=1258865401]
 unique_name_in_owner = true
-stream = ExtResource("7_cpq7c")
+stream = ExtResource("7_kihbt")
 volume_db = -5.0

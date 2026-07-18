@@ -1,0 +1,51 @@
+[gd_resource type="Theme" format=3 uid="uid://r2pc04ebi1k4"]
+
+[ext_resource type="FontFile" uid="uid://8diwfm1ncst5" path="res://Assets/Font/JetBrainsMono-Medium.ttf" id="1_w5dsd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w5dsd"]
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a7sth"]
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3rl6d"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.6, 0.6, 0.6, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+
+[resource]
+default_font = ExtResource("1_w5dsd")
+Button/styles/focus = SubResource("StyleBoxFlat_w5dsd")
+Button/styles/hover = SubResource("StyleBoxFlat_a7sth")
+Button/styles/normal = SubResource("StyleBoxFlat_a7sth")
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/constants/outline_size = 2
+Label/fonts/font = ExtResource("1_w5dsd")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_3rl6d")

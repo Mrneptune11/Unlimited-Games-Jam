@@ -75,6 +75,8 @@ var state: State = State.IDLE : # The current state the player is in
 
 var mode: Mode = Mode.PAUSE :
 	set (value):
+		if mode == Mode.SPECTATE: return #Lock mode to spectate
+		
 		mode = value
 
 var direction: float = 1.0 : # Which direction the player is facing
