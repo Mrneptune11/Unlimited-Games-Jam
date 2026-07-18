@@ -164,6 +164,8 @@ func name_change(lobby:Lobby)->String:
 	end_event_by_timer(3)
 	
 	subject.set_player_name.rpc(new_name)
+	
+	subject.play_mutation_sfx.rpc()
 	return return_str
 
 # A random player is "smited" (explodes)
@@ -181,6 +183,7 @@ func color_change(lobby:Lobby)->String:
 	var subject:Player = lobby.get_player(lobby.pick_rand_contestant())
 	var new_color:StringName = lobby.gen_id()
 	subject.update_color.rpc(new_color)
+	subject.play_mutation_sfx.rpc()
 	
 	end_event_by_timer(3)
 	
@@ -225,6 +228,8 @@ func change_size(lobby:Lobby, change:int) -> String:
 	var contestant:int = lobby.pick_rand_contestant()
 	var subject:Player = lobby.get_player(contestant)
 	subject.change_size.rpc_id(contestant, change)
+	subject.play_mutation_sfx.rpc()
+	
 	end_event_by_timer(3)
 	
 	if change > 0:

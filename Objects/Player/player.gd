@@ -13,6 +13,7 @@ const SPECTATE_SPEED:float = 10
 
 @onready var jump_sfx: AudioStreamPlayer2D = %JumpSFX
 @onready var land_sfx: AudioStreamPlayer2D = %LandSFX
+@onready var _mutation_sfx: AudioStreamPlayer2D = %MutationSFX
 
 #  player states
 enum State {
@@ -397,6 +398,12 @@ func update_color(color:String)->void:
 	color_id = color
 	my_label.modulate = Color(color)
 	$Sprite2D.modulate = Color(color)
+
+## Wrapper to play the MutationSFX for all clients.
+## Used by the EventManager during Mutation events.
+@rpc("authority", "call_local", "reliable")
+func play_mutation_sfx() -> void:
+	_mutation_sfx.play()
 
 #-------------------------------------------------------------------------------
 
