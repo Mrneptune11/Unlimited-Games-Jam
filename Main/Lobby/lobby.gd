@@ -36,6 +36,9 @@ var level:Level = null
 var level_idx:int = 1
 #-------------------------------------------------------------------------------
 
+@onready var _event_start_sfx: AudioStreamPlayer = %EventStartSFX
+@onready var _event_end_sfx: AudioStreamPlayer = %EventEndSFX
+
 # Lifecycle
 
 func _init()->void:
@@ -328,9 +331,23 @@ func event_cycle()->void:
 	$UI.update_event_terminal(new_event)
 	EM.match_event(new_event, self)
 	
+	_play_event_start_sfx.rpc()
+	
 	await EM.event_complete #Onve the event is complete, rerun the cycle
 	
+	_play_event_end_sfx.rpc()
+	
 	event_cycle()
+
+## Wrapper function to play the EventStartSFX on all clients.
+@rpc("authority", "call_local", "reliable")
+func _play_event_start_sfx() -> void:
+	_event_start_sfx.play()
+
+## Wrapper function to play the EventEndSFX on all clients.
+@rpc("authority", "call_local", "reliable")
+func _play_event_end_sfx() -> void:
+	_event_end_sfx.play()
 
 #Handle game end when someone wins
 func someone_wins(peer:int)->void:

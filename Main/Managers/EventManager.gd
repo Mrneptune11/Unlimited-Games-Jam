@@ -142,6 +142,8 @@ func match_event(event_id:StringName, lobby:Lobby):
 	#After matching, the event is run and returns the terminal text
 	event_text = event_call.call()
 	lobby.get_node("UI").update_event_terminal(event_text)
+	
+	
 
 #Helper func used to streamline ending events that are solely time based
 func end_event_by_timer(time:float)->void:
