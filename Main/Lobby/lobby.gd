@@ -38,6 +38,8 @@ var level_idx:int = 1
 
 @onready var _event_start_sfx: AudioStreamPlayer = %EventStartSFX
 @onready var _event_end_sfx: AudioStreamPlayer = %EventEndSFX
+@onready var _win_sfx: AudioStreamPlayer = %WinSFX
+@onready var _no_one_wins_sfx: AudioStreamPlayer = %NoOneWinsSFX
 
 # Lifecycle
 
@@ -349,11 +351,23 @@ func _play_event_start_sfx() -> void:
 func _play_event_end_sfx() -> void:
 	_event_end_sfx.play()
 
+## Wrapper function to play the WinSFX on all clients.
+@rpc("authority", "call_local", "reliable")
+func _play_win_sfx() -> void:
+	_win_sfx.play()
+
+## Wrapper function to play the NoOneWinsSFX on all clients.
+@rpc("authority", "call_local", "reliable")
+func _play_no_one_wins_sfx() -> void:
+	_no_one_wins_sfx.play()
+
 #Handle game end when someone wins
 func someone_wins(peer:int)->void:
 	var winner = get_player(peer)
 	var win_message:String = "Congrations to the winner: " + get_player_color_string(winner)
 	$UI.update_event_terminal(win_message)
+	_play_win_sfx.rpc()
+	
 	await create_game_timer(10).timeout
 	
 	handle_server_disconnect()
@@ -362,6 +376,8 @@ func someone_wins(peer:int)->void:
 func no_one_wins()->void:
 	var end_message:String = "Nobody wins... Thats hilarious (●__●)"
 	$UI.update_event_terminal(end_message)
+	_play_no_one_wins_sfx.rpc()
+	
 	await create_game_timer(10).timeout
 	
 	handle_server_disconnect()

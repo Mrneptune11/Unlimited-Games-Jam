@@ -5,6 +5,8 @@
 [ext_resource type="AudioStream" uid="uid://blavu273kye24" path="res://Assets/sfx/event_tick.wav" id="3_owp0v"]
 [ext_resource type="AudioStream" uid="uid://bvb22aw1qq8bu" path="res://Assets/sfx/event_start.wav" id="4_oh6hi"]
 [ext_resource type="AudioStream" uid="uid://da0dsx8gjqo30" path="res://Assets/sfx/event_end.wav" id="5_xnmcj"]
+[ext_resource type="AudioStream" uid="uid://bdcehpqds5s7n" path="res://Assets/sfx/winner_is_you.wav" id="6_b6yaa"]
+[ext_resource type="AudioStream" uid="uid://cgqqx6yndefbf" path="res://Assets/sfx/no_one_wins.wav" id="7_cpq7c"]
 
 [sub_resource type="GDScript" id="GDScript_0duqs"]
 script/source = "extends Node2D
@@ -160,7 +162,7 @@ pitch_scale = 2.0
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="UI/EventTerminal" unique_id=1159857400]
 replication_config = SubResource("SceneReplicationConfig_0duqs")
 
-[node name="SFX" type="Node2D" parent="." unique_id=1897574471]
+[node name="SFX" type="Node" parent="." unique_id=1309670275]
 
 [node name="EventStartSFX" type="AudioStreamPlayer" parent="SFX" unique_id=1173079753]
 unique_name_in_owner = true
@@ -172,3 +174,13 @@ pitch_scale = 1.2
 unique_name_in_owner = true
 stream = ExtResource("5_xnmcj")
 volume_db = -8.0
+
+[node name="WinSFX" type="AudioStreamPlayer" parent="SFX" unique_id=2048364424]
+unique_name_in_owner = true
+stream = ExtResource("6_b6yaa")
+volume_db = -5.0
+
+[node name="NoOneWinsSFX" type="AudioStreamPlayer" parent="SFX" unique_id=1984783632]
+unique_name_in_owner = true
+stream = ExtResource("7_cpq7c")
+volume_db = -5.0
