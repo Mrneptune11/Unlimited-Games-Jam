@@ -413,8 +413,8 @@ func text_prompt(lobby_path:NodePath, to_call:String, max_length:int, word:Strin
 				text_box.queue_free() #entry box is removed
 				)
 		"trivia_time":
-			prompt = misc_data["question"] + "\n A:" + misc_data["A"] + "| B:" + misc_data["B"] + \
-			"| C:" + misc_data["C"] + "| D:" + misc_data["D"]
+			prompt = misc_data["question"] + "\n A: " + misc_data["A"] + "| B: " + misc_data["B"] + \
+			"| C: " + misc_data["C"] + "| D: " + misc_data["D"]
 			
 			var timer:SceneTreeTimer = get_tree().create_timer(10) 
 			timer.timeout.connect(player.explode)
@@ -480,7 +480,11 @@ func eval_completion(completed:Dictionary[int, float], lobby_path:NodePath)->voi
 					slowest_time = test_time
 					slowest_peer = peer
 			
-			get_node(lobby_path).get_player(slowest_peer).explode.rpc_id(slowest_peer)
+			var slowest_player:Player = get_node(lobby_path).get_player(slowest_peer)
+			if slowest_peer == 1:
+				slowest_player.explode()
+			else:
+				slowest_player.explode.rpc_id(slowest_peer)
 	
 	goal_completed = true #Goal complete lock
 	

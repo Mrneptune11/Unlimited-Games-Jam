@@ -7,18 +7,18 @@ var fuse_time: float = 5.0
 
 @onready var fuse: Timer = %FuseTimer
 @onready var blast_zone: Area2D = %BlastZone
-@onready var label: Label = %Label
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	fuse.start(fuse_time)
+	$Sprite2D.modulate = Color(lobby.get_player(my_owner).color_id)
 
 # Update label text with fuse time left.
 func _process(_delta: float) -> void:
 	# If Weapon node is flipped, also flip label to preserve text orientation.
 	scale = scale.abs() * (get_parent() as Node2D).scale.sign()
 	
-	label.text = str(int(fuse.time_left))
+	$AnimatedSprite2D.frame = int(fuse.time_left)
 
 func _on_fuse_timer_timeout() -> void:
 	if not is_multiplayer_authority():	# Only run on server.

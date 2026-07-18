@@ -1,34 +1,46 @@
 [gd_scene format=3 uid="uid://cf4hevrnltnek"]
 
+[ext_resource type="Theme" uid="uid://r2pc04ebi1k4" path="res://Objects/Entry Box/entry_box_theme.tres" id="1_8orn8"]
 [ext_resource type="Script" uid="uid://hxdqybynr1ro" path="res://Objects/Entry Box/entry_box.gd" id="1_vgqg1"]
 
 [node name="NameContainer" type="PanelContainer" unique_id=1066980682]
+z_index = 100
 custom_minimum_size = Vector2(200, 0)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -100.0
-offset_top = -35.0
-offset_right = 100.0
-offset_bottom = 35.0
+offset_left = -200.0
+offset_top = -58.5
+offset_right = 200.0
+offset_bottom = 175.5
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_8orn8")
 script = ExtResource("1_vgqg1")
 
 [node name="HBox" type="VBoxContainer" parent="." unique_id=1392790689]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 20
 
 [node name="NameLabel" type="Label" parent="HBox" unique_id=325161527]
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Duh Duh Duh
+"
 
 [node name="Entry" type="LineEdit" parent="HBox" unique_id=1490367714]
 custom_minimum_size = Vector2(94, 0)
 layout_mode = 2
+theme = ExtResource("1_8orn8")
+theme_override_font_sizes/font_size = 30
 max_length = 9
 
 [node name="Button" type="Button" parent="HBox" unique_id=381439818]
+custom_minimum_size = Vector2(400, 60)
 layout_mode = 2
+theme = ExtResource("1_8orn8")
+theme_override_font_sizes/font_size = 30
 text = "Submit"

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://7d06mklmig8i"]
 
 [ext_resource type="Script" uid="uid://dknumv6crenqm" path="res://Objects/NameLabel/name_label.gd" id="1_3fmgj"]
+[ext_resource type="Theme" uid="uid://r2pc04ebi1k4" path="res://Objects/Entry Box/entry_box_theme.tres" id="1_vl1ay"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_3fmgj"]
 font_size = 32
@@ -14,7 +15,8 @@ custom_minimum_size = Vector2(165, 45)
 offset_right = 136.0
 offset_bottom = 45.0
 offset_transform_enabled = true
-offset_transform_position = Vector2(-82.5, -90)
+offset_transform_position = Vector2(-86.5, -90)
+theme = ExtResource("1_vl1ay")
 theme_override_font_sizes/font_size = 5
 text = "123456789"
 label_settings = SubResource("LabelSettings_3fmgj")
