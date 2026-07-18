@@ -3,6 +3,11 @@
 [ext_resource type="Script" uid="uid://3mtp3mvg1058" path="res://Main/Lobby/lobby.gd" id="1_0duqs"]
 [ext_resource type="Script" uid="uid://b3bltlekjmkx8" path="res://Main/Lobby/ui.gd" id="2_0duqs"]
 [ext_resource type="PackedScene" uid="uid://fmm44p2dxj8k" path="res://Objects/Bg/bg.tscn" id="3_owp0v"]
+[ext_resource type="AudioStream" uid="uid://bvb22aw1qq8bu" path="res://Assets/sfx/event_start.wav" id="4_b6yaa"]
+[ext_resource type="AudioStream" uid="uid://blavu273kye24" path="res://Assets/sfx/event_tick.wav" id="4_cpq7c"]
+[ext_resource type="AudioStream" uid="uid://da0dsx8gjqo30" path="res://Assets/sfx/event_end.wav" id="5_cpq7c"]
+[ext_resource type="AudioStream" uid="uid://bdcehpqds5s7n" path="res://Assets/sfx/winner_is_you.wav" id="6_fwlmj"]
+[ext_resource type="AudioStream" uid="uid://cgqqx6yndefbf" path="res://Assets/sfx/no_one_wins.wav" id="7_kihbt"]
 
 [sub_resource type="GDScript" id="GDScript_0duqs"]
 script/source = "extends Node2D
@@ -189,6 +194,12 @@ theme_override_font_sizes/normal_font_size = 50
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="TickSFX" type="AudioStreamPlayer" parent="UI/EventTerminal/Timer" unique_id=738144189]
+unique_name_in_owner = true
+stream = ExtResource("4_cpq7c")
+volume_db = -20.0
+pitch_scale = 2.0
+
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="UI/EventTerminal" unique_id=1159857400]
 replication_config = SubResource("SceneReplicationConfig_0duqs")
 
@@ -201,3 +212,26 @@ offset_bottom = 110.0
 theme_override_font_sizes/normal_font_size = 20
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="SFX" type="Node" parent="." unique_id=845318948]
+
+[node name="EventStartSFX" type="AudioStreamPlayer" parent="SFX" unique_id=1864614984]
+unique_name_in_owner = true
+stream = ExtResource("4_b6yaa")
+volume_db = -8.0
+pitch_scale = 1.2
+
+[node name="EventEndSFX" type="AudioStreamPlayer" parent="SFX" unique_id=1615366054]
+unique_name_in_owner = true
+stream = ExtResource("5_cpq7c")
+volume_db = -8.0
+
+[node name="WinSFX" type="AudioStreamPlayer" parent="SFX" unique_id=2088562645]
+unique_name_in_owner = true
+stream = ExtResource("6_fwlmj")
+volume_db = -5.0
+
+[node name="NoOneWinsSFX" type="AudioStreamPlayer" parent="SFX" unique_id=1258865401]
+unique_name_in_owner = true
+stream = ExtResource("7_kihbt")
+volume_db = -5.0

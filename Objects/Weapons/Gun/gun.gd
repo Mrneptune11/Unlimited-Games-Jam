@@ -4,6 +4,8 @@ const BULLET_SCN:PackedScene = preload("res://Objects/Weapons/Gun/Bullet.tscn") 
 
 const BULLET_SPEED:float = 200 #Bullet speed constant
 
+@onready var _shoot_sfx: AudioStreamPlayer2D = %ShootSFX
+
 func _ready() -> void:
 	cool_down = .75 #Ready sets the gun weapon classs cool down
 	super._ready()
@@ -29,3 +31,5 @@ func spawn_projectile(my_subject:int)->void:
 	#Authority checks if the bullet hit the duel target
 	if is_multiplayer_authority():
 		bullet.hit_player.connect(player.get_node("Socket").get_node("Weapon").validate_target)
+	
+	_shoot_sfx.play()

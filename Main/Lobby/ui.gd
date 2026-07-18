@@ -1,8 +1,11 @@
 extends CanvasLayer
 
 @onready var lobby: Lobby = get_parent()
+@onready var tick_sfx: AudioStreamPlayer = %TickSFX
 
 var active_timer:SceneTreeTimer = null ##If there is an activetimer
+
+var last_tick: int = 0	## The last timer tick number. When this changes, the tick SFX is played.
 
 #-------------------------------------------------------------------------------
 
@@ -18,6 +21,9 @@ func _process(_delta: float) -> void:
 		var time_left:float = active_timer.time_left
 		if time_left > 0.0:
 			timer_label.text = str((roundi(time_left)))
+			
+			if (roundi(time_left) != last_tick):
+				_play_tick_sfx.rpc()
 		else:
 			timer_label.text = ""
 
@@ -68,3 +74,10 @@ func init_start_btn()->void:
 #Update the event terminal current message
 func update_event_terminal(string:String)->void:
 	$EventTerminal.text = string
+
+@rpc("authority", "call_local", "reliable")
+func _play_tick_sfx() -> void:
+	tick_sfx.play()
+	
+	if active_timer:
+		last_tick = roundi(active_timer.time_left)

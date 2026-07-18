@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://d387jiodg6sfj" path="res://Objects/Weapons/Bomb/bomb.gd" id="2_3gi3q"]
 [ext_resource type="PackedScene" uid="uid://8xlbhslgcjmx" path="res://Objects/Weapons/Bomb/BlastParticles/BlastParticles.tscn" id="3_ovvok"]
 [ext_resource type="Texture2D" uid="uid://cexjh3lcpku6i" path="res://Assets/SpriteSheets/bomb.png" id="4_l6xdh"]
+[ext_resource type="AudioStream" uid="uid://cgiagydegc1x8" path="res://Assets/sfx/bomb_tick.wav" id="5_l6xdh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g4v7s"]
 atlas = ExtResource("4_l6xdh")
@@ -73,7 +74,13 @@ sprite_frames = SubResource("SpriteFrames_0duqs")
 unique_name_in_owner = true
 one_shot = true
 
-[node name="BlastZone" type="Area2D" parent="." index="3" unique_id=1909809706]
+[node name="TickSFX" type="AudioStreamPlayer2D" parent="." index="3" unique_id=2109868075]
+unique_name_in_owner = true
+stream = ExtResource("5_l6xdh")
+volume_db = 5.0
+attenuation = 0.75
+
+[node name="BlastZone" type="Area2D" parent="." index="4" unique_id=1909809706]
 unique_name_in_owner = true
 input_pickable = false
 monitorable = false

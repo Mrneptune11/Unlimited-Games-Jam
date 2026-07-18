@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cp4b2pq44hqp0" path="res://Objects/Weapons/Projectile/Projectile.tscn" id="1_6o8j3"]
 [ext_resource type="Texture2D" uid="uid://d2heawl5ty88q" path="res://Assets/sprites/white_square.png" id="2_u2cjt"]
 [ext_resource type="Texture2D" uid="uid://ce5kn1nsccps0" path="res://Assets/SpriteSheets/slash.png" id="3_u2cjt"]
+[ext_resource type="AudioStream" uid="uid://byhh0c8sqshx0" path="res://Assets/sfx/sword_swing.wav" id="4_rvfn1"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_782xi"]
 radius = 2.0
@@ -119,3 +120,9 @@ sprite_frames = SubResource("SpriteFrames_g4v7s")
 autoplay = "default"
 frame = 11
 frame_progress = 1.0
+
+[node name="SwingSFX" type="AudioStreamPlayer2D" parent="." index="3" unique_id=433845514]
+stream = ExtResource("4_rvfn1")
+autoplay = true
+max_distance = 600.0
+attenuation = 1.8025014

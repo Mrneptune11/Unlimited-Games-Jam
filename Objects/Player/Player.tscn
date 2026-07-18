@@ -6,6 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://bg7mtpr2qe4na" path="res://Assets/sprites/ghost.png" id="3_b0me6"]
 [ext_resource type="Script" uid="uid://c2ffnvyj4unmc" path="res://Objects/Player/socket.gd" id="5_1qpp8"]
 [ext_resource type="Texture2D" uid="uid://yorrxa8meq7l" path="res://Assets/sprites/jump.png" id="5_nd6ml"]
+[ext_resource type="AudioStream" uid="uid://b7sy3ehpfa3q2" path="res://Assets/sfx/jump.wav" id="7_7t0p5"]
+[ext_resource type="AudioStream" uid="uid://dgxe2gnipxay7" path="res://Assets/sfx/land.wav" id="8_ebgc0"]
+[ext_resource type="AudioStream" uid="uid://caxmy04jem7pb" path="res://Assets/sfx/mutation.wav" id="9_7t0p5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oansn"]
 atlas = ExtResource("1_we6tp")
@@ -123,3 +126,22 @@ replication_config = SubResource("SceneReplicationConfig_b0me6")
 [node name="Socket" type="Marker2D" parent="." unique_id=552284437]
 position = Vector2(12, 0)
 script = ExtResource("5_1qpp8")
+
+[node name="SFX" type="Node2D" parent="." unique_id=783735189]
+
+[node name="JumpSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=100584014]
+unique_name_in_owner = true
+stream = ExtResource("7_7t0p5")
+volume_db = -2.0
+
+[node name="LandSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=775795690]
+unique_name_in_owner = true
+stream = ExtResource("8_ebgc0")
+volume_db = -8.0
+
+[node name="MutationSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=1456053294]
+unique_name_in_owner = true
+stream = ExtResource("9_7t0p5")
+volume_db = -4.0
+pitch_scale = 0.75
+attenuation = 0.20306315
