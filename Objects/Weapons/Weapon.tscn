@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://drn5mbn6ohyh3" path="res://Objects/Weapons/weapon.gd" id="1_1c0wm"]
 [ext_resource type="Texture2D" uid="uid://bcv20nico1kgo" path="res://Assets/temp/gun.png" id="2_6fmjp"]
+[ext_resource type="AudioStream" uid="uid://dxb6t7smv3d5s" path="res://Assets/sfx/weapon_equip.wav" id="3_kjjth"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_g4v7s"]
 animations = [{
@@ -21,3 +22,9 @@ metadata/_custom_type_script = "uid://drn5mbn6ohyh3"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1527165884]
 sprite_frames = SubResource("SpriteFrames_g4v7s")
+
+[node name="EquipSFX" type="AudioStreamPlayer2D" parent="." unique_id=1484048173]
+stream = ExtResource("3_kjjth")
+volume_db = -4.0
+pitch_scale = 1.25
+autoplay = true
