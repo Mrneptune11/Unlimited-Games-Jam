@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://drcmlu66mj7i5"]
+
+[ext_resource type="Script" uid="uid://cs4rhmytvojrh" path="res://Events/Fireballs/FireballProjectile/HitParticles/fireball_particles.gd" id="1_048xu"]
+[ext_resource type="AudioStream" uid="uid://8waaciyuqm0w" path="res://Assets/sfx/fireball_hit.wav" id="2_btsnw"]
+
+[sub_resource type="Curve" id="Curve_048xu"]
+_data = [Vector2(0, 1), 0.0, -0.43962273, 0, 0, Vector2(1, 0), -2.015663, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_0a6su"]
+curve = SubResource("Curve_048xu")
+
+[sub_resource type="Curve" id="Curve_qs6fw"]
+_limits = [0.0, 50.0, 0.0, 1.0]
+_data = [Vector2(0, 15.730339), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_qs6fw"]
+curve = SubResource("Curve_qs6fw")
+
+[sub_resource type="Curve" id="Curve_nmygb"]
+_data = [Vector2(0, 1), 0.0, -1.562138, 0, 0, Vector2(1, 0), -0.062359538, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_btsnw"]
+curve = SubResource("Curve_nmygb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ifm0f"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+angle_min = -179.99998
+angle_max = 180.00002
+direction = Vector3(0.5, -1, 0)
+initial_velocity_min = 21.5
+initial_velocity_max = 107.52
+angular_velocity_min = 24.999983
+angular_velocity_max = 49.99998
+angular_velocity_curve = SubResource("CurveTexture_qs6fw")
+gravity = Vector3(0, 20, 0)
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_btsnw")
+color = Color(1, 0, 0, 1)
+alpha_curve = SubResource("CurveTexture_0a6su")
+
+[node name="FireballParticles" type="GPUParticles2D" unique_id=2085816240]
+emitting = false
+amount = 15
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_ifm0f")
+script = ExtResource("1_048xu")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1956987623]
+unique_name_in_owner = true
+stream = ExtResource("2_btsnw")
+volume_db = -2.5
+autoplay = true
+max_distance = 500.0
+attenuation = 1.8660673

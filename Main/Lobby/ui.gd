@@ -23,8 +23,7 @@ func _process(_delta: float) -> void:
 			timer_label.text = str((roundi(time_left)))
 			
 			if (roundi(time_left) != last_tick):
-				tick_sfx.play()
-				last_tick = roundi(time_left)
+				_play_tick_sfx.rpc()
 		else:
 			timer_label.text = ""
 
@@ -71,3 +70,10 @@ func init_start_btn()->void:
 #Update the event terminal current message
 func update_event_terminal(string:String)->void:
 	$EventTerminal.text = string
+
+@rpc("authority", "call_local", "reliable")
+func _play_tick_sfx() -> void:
+	tick_sfx.play()
+	
+	if active_timer:
+		last_tick = roundi(active_timer.time_left)

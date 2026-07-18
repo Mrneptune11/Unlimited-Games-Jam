@@ -152,7 +152,7 @@ vertical_alignment = 1
 [node name="TickSFX" type="AudioStreamPlayer" parent="UI/EventTerminal/Timer" unique_id=738144189]
 unique_name_in_owner = true
 stream = ExtResource("3_owp0v")
-volume_db = -7.0
+volume_db = -20.0
 pitch_scale = 2.0
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="UI/EventTerminal" unique_id=1159857400]
