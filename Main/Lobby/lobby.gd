@@ -79,6 +79,7 @@ func gen_id()->StringName:
 
 func start_relay_lobby(server: EzchaRelayServer, lobby_name: String, visibility: EzchaRelayMultiplayerPeer.Visibility) -> void:
 	var peer: EzchaRelayMultiplayerPeer = EzchaRelayMultiplayerPeer.new()
+	server_status = State.LOBBY #Changes to LOBBY once a session is hosted
 	peer.create_lobby(server, lobby_name, MAX_PLAYERS, 0, visibility)
 	multiplayer.multiplayer_peer = peer
 	_start_server_common()
@@ -157,10 +158,10 @@ func force_peer_exit(message:String)->void:
 func _on_peer_connected(peer_id: int) -> void:
 	#Don't allow new joins after the game starts
 	if (!multiplayer.is_server()): return
-		
-	if server_status != State.LOBBY: 
-		force_peer_exit.rpc_id(peer_id,"Can't join server during an active match")
-		return
+		#
+	#if server_status != State.LOBBY: 
+		#force_peer_exit.rpc_id(peer_id,"Can't join server during an active match")
+		#return
 		
 	#handle spawn if host
 	if (!multiplayer.is_server()): return
