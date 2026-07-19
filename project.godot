@@ -31,6 +31,10 @@ window/stretch/aspect="expand"
 
 enabled=PackedStringArray("res://addons/ezcha_network/plugin.cfg")
 
+[ezcha_network]
+
+config/global/game_id="7zg3CzB-MMx7Bp2hJHrPH"
+
 [input]
 
 move_left={
