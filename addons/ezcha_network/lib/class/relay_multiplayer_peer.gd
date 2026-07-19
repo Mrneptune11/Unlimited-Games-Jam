@@ -165,9 +165,12 @@ func resolve_lobby(join_code: String) -> void:
 ## Connect to a relay server and join a lobby.
 ## Do not call this function with `await`.
 func join_lobby(lobby: EzchaRelayLobby) -> void:
+	print("Join Join Code: ",lobby.join_code)
+	print("Join Lobby id: " ,lobby.id)
 	if (!_prepare_connection()): return
 	if (!await _open_connection(lobby.server.address)): return
 	await _send_join_request(lobby.id)
+
 
 ## Request a new lobby from the relay server.
 ## Hosting requires the user to be authenticated.
@@ -180,6 +183,8 @@ func create_lobby(server: EzchaRelayServer, name: String, players: int, game_mod
 	if (!_prepare_connection()): return
 	if (!await _open_connection(server.address)): return
 	await _send_create_request(name, players, game_mode, visibility, host_migration)
+	print(" Create Join Code: ",_join_code)
+	print(" Create Lobby id" ,_lobby_id)
 
 ## Kick another player from the lobby.
 ## (host/moderator only)
@@ -532,6 +537,7 @@ func _send_handshake() -> bool:
 	return (_operation_result != null && _operation_result)
 
 func _send_join_request(lobby_id: String) -> bool:
+	print("send join request lobby id: ",lobby_id)
 	# Update state
 	_operation = Operation.JOIN_LOBBY
 	_operation_result = null

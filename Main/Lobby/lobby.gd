@@ -77,19 +77,40 @@ func gen_id()->StringName:
 
 # Network
 
-func _start_server_common() -> void:
+func start_relay_lobby(server: EzchaRelayServer, lobby_name: String, visibility: EzchaRelayMultiplayerPeer.Visibility) -> void:
+	var peer: EzchaRelayMultiplayerPeer = EzchaRelayMultiplayerPeer.new()
+	peer.create_lobby(server, lobby_name, MAX_PLAYERS, 0, visibility)
+	multiplayer.multiplayer_peer = peer
+	_start_server_common()
+
+
+
+func join_relay_lobby(lobby: EzchaRelayLobby) -> void:
+	var peer: EzchaRelayMultiplayerPeer = EzchaRelayMultiplayerPeer.new()
+	peer.join_lobby(lobby)
+	multiplayer.multiplayer_peer = peer
+	peer.error.connect(func(code, message):printerr("Relay error: ", code, message))
+
+func resolve_relay_lobby(code: String) -> void:
+	var peer: EzchaRelayMultiplayerPeer = EzchaRelayMultiplayerPeer.new()
+	peer.resolve_lobby(code)
+	multiplayer.multiplayer_peer = peer
+
+func _start_server_common(local_host:bool=false) -> void:
 	server_status = State.LOBBY #Changes to LOBBY once a session is hosted
 	
 	load_level(0) #start level scene
-	spawn_player(1) # server is always first player
 	$UI.init_start_btn()
+	
+	if local_host:
+		spawn_player(1) # server is always first player
 	
 
 func start_enet_server(port: int = DEFAULT_PORT) -> void:
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	peer.create_server(port, MAX_PLAYERS)
 	multiplayer.multiplayer_peer = peer
-	_start_server_common()
+	_start_server_common(true)
 
 func start_enet_client(address: String, port: int = DEFAULT_PORT) -> void:
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
@@ -121,7 +142,7 @@ func handle_server_disconnect()->void:
 	get_tree().change_scene_to_file("res://Main/Lobby/Lobby.tscn")
 
 #Forces a peer to disconnect from the server
-@rpc("any_peer", "reliable")
+@rpc("call_local", "any_peer", "reliable")
 func force_peer_exit(message:String)->void:
 	if message:
 		OS.alert(message)

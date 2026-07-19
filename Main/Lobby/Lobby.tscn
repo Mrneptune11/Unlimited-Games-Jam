@@ -75,7 +75,7 @@ offset_bottom = 580.0
 repeat_times = 16
 
 [node name="PanelContainer" type="PanelContainer" parent="UI/BG" unique_id=1031750815]
-custom_minimum_size = Vector2(800, 400)
+custom_minimum_size = Vector2(1200, 600)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -96,10 +96,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -79.0
-offset_top = -104.0
-offset_right = 79.0
-offset_bottom = 104.0
+offset_left = 312.0
+offset_top = -92.0
+offset_right = 470.0
+offset_bottom = 116.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -212,6 +212,132 @@ offset_bottom = 110.0
 theme_override_font_sizes/normal_font_size = 20
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="RelayStart" type="CenterContainer" parent="UI" unique_id=2040018122]
+offset_left = 399.0
+offset_top = 287.0
+offset_right = 1167.0
+offset_bottom = 799.0
+
+[node name="Relay" type="HBoxContainer" parent="UI/RelayStart" unique_id=1313920208]
+custom_minimum_size = Vector2(768, 512)
+layout_mode = 2
+
+[node name="List" type="PanelContainer" parent="UI/RelayStart/Relay" unique_id=248970813]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="UI/RelayStart/Relay/List" unique_id=1568673301]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="UI/RelayStart/Relay/List/VBox" unique_id=1204139321]
+layout_mode = 2
+text = "FIND A LOBBY"
+horizontal_alignment = 1
+
+[node name="ItemList" type="ItemList" parent="UI/RelayStart/Relay/List/VBox" unique_id=850102894]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Actions" type="HBoxContainer" parent="UI/RelayStart/Relay/List/VBox" unique_id=1521597415]
+layout_mode = 2
+
+[node name="Refresh" type="Button" parent="UI/RelayStart/Relay/List/VBox/Actions" unique_id=566417659]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Refresh"
+
+[node name="Join" type="Button" parent="UI/RelayStart/Relay/List/VBox/Actions" unique_id=2004754837]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Join"
+
+[node name="Split" type="VBoxContainer" parent="UI/RelayStart/Relay" unique_id=1408097536]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Resolve" type="PanelContainer" parent="UI/RelayStart/Relay/Split" unique_id=1397940094]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBox" type="VBoxContainer" parent="UI/RelayStart/Relay/Split/Resolve" unique_id=1827940139]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="UI/RelayStart/Relay/Split/Resolve/VBox" unique_id=348227088]
+layout_mode = 2
+text = "JOIN A LOBBY"
+horizontal_alignment = 1
+
+[node name="HBox" type="HBoxContainer" parent="UI/RelayStart/Relay/Split/Resolve/VBox" unique_id=1309000220]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/RelayStart/Relay/Split/Resolve/VBox/HBox" unique_id=1192832312]
+layout_mode = 2
+text = "Join code"
+
+[node name="JoinCode" type="LineEdit" parent="UI/RelayStart/Relay/Split/Resolve/VBox/HBox" unique_id=312002908]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "123ABC"
+max_length = 6
+
+[node name="Resolve" type="Button" parent="UI/RelayStart/Relay/Split/Resolve/VBox" unique_id=1182341094]
+layout_mode = 2
+text = "Resolve"
+
+[node name="Host" type="PanelContainer" parent="UI/RelayStart/Relay/Split" unique_id=203564479]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="UI/RelayStart/Relay/Split/Host" unique_id=130165044]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="UI/RelayStart/Relay/Split/Host/VBox" unique_id=1858431610]
+layout_mode = 2
+text = "HOST A LOBBY"
+horizontal_alignment = 1
+
+[node name="Parameters" type="GridContainer" parent="UI/RelayStart/Relay/Split/Host/VBox" unique_id=549514688]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 2
+
+[node name="NameLabel" type="Label" parent="UI/RelayStart/Relay/Split/Host/VBox/Parameters" unique_id=1627683890]
+layout_mode = 2
+text = "Name"
+
+[node name="Name" type="LineEdit" parent="UI/RelayStart/Relay/Split/Host/VBox/Parameters" unique_id=311427050]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "My Epic Lobby"
+
+[node name="ServerLabel" type="Label" parent="UI/RelayStart/Relay/Split/Host/VBox/Parameters" unique_id=306608963]
+layout_mode = 2
+text = "Server"
+
+[node name="Server" type="OptionButton" parent="UI/RelayStart/Relay/Split/Host/VBox/Parameters" unique_id=2021952607]
+layout_mode = 2
+
+[node name="VisibilityLabel" type="Label" parent="UI/RelayStart/Relay/Split/Host/VBox/Parameters" unique_id=1827160587]
+layout_mode = 2
+text = "Visibility"
+
+[node name="Visibility" type="OptionButton" parent="UI/RelayStart/Relay/Split/Host/VBox/Parameters" unique_id=1999383538]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Public"
+popup/item_0/id = 0
+popup/item_1/text = "Unlisted"
+popup/item_1/id = 1
+popup/item_2/text = "Friends only"
+popup/item_2/id = 2
+
+[node name="Host" type="Button" parent="UI/RelayStart/Relay/Split/Host/VBox" unique_id=2084674446]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Host"
 
 [node name="SFX" type="Node" parent="." unique_id=845318948]
 

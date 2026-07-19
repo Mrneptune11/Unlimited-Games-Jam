@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="SHUSW"
-run/main_scene="uid://duw5lck3jm6k3"
+run/main_scene="uid://dtu0kq7w506q2"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="uid://chngy22xv6jbl"
 
@@ -34,6 +34,7 @@ enabled=PackedStringArray("res://addons/ezcha_network/plugin.cfg")
 [ezcha_network]
 
 config/global/game_id="7zg3CzB-MMx7Bp2hJHrPH"
+config/debug/test_session="Yt5tx1eSoGZXRddoPaDN3GMh.-3SeUIAv1EW6NReL2s5p3MK3"
 
 [input]
 
