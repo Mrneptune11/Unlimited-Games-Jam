@@ -4,6 +4,8 @@
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_g4v7s"]
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_g4v7s"]
+
 [node name="Projectile" type="Area2D" unique_id=402566226]
 script = ExtResource("1_ta1dt")
 
@@ -11,3 +13,6 @@ script = ExtResource("1_ta1dt")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1814601285]
 shape = SubResource("CircleShape2D_g4v7s")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1629664260]
+sprite_frames = SubResource("SpriteFrames_g4v7s")

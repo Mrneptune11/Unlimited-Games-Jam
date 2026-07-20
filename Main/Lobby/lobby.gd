@@ -158,10 +158,10 @@ func force_peer_exit(message:String)->void:
 func _on_peer_connected(peer_id: int) -> void:
 	#Don't allow new joins after the game starts
 	if (!multiplayer.is_server()): return
-		#
-	#if server_status != State.LOBBY: 
-		#force_peer_exit.rpc_id(peer_id,"Can't join server during an active match")
-		#return
+		
+	if server_status != State.LOBBY: 
+		force_peer_exit.rpc_id(peer_id,"Can't join server during an active match")
+		return
 		
 	#handle spawn if host
 	if (!multiplayer.is_server()): return
