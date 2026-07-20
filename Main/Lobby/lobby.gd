@@ -41,6 +41,9 @@ var level_idx:int = 1
 @onready var _win_sfx: AudioStreamPlayer = %WinSFX
 @onready var _no_one_wins_sfx: AudioStreamPlayer = %NoOneWinsSFX
 
+signal event_cycle_started	## Emits when a new event cycle begins.
+signal game_ended(no_winners: bool)	## Emits when the game ends by one or no players being left alive.
+
 # Lifecycle
 
 func _init()->void:
@@ -316,6 +319,8 @@ func event_cycle()->void:
 		no_one_wins()
 		return
 	
+	event_cycle_started.emit()
+	
 	#Prepare for the next event
 	$UI.update_event_terminal("Next event in:")
 	await create_game_timer(10).timeout
@@ -368,15 +373,19 @@ func someone_wins(peer:int)->void:
 	$UI.update_event_terminal(win_message)
 	_play_win_sfx.rpc()
 	
+	game_ended.emit(false)
+	
 	await create_game_timer(10).timeout
 	
 	handle_server_disconnect()
 
 #Handle game end when nobody is left alive
 func no_one_wins()->void:
-	var end_message:String = "Nobody wins... Thats hilarious (●__●)"
+	var end_message:String = "Nobody wins... Thats hilarious"
 	$UI.update_event_terminal(end_message)
 	_play_no_one_wins_sfx.rpc()
+	
+	game_ended.emit(true)
 	
 	await create_game_timer(10).timeout
 	
