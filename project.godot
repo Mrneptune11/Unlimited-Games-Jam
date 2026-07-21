@@ -20,6 +20,10 @@ config/icon="uid://chngy22xv6jbl"
 EM="*uid://da34ppw85trme"
 MM="*uid://c2l5kkt2xs3h8"
 
+[debug]
+
+file_logging/enable_file_logging=true
+
 [display]
 
 window/size/viewport_width=1920

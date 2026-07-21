@@ -25,7 +25,7 @@ position = Vector2(0, -18)
 texture = ExtResource("2_23haa")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1550808346]
-position = Vector2(0, -16)
+position = Vector2(0, -18)
 shape = SubResource("CircleShape2D_4xi1n")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1157916286]
