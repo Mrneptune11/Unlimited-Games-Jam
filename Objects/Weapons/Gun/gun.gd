@@ -26,7 +26,7 @@ func spawn_projectile(my_subject:int)->void:
 	bullet.set_up(dir * BULLET_SPEED, 5, my_subject, lobby)
 	bullet.global_position = self.global_position
 	
-	lobby.get_node("Projectiles").add_child(bullet) #Bullet added to scene tree
+	lobby.get_node("Projectiles").add_child(bullet, true) #Bullet added to scene tree
 	
 	#Authority checks if the bullet hit the duel target
 	if is_multiplayer_authority():

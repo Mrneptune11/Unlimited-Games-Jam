@@ -24,7 +24,7 @@ func spawn_projectile(my_subject:int)->void:
 	slash.get_node("AnimatedSprite2D").animation_finished.connect(slash.queue_free)
 	slash.global_position = self.global_position
 	
-	lobby.get_node("Projectiles").add_child(slash) #Bullet added to scene tree
+	lobby.get_node("Projectiles").add_child(slash, true) #Bullet added to scene tree
 	
 	#Authority checks if the bullet hit the duel target
 	if is_multiplayer_authority():
