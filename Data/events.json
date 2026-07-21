@@ -24,7 +24,7 @@
 	
 	{
 		"id" : "someone_explode",
-		"weight" : 1,
+		"weight" : 0.25,
 	},
 	
 	{
@@ -39,7 +39,7 @@
 	
 	{
 		"id" : "owe_money",
-		"weight" : 1,
+		"weight" : 0.25,
 	},
 	
 	{
