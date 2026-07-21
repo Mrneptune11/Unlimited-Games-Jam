@@ -3,11 +3,13 @@
 [ext_resource type="Script" uid="uid://3mtp3mvg1058" path="res://Main/Lobby/lobby.gd" id="1_0duqs"]
 [ext_resource type="Script" uid="uid://b3bltlekjmkx8" path="res://Main/Lobby/ui.gd" id="2_0duqs"]
 [ext_resource type="PackedScene" uid="uid://fmm44p2dxj8k" path="res://Objects/Bg/bg.tscn" id="3_owp0v"]
+[ext_resource type="Theme" uid="uid://r2pc04ebi1k4" path="res://Objects/Entry Box/entry_box_theme.tres" id="4_2vu3r"]
 [ext_resource type="AudioStream" uid="uid://bvb22aw1qq8bu" path="res://Assets/sfx/event_start.wav" id="4_b6yaa"]
 [ext_resource type="AudioStream" uid="uid://blavu273kye24" path="res://Assets/sfx/event_tick.wav" id="4_cpq7c"]
 [ext_resource type="Theme" uid="uid://dopeom4ydjiad" path="res://UI/Kaomoji/kaomoji_box_theme.tres" id="4_kihbt"]
 [ext_resource type="AudioStream" uid="uid://da0dsx8gjqo30" path="res://Assets/sfx/event_end.wav" id="5_cpq7c"]
 [ext_resource type="PackedScene" uid="uid://clhmylgmstgur" path="res://UI/Kaomoji/Kaomoji.tscn" id="5_fwlmj"]
+[ext_resource type="Script" uid="uid://bjebw1wm4wp2g" path="res://UI/Menus/Other/back_button.gd" id="5_hudff"]
 [ext_resource type="AudioStream" uid="uid://bdcehpqds5s7n" path="res://Assets/sfx/winner_is_you.wav" id="6_fwlmj"]
 [ext_resource type="AudioStream" uid="uid://cgqqx6yndefbf" path="res://Assets/sfx/no_one_wins.wav" id="7_kihbt"]
 
@@ -20,6 +22,47 @@ const BULLET_SPEED:float = 200
 "
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g4v7s"]
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hudff"]
+bg_color = Color(0.326184, 0.326184, 0.32618397, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d8ic0"]
+bg_color = Color(0.326184, 0.326184, 0.32618397, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_0duqs"]
 properties/0/path = NodePath(".:text")
@@ -71,49 +114,47 @@ offset_bottom = 580.0
 repeat_times = 16
 
 [node name="PanelContainer" type="PanelContainer" parent="UI/BG" unique_id=1031750815]
-custom_minimum_size = Vector2(800, 400)
+custom_minimum_size = Vector2(800, 500)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -420.0
-offset_top = -220.0
-offset_right = 380.0
-offset_bottom = 180.0
+offset_left = -412.0
+offset_top = -272.0
+offset_right = 388.0
+offset_bottom = 228.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_g4v7s")
 
 [node name="Start" type="VBoxContainer" parent="UI" unique_id=1095290580]
+custom_minimum_size = Vector2(200, 0)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -79.0
-offset_top = -104.0
-offset_right = 79.0
-offset_bottom = 104.0
+offset_left = -123.0
+offset_top = -187.0
+offset_right = 123.0
+offset_bottom = 187.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="Title" type="RichTextLabel" parent="UI/Start" unique_id=520906420]
-custom_minimum_size = Vector2(100, 25)
-layout_mode = 2
-text = "Host or Join 
-"
+theme = ExtResource("4_2vu3r")
 
 [node name="ENet" type="VBoxContainer" parent="UI/Start" unique_id=2036676489]
 layout_mode = 2
+theme_override_constants/separation = 60
 
 [node name="HostENet" type="PanelContainer" parent="UI/Start/ENet" unique_id=251083739]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hudff")
 
 [node name="VBox" type="VBoxContainer" parent="UI/Start/ENet/HostENet" unique_id=1876653768]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 20
 
 [node name="Options" type="GridContainer" parent="UI/Start/ENet/HostENet/VBox" unique_id=1602178311]
 layout_mode = 2
@@ -121,6 +162,7 @@ columns = 2
 
 [node name="PortLabel" type="Label" parent="UI/Start/ENet/HostENet/VBox/Options" unique_id=1296956702]
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
 text = "Port:"
 
 [node name="Port" type="SpinBox" parent="UI/Start/ENet/HostENet/VBox/Options" unique_id=1819557715]
@@ -128,29 +170,38 @@ layout_mode = 2
 max_value = 1000000.0
 
 [node name="Start" type="Button" parent="UI/Start/ENet/HostENet/VBox" unique_id=1840390251]
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
 text = "Host"
 
 [node name="Join" type="PanelContainer" parent="UI/Start/ENet" unique_id=159374255]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_d8ic0")
 
 [node name="VBox" type="VBoxContainer" parent="UI/Start/ENet/Join" unique_id=1008451054]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 20
 
 [node name="Options" type="GridContainer" parent="UI/Start/ENet/Join/VBox" unique_id=613895801]
 layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
 columns = 2
 
 [node name="AddressLabel" type="Label" parent="UI/Start/ENet/Join/VBox/Options" unique_id=485884758]
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
 text = "Address:"
 
 [node name="Address" type="LineEdit" parent="UI/Start/ENet/Join/VBox/Options" unique_id=1735152330]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
+theme_override_font_sizes/font_size = 16
 
 [node name="PortLabel" type="Label" parent="UI/Start/ENet/Join/VBox/Options" unique_id=1854792270]
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
 text = "Port:"
 
 [node name="Port" type="SpinBox" parent="UI/Start/ENet/Join/VBox/Options" unique_id=412054546]
@@ -158,7 +209,9 @@ layout_mode = 2
 max_value = 1000000.0
 
 [node name="Start" type="Button" parent="UI/Start/ENet/Join/VBox" unique_id=1813664087]
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
 text = "Join"
 
 [node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=313957006]
@@ -221,6 +274,35 @@ pitch_scale = 2.0
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="UI/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/EventTerminal" unique_id=1159857400]
 replication_config = SubResource("SceneReplicationConfig_0duqs")
+
+[node name="Back" type="Button" parent="UI" unique_id=1341808518]
+custom_minimum_size = Vector2(200, 75)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -180.0
+offset_right = 100.0
+offset_bottom = -105.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("4_2vu3r")
+theme_override_font_sizes/font_size = 30
+script = ExtResource("5_hudff")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/Back" unique_id=829781796]
+custom_minimum_size = Vector2(200, 75)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "[rainbow freq=.01]Back"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="SFX" type="Node" parent="." unique_id=845318948]
 
