@@ -8,6 +8,7 @@ enum Track {
 
 var current_track:Track = Track.NONE
 
+@rpc("call_local","authority","reliable")
 func play_music(track:Track)->AudioStreamPlayer:
 	if current_track == track: return 
 	

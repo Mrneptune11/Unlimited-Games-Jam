@@ -1,7 +1,7 @@
 extends Control
 
 func _ready():
-	MM.play_music(MM.Track.STUFF)
+	MM.play_music.rpc(MM.Track.STUFF)
 	
 	var buttons:Array[Node] = $VBoxContainer.get_children()
 	for i:int in range(buttons.size()):

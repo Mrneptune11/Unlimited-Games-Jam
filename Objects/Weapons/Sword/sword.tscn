@@ -38,9 +38,9 @@ animations = [{
 script = ExtResource("2_uh0sh")
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=1527165884]
-position = Vector2(-7, 1)
+position = Vector2(-8, 2)
 sprite_frames = SubResource("SpriteFrames_r76a6")
 
 [node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="." index="1" unique_id=1907415151]
-position = Vector2(-7, 1)
+position = Vector2(-8, 2)
 sprite_frames = SubResource("SpriteFrames_uh0sh")
