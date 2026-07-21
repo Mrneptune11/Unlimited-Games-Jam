@@ -84,10 +84,10 @@ theme_override_font_sizes/normal_font_size = 60
 theme_override_styles/normal = SubResource("StyleBoxFlat_ygqeo")
 bbcode_enabled = true
 text = "[rainbow freq=.01]Mr. Neptune:
-[font_size=50] Progammer, Artist, Designer[/font_size]
+[font_size=40] Progammer, Artist, Music, Designer[/font_size]
 
 Tapeknot:
-[font_size=50]Programmer, Audio, Designer[/font_size]
+[font_size=40]Programmer, Audio, Designer[/font_size]
 
 [font_size=30] Special thanks to Cmota for the trivia data."
 tab_size = 1

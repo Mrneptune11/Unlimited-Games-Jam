@@ -160,6 +160,7 @@ func _on_connected_to_server() -> void:
 func _on_connection_failed() -> void:
 	#Fails to connect to a valid host
 	OS.alert("Host connection failed")
+	get_tree().change_scene_to_file("res://Main/Lobby/Lobby.tscn")
 	
 
 func _on_server_disconnected() -> void:
