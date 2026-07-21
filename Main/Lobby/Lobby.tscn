@@ -8,7 +8,6 @@
 [ext_resource type="AudioStream" uid="uid://blavu273kye24" path="res://Assets/sfx/event_tick.wav" id="4_cpq7c"]
 [ext_resource type="Theme" uid="uid://dopeom4ydjiad" path="res://UI/hud_theme.tres" id="4_kihbt"]
 [ext_resource type="AudioStream" uid="uid://da0dsx8gjqo30" path="res://Assets/sfx/event_end.wav" id="5_cpq7c"]
-[ext_resource type="PackedScene" uid="uid://clhmylgmstgur" path="res://UI/Kaomoji/Kaomoji.tscn" id="5_fwlmj"]
 [ext_resource type="Script" uid="uid://bjebw1wm4wp2g" path="res://UI/Menus/Other/back_button.gd" id="5_hudff"]
 [ext_resource type="AudioStream" uid="uid://bdcehpqds5s7n" path="res://Assets/sfx/winner_is_you.wav" id="6_fwlmj"]
 [ext_resource type="AudioStream" uid="uid://cgqqx6yndefbf" path="res://Assets/sfx/no_one_wins.wav" id="7_kihbt"]
@@ -237,10 +236,6 @@ theme = ExtResource("4_kihbt")
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/HUD/PanelContainer" unique_id=885819878]
 layout_mode = 2
 theme_override_constants/separation = 10
-
-[node name="Kaomoji" parent="UI/HUD/PanelContainer/VBoxContainer" unique_id=1540179947 instance=ExtResource("5_fwlmj")]
-unique_name_in_owner = true
-layout_mode = 2
 
 [node name="EventTerminal" type="HBoxContainer" parent="UI/HUD/PanelContainer/VBoxContainer" unique_id=1517683835]
 layout_mode = 2
