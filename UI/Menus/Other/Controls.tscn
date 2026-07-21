@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://bjebw1wm4wp2g" path="res://UI/Menus/Other/back_button.gd" id="4_1lfql"]
 [ext_resource type="Texture2D" uid="uid://bg5pxyuwirwtt" path="res://Assets/SpriteSheets/SHUSW_controls.png" id="5_acvvr"]
 [ext_resource type="Texture2D" uid="uid://cgl33atukxaqr" path="res://Assets/sprites/or.png" id="6_ayugc"]
+[ext_resource type="Texture2D" uid="uid://yorrxa8meq7l" path="res://Assets/sprites/jump.png" id="7_aylip"]
+[ext_resource type="Texture2D" uid="uid://d2heawl5ty88q" path="res://Assets/sprites/white_square.png" id="8_xqyds"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ygqeo"]
 border_width_left = 8
@@ -291,3 +293,46 @@ texture = ExtResource("6_ayugc")
 layout_mode = 2
 texture = SubResource("AtlasTexture_xqyds")
 expand_mode = 3
+
+[node name="Icon" type="Control" parent="." unique_id=1525163208]
+anchors_preset = 0
+offset_left = 784.0
+offset_top = 976.0
+offset_right = 824.0
+offset_bottom = 1016.0
+
+[node name="Icon" type="TextureRect" parent="Icon" unique_id=1116087155]
+texture_filter = 1
+layout_mode = 0
+offset_left = -16.0
+offset_right = 24.0
+offset_bottom = 40.0
+scale = Vector2(2, 2)
+texture = ExtResource("7_aylip")
+
+[node name="TextureRect" type="TextureRect" parent="Icon/Icon" unique_id=450001911]
+show_behind_parent = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -2)
+texture = ExtResource("8_xqyds")
+
+[node name="Icon2" type="TextureRect" parent="Icon" unique_id=1404877686]
+texture_filter = 1
+layout_mode = 0
+offset_left = 368.0
+offset_right = 408.0
+offset_bottom = 40.0
+scale = Vector2(-2, 2)
+texture = ExtResource("7_aylip")
+
+[node name="TextureRect" type="TextureRect" parent="Icon/Icon2" unique_id=317039722]
+show_behind_parent = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -2)
+texture = ExtResource("8_xqyds")

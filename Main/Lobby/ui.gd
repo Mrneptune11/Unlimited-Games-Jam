@@ -30,8 +30,29 @@ func _process(_delta: float) -> void:
 
 
 func _ready() -> void:
-	$Start/ENet/Join/VBox/Start.pressed.connect(_on_enet_join_pressed)
-	$Start/ENet/HostENet/VBox/Start.pressed.connect(_on_enet_host_pressed)
+	var btns:Array[Button] = []
+	btns.append($Start/ENet/Join/VBox/Start)
+	btns.append($Start/ENet/HostENet/VBox/Start)
+	
+	for i:int in range(btns.size()):
+		var btn:Button = btns[i]
+		btn.modulate = Color("#797979")
+		if i == 0:
+			btn.pressed.connect(_on_enet_join_pressed)
+		if i == 1:
+			btn.pressed.connect(_on_enet_host_pressed)
+		
+		btn.mouse_entered.connect(btn.grab_focus)
+		btn.mouse_exited.connect(btn.release_focus)
+		
+		btn.focus_entered.connect(func(): 
+			btn.add_theme_font_size_override("font_size", 36)
+			btn.modulate = Color("#FFFFFF")
+		)
+		btn.focus_exited.connect(func(): 
+			btn.add_theme_font_size_override("font_size", 30)
+			btn.modulate = Color("#797979")
+			)
 
 # ENet
 

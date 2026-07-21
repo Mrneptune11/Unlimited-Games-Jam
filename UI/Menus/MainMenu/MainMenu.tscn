@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://fmm44p2dxj8k" path="res://Objects/Bg/bg.tscn" id="2_7wy4y"]
 [ext_resource type="FontFile" uid="uid://8diwfm1ncst5" path="res://Assets/Font/JetBrainsMono-Medium.ttf" id="3_rjeyd"]
 [ext_resource type="Theme" uid="uid://r2pc04ebi1k4" path="res://Objects/Entry Box/entry_box_theme.tres" id="4_ygqeo"]
+[ext_resource type="Texture2D" uid="uid://yorrxa8meq7l" path="res://Assets/sprites/jump.png" id="5_8e7ed"]
+[ext_resource type="Texture2D" uid="uid://d2heawl5ty88q" path="res://Assets/sprites/white_square.png" id="6_ie2mw"]
 
 [node name="MainMenu" type="Control" unique_id=1964875841]
 layout_mode = 3
@@ -132,3 +134,44 @@ bbcode_enabled = true
 text = "[rainbow freq=.01]Quit"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Icon" type="Control" parent="." unique_id=1913143486]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Icon" type="TextureRect" parent="Icon" unique_id=877858218]
+texture_filter = 1
+layout_mode = 0
+offset_left = -8.0
+offset_right = 32.0
+offset_bottom = 40.0
+scale = Vector2(2, 2)
+texture = ExtResource("5_8e7ed")
+
+[node name="TextureRect" type="TextureRect" parent="Icon/Icon" unique_id=742304190]
+show_behind_parent = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -2)
+texture = ExtResource("6_ie2mw")
+
+[node name="Icon2" type="TextureRect" parent="Icon" unique_id=140934106]
+texture_filter = 1
+layout_mode = 0
+offset_left = 368.0
+offset_right = 408.0
+offset_bottom = 40.0
+scale = Vector2(-2, 2)
+texture = ExtResource("5_8e7ed")
+
+[node name="TextureRect" type="TextureRect" parent="Icon/Icon2" unique_id=890675540]
+show_behind_parent = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -2)
+texture = ExtResource("6_ie2mw")

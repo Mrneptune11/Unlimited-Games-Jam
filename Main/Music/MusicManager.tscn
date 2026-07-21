@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://c2l5kkt2xs3h8"]
+
+[ext_resource type="AudioStream" uid="uid://cn47vv8g1c10y" path="res://Main/Music/WAV/Stuff.wav" id="1_qcfyw"]
+[ext_resource type="Script" uid="uid://bey4ldsbc6ont" path="res://Main/Music/MusicManager.gd" id="1_tw08o"]
+[ext_resource type="AudioStream" uid="uid://c7kokxobw0ct6" path="res://Main/Music/WAV/Happens.wav" id="2_tw08o"]
+
+[node name="MusicManager" type="Node" unique_id=540376164]
+script = ExtResource("1_tw08o")
+
+[node name="Stuff" type="AudioStreamPlayer" parent="." unique_id=864934795]
+stream = ExtResource("1_qcfyw")
+
+[node name="Happens" type="AudioStreamPlayer" parent="." unique_id=574590676]
+stream = ExtResource("2_tw08o")

@@ -300,6 +300,8 @@ func create_game_timer(time:float = 5)->SceneTreeTimer:
 func start_match()->void:
 	server_status = State.MATCH
 	
+	MM.play_music(MM.Track.HAPPENS)
+	
 	var timer:SceneTreeTimer = create_game_timer()
 	timer.timeout.connect(next_level)
 	timer.timeout.connect(event_cycle)

@@ -4,6 +4,8 @@
 [ext_resource type="FontFile" uid="uid://8diwfm1ncst5" path="res://Assets/Font/JetBrainsMono-Medium.ttf" id="2_8bi2f"]
 [ext_resource type="Theme" uid="uid://r2pc04ebi1k4" path="res://Objects/Entry Box/entry_box_theme.tres" id="3_3xwnv"]
 [ext_resource type="Script" uid="uid://bjebw1wm4wp2g" path="res://UI/Menus/Other/back_button.gd" id="4_p3ulm"]
+[ext_resource type="Texture2D" uid="uid://yorrxa8meq7l" path="res://Assets/sprites/jump.png" id="5_3xwnv"]
+[ext_resource type="Texture2D" uid="uid://d2heawl5ty88q" path="res://Assets/sprites/white_square.png" id="6_p3ulm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ygqeo"]
 border_width_left = 8
@@ -121,3 +123,46 @@ bbcode_enabled = true
 text = "[rainbow freq=.01]Back"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Icon" type="Control" parent="." unique_id=1056874390]
+anchors_preset = 0
+offset_left = 784.0
+offset_top = 976.0
+offset_right = 824.0
+offset_bottom = 1016.0
+
+[node name="Icon" type="TextureRect" parent="Icon" unique_id=556094808]
+texture_filter = 1
+layout_mode = 0
+offset_left = -16.0
+offset_right = 24.0
+offset_bottom = 40.0
+scale = Vector2(2, 2)
+texture = ExtResource("5_3xwnv")
+
+[node name="TextureRect" type="TextureRect" parent="Icon/Icon" unique_id=2058159039]
+show_behind_parent = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -2)
+texture = ExtResource("6_p3ulm")
+
+[node name="Icon2" type="TextureRect" parent="Icon" unique_id=669044625]
+texture_filter = 1
+layout_mode = 0
+offset_left = 368.0
+offset_right = 408.0
+offset_bottom = 40.0
+scale = Vector2(-2, 2)
+texture = ExtResource("5_3xwnv")
+
+[node name="TextureRect" type="TextureRect" parent="Icon/Icon2" unique_id=301096008]
+show_behind_parent = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -2)
+texture = ExtResource("6_p3ulm")
