@@ -15,36 +15,95 @@
 	{
 		"id" : "print_hi",
 		"weight" : 0.5,
+		"kaomoji" : 
+			{
+				"frames" : [
+					"₍₍⚞(˶>ᗜ<˶)⚟⁾⁾",
+					"  (˶>⩊<˶)  ",
+				],
+				"framerate" : 1.5,
+			},
 	},
 	
 	{
 		"id" : "print_buh",
 		"weight" : 0.5,
+		"kaomoji" : 
+			{
+				"frames" : [
+					"凸ಠ益ಠ)凸",
+					"凸`皿´)凸",
+					"凸｀0´)凸",
+				],
+				"framerate" : 1.3,
+			},
 	},
 	
 	{
 		"id" : "someone_explode",
 		"weight" : 0.25,
+		"kaomoji" : 
+			{
+				"frames" : [
+					"ඞා",
+				],
+				"framerate" : 0.0,
+			},
 	},
 	
 	{
 		"id" : "color_change",
 		"weight" : 1,
+		"kaomoji" : 
+			{
+				"frames" : [
+					"( ͡° ͜ʖ ͡°)",
+					"(͠≖ ͜ʖ͠≖)",
+				],
+				"framerate" : 1.3,
+			},
 	},
 	
 	{
 		"id" : "os_check",
 		"weight" : 1,
+		"kaomoji" : 
+			{
+				"frames" : [
+					"( ´ཀ` ) ← disgusting",
+					"( ´ཀ` )   disgusting",
+				],
+				"framerate" : 2.0,
+			},
 	},
 	
 	{
 		"id" : "owe_money",
 		"weight" : 0.25,
+		"kaomoji" : 
+			{
+				"frames" : [
+					"(\" ´ ∇ ` )",
+					"(ᵕ — ᴗ — )",
+					"(,,¬﹏¬,,)",
+				],
+				"framerate" : 1.0,
+			},
 	},
 	
 	{
 		"id" : "fireballs",
 		"weight" : 1,
+		"kaomoji" : 
+			{
+				"frames" : [
+					"\\(˚☐˚”)/    ",
+					"    \\(”˚ㅁ˚)/",
+					"\\(╥‸ ╥ )/    ",
+					"   \\(°.◜ᯅ◝°)/",
+				],
+				"framerate" : 0.9,
+			},
 	},
 	
 	{
@@ -60,11 +119,30 @@
 	{
 		"id" : "increase_size",
 		"weight" : 1,
+		"kaomoji" : 
+			{
+				"frames" : [
+					"ᕙ( •̀ ᗜ •́ )ᕗ",
+					"ᕙ( ⇀ ‸ ↼‶)ᕗ",
+				],
+				"framerate" : 1.0,
+			},
 	},
 	
 	{
 		"id" : "decrease_size",
 		"weight" : 1,
+		"kaomoji" : 
+			{
+				"frames" : [
+					"𓁹‿𓁹		",
+					"𓁹‿𓁹	.	",
+					"𓁹‿𓁹	..	",
+					"𓁹‿𓁹	...	",
+					"𓁹‿𓁹	....",
+				],
+				"framerate" : 1.5,
+			},
 	},
 
 	{
