@@ -4,6 +4,8 @@
 [ext_resource type="FontFile" uid="uid://8diwfm1ncst5" path="res://Assets/Font/JetBrainsMono-Medium.ttf" id="2_ky8x5"]
 [ext_resource type="Theme" uid="uid://r2pc04ebi1k4" path="res://Objects/Entry Box/entry_box_theme.tres" id="3_ky8x5"]
 [ext_resource type="Script" uid="uid://bjebw1wm4wp2g" path="res://UI/Menus/Other/back_button.gd" id="4_1lfql"]
+[ext_resource type="Texture2D" uid="uid://bg5pxyuwirwtt" path="res://Assets/SpriteSheets/SHUSW_controls.png" id="5_acvvr"]
+[ext_resource type="Texture2D" uid="uid://cgl33atukxaqr" path="res://Assets/sprites/or.png" id="6_ayugc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ygqeo"]
 border_width_left = 8
@@ -15,6 +17,50 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g4v7s"]
+atlas = ExtResource("5_acvvr")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_57qmd"]
+atlas = ExtResource("5_acvvr")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7edn4"]
+atlas = ExtResource("5_acvvr")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aylip"]
+atlas = ExtResource("5_acvvr")
+region = Rect2(48, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xqyds"]
+atlas = ExtResource("5_acvvr")
+region = Rect2(0, 32, 48, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w2d1p"]
+atlas = ExtResource("5_acvvr")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4o7ux"]
+atlas = ExtResource("5_acvvr")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n5214"]
+atlas = ExtResource("5_acvvr")
+region = Rect2(48, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6eh2r"]
+atlas = ExtResource("5_acvvr")
+region = Rect2(32, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7bdca"]
+atlas = ExtResource("5_acvvr")
+region = Rect2(48, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ayugc"]
+atlas = ExtResource("5_acvvr")
+region = Rect2(0, 48, 32, 16)
 
 [node name="MainMenu" type="Control" unique_id=1964875841]
 layout_mode = 3
@@ -74,15 +120,16 @@ theme_override_constants/outline_size = 3
 theme_override_font_sizes/normal_font_size = 60
 theme_override_styles/normal = SubResource("StyleBoxFlat_ygqeo")
 bbcode_enabled = true
-text = "[rainbow freq=.01]	Move: A and D | ← and→
+text = "[rainbow freq=.01]	Move:              
 
-	Jump: Space | W | ↑
+	Jump: 
 	
-	Use Item:  O | P | Z | X
+	Use Item:
 
-	Click UI:  Enter | Space
+	Click UI:
 "
 tab_size = 1
+vertical_alignment = 1
 
 [node name="Back" type="Button" parent="." unique_id=1770326265]
 custom_minimum_size = Vector2(200, 75)
@@ -110,6 +157,137 @@ offset_bottom = 40.0
 mouse_filter = 1
 theme_override_font_sizes/normal_font_size = 30
 bbcode_enabled = true
-text = "[rainbow freq=.01]Quit"
+text = "[rainbow freq=.01]Back"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Control" type="Control" parent="." unique_id=1221321433]
+texture_filter = 1
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(2, 2)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control" unique_id=777960396]
+layout_mode = 0
+offset_left = 392.0
+offset_top = 152.0
+offset_right = 492.0
+offset_bottom = 192.0
+theme_override_constants/separation = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/HBoxContainer" unique_id=1025423229]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TextureRect2" type="TextureRect" parent="Control/HBoxContainer/HBoxContainer" unique_id=1420098534]
+layout_mode = 2
+texture = SubResource("AtlasTexture_g4v7s")
+expand_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/HBoxContainer/HBoxContainer" unique_id=1547963479]
+layout_mode = 2
+texture = SubResource("AtlasTexture_57qmd")
+expand_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="Control/HBoxContainer" unique_id=331510413]
+layout_mode = 2
+texture = ExtResource("6_ayugc")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/HBoxContainer" unique_id=1976840933]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TextureRect2" type="TextureRect" parent="Control/HBoxContainer/HBoxContainer2" unique_id=165060011]
+layout_mode = 2
+texture = SubResource("AtlasTexture_7edn4")
+expand_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/HBoxContainer/HBoxContainer2" unique_id=1713630361]
+layout_mode = 2
+texture = SubResource("AtlasTexture_aylip")
+expand_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Control" unique_id=128205097]
+layout_mode = 0
+offset_left = 384.0
+offset_top = 240.0
+offset_right = 656.0
+offset_bottom = 280.0
+theme_override_constants/separation = 10
+
+[node name="TextureRect2" type="TextureRect" parent="Control/HBoxContainer3" unique_id=1216379500]
+layout_mode = 2
+texture = SubResource("AtlasTexture_xqyds")
+expand_mode = 3
+
+[node name="TextureRect5" type="TextureRect" parent="Control/HBoxContainer3" unique_id=889581417]
+layout_mode = 2
+texture = ExtResource("6_ayugc")
+
+[node name="TextureRect" type="TextureRect" parent="Control/HBoxContainer3" unique_id=1055533002]
+layout_mode = 2
+texture = SubResource("AtlasTexture_w2d1p")
+expand_mode = 2
+
+[node name="TextureRect4" type="TextureRect" parent="Control/HBoxContainer3" unique_id=588714193]
+layout_mode = 2
+texture = ExtResource("6_ayugc")
+
+[node name="TextureRect3" type="TextureRect" parent="Control/HBoxContainer3" unique_id=914902634]
+layout_mode = 2
+texture = SubResource("AtlasTexture_4o7ux")
+expand_mode = 2
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Control" unique_id=693170058]
+layout_mode = 0
+offset_left = 440.0
+offset_top = 320.0
+offset_right = 680.0
+offset_bottom = 360.0
+theme_override_constants/separation = 10
+
+[node name="TextureRect2" type="TextureRect" parent="Control/HBoxContainer4" unique_id=471517344]
+layout_mode = 2
+texture = SubResource("AtlasTexture_n5214")
+expand_mode = 3
+
+[node name="TextureRect5" type="TextureRect" parent="Control/HBoxContainer4" unique_id=1433440641]
+layout_mode = 2
+texture = ExtResource("6_ayugc")
+
+[node name="TextureRect" type="TextureRect" parent="Control/HBoxContainer4" unique_id=1027467565]
+layout_mode = 2
+texture = SubResource("AtlasTexture_6eh2r")
+expand_mode = 2
+
+[node name="TextureRect4" type="TextureRect" parent="Control/HBoxContainer4" unique_id=800815534]
+layout_mode = 2
+texture = ExtResource("6_ayugc")
+
+[node name="TextureRect3" type="TextureRect" parent="Control/HBoxContainer4" unique_id=1206201145]
+layout_mode = 2
+texture = SubResource("AtlasTexture_7bdca")
+expand_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control" unique_id=1983082823]
+layout_mode = 0
+offset_left = 424.0
+offset_top = 400.0
+offset_right = 660.0
+offset_bottom = 440.0
+theme_override_constants/separation = 10
+
+[node name="TextureRect2" type="TextureRect" parent="Control/HBoxContainer2" unique_id=1343525317]
+layout_mode = 2
+texture = SubResource("AtlasTexture_ayugc")
+expand_mode = 3
+
+[node name="TextureRect4" type="TextureRect" parent="Control/HBoxContainer2" unique_id=1504136100]
+layout_mode = 2
+texture = ExtResource("6_ayugc")
+
+[node name="TextureRect" type="TextureRect" parent="Control/HBoxContainer2" unique_id=680619150]
+layout_mode = 2
+texture = SubResource("AtlasTexture_xqyds")
+expand_mode = 3
