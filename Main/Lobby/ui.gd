@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 @onready var lobby: Lobby = get_parent()
+@onready var event_terminal: RichTextLabel = %EventTerminal
 @onready var tick_sfx: AudioStreamPlayer = %TickSFX
 
 var active_timer:SceneTreeTimer = null ##If there is an activetimer
@@ -14,7 +15,7 @@ const START_BTN_SCN = preload("res://UI/StartButton/StartGameButton.tscn")
 #-------------------------------------------------------------------------------
 
 func _process(_delta: float) -> void:
-	var timer_label:RichTextLabel = $EventTerminal/Timer
+	var timer_label:RichTextLabel = event_terminal.get_node("Timer")
 	
 	#Keep the timer up to date when active, and blank when not needed
 	if active_timer:
@@ -73,7 +74,7 @@ func init_start_btn()->void:
 	
 #Update the event terminal current message
 func update_event_terminal(string:String)->void:
-	$EventTerminal.text = string
+	event_terminal.text = string
 
 @rpc("authority", "call_local", "reliable")
 func _play_tick_sfx() -> void:

@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://clhmylgmstgur"]
+
+[ext_resource type="Theme" uid="uid://dopeom4ydjiad" path="res://UI/Kaomoji/kaomoji_box_theme.tres" id="1_1kfow"]
+[ext_resource type="Script" uid="uid://ci6utavlmnx38" path="res://UI/Kaomoji/kaomoji.gd" id="2_6bygk"]
+[ext_resource type="JSON" path="res://Data/events.json" id="3_ny3fe"]
+[ext_resource type="JSON" path="res://Data/misc_kaomojis.json" id="4_xg0bm"]
+
+[node name="Kaomoji" type="RichTextLabel" unique_id=675921576]
+custom_minimum_size = Vector2(400, 60)
+custom_maximum_size = Vector2(400, 60)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -50.0
+offset_right = 200.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_1kfow")
+bbcode_enabled = true
+text = "(╯°□°）╯︵ ┻━┻"
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("2_6bygk")
+_event_data = ExtResource("3_ny3fe")
+_misc_data = ExtResource("4_xg0bm")
