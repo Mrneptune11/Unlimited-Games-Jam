@@ -59,6 +59,7 @@ func _init()->void:
 		
 
 func _ready() -> void:
+	
 	# Listen to multiplayer signals
 	# The following emit on both clients and servers
 	multiplayer.peer_connected.connect(_on_peer_connected)

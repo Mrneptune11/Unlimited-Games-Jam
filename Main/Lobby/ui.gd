@@ -60,28 +60,24 @@ func _on_enet_join_pressed():
 	var address: String = $Start/ENet/Join/VBox/Options/Address.text
 	var port: int = $Start/ENet/Join/VBox/Options/Port.value
 	lobby.start_enet_client(address, port)
-	$Start.hide()
-	$BG.hide()
+	hide_menu()
 
 func _on_enet_host_pressed():
 	var port: int = $Start/ENet/HostENet/VBox/Options/Port.value
 	lobby.start_enet_server(port)
-	$Start.hide()
-	$BG.hide()
+	hide_menu()
 
 # WebSocket
 
 func _on_websocket_join_pressed():
 	var url: String = $Start/WebSocket/Join/VBox/Options/Url.text
 	lobby.start_websocket_client(url)
-	$Start.hide()
-	$BG.hide()
+	hide_menu()
 
 func _on_websocket_host_pressed():
 	var port: int = $Start/ENet/Host/VBox/Options/Port.value
 	lobby.start_websocket_server(port)
-	$Start.hide()
-	$BG.hide()
+
 
 #-------------------------------------------------------------------------------
 
@@ -103,3 +99,8 @@ func _play_tick_sfx() -> void:
 	
 	if active_timer:
 		last_tick = roundi(active_timer.time_left)
+
+func hide_menu():
+	$Start.hide()
+	$BG.hide()
+	$Back.hide()
