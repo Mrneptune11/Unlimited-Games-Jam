@@ -1,7 +1,8 @@
 extends CanvasLayer
 
 @onready var lobby: Lobby = get_parent()
-@onready var event_terminal: RichTextLabel = %EventTerminal
+@onready var event_text: RichTextLabel = %EventText
+@onready var timer: RichTextLabel = %Timer
 @onready var tick_sfx: AudioStreamPlayer = %TickSFX
 
 var active_timer:SceneTreeTimer = null ##If there is an activetimer
@@ -15,18 +16,18 @@ const START_BTN_SCN = preload("res://UI/StartButton/StartGameButton.tscn")
 #-------------------------------------------------------------------------------
 
 func _process(_delta: float) -> void:
-	var timer_label:RichTextLabel = event_terminal.get_node("Timer")
-	
 	#Keep the timer up to date when active, and blank when not needed
 	if active_timer:
+		timer.visible = true
+		
 		var time_left:float = active_timer.time_left
 		if time_left > 0.0:
-			timer_label.text = str((roundi(time_left)))
+			timer.text = str((roundi(time_left)))
 			
 			if (roundi(time_left) != last_tick):
 				_play_tick_sfx.rpc()
 		else:
-			timer_label.text = ""
+			timer.visible = false
 
 
 func _ready() -> void:
@@ -90,8 +91,8 @@ func init_start_btn()->void:
 	
 	
 #Update the event terminal current message
-func update_event_terminal(string:String)->void:
-	event_terminal.text = string
+func update_event_text(string:String)->void:
+	event_text.text = string
 
 @rpc("authority", "call_local", "reliable")
 func _play_tick_sfx() -> void:

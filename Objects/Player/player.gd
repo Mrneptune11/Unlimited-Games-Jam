@@ -49,6 +49,7 @@ var color_id:String = "#FFFFFF"
 var my_label:Label = null
 var label_offset:Vector2 = Vector2.ZERO
 
+signal exploded(peer_id: int)	## Emits when the player explodes.
 signal duel_complete ##Singal indicating a duel terminated
 
 var character: int = 0 : # Determines which character to display as
@@ -307,6 +308,7 @@ func explode()->void:
 		if child is EntryBox:
 			child.queue_free()
 	
+	emit_exploded_signal.rpc_id(1, peer_id)
 
 ##Explosion are not a syncronized object, but rather every player spawns one at the correct position
 @rpc("any_peer", "call_local", "reliable")
@@ -328,7 +330,11 @@ func hide_player():
 		my_label.queue_free()
 	
 	unequip_weapon() #hidden players should not have weapons
-	 
+
+@rpc("any_peer", "call_local", "reliable")
+func emit_exploded_signal(id: int) -> void:
+	exploded.emit(id)
+
 #-------------------------------------------------------------------------------
 
 #Player label and color logic

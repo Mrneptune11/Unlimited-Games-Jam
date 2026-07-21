@@ -57,6 +57,16 @@ func _ready() -> void:
 	
 	# Subscribe to misc. signals
 	var lobby: Lobby = get_tree().current_scene as Lobby
+	
+	# Jank method to load an animation whenever a player dies.
+	# Very, very jank. But functional!
+	lobby.event_cycle_started.connect(
+		func():
+			for player: Player in lobby.get_players():
+				player.exploded.connect(load_kaomoji.rpc.bind(&"player_exploded", true).unbind(1))
+	, CONNECT_ONE_SHOT
+	)
+	
 	lobby.event_cycle_started.connect(load_kaomoji.rpc.bind(&"event_countdown"))
 	lobby.game_ended.connect(
 		func(no_winners: bool):
@@ -107,6 +117,7 @@ func load_kaomoji(event_id: StringName, override: bool = false) -> void:
 	if override:
 		_override_animation = new_animation
 	else:
+		_override_animation = null	# Cancel current override animation.
 		_current_animation = new_animation
 	
 	_frame_timer = 0.0
