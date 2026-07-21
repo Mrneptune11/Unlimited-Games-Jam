@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://fmm44p2dxj8k" path="res://Objects/Bg/bg.tscn" id="3_owp0v"]
 [ext_resource type="AudioStream" uid="uid://bvb22aw1qq8bu" path="res://Assets/sfx/event_start.wav" id="4_b6yaa"]
 [ext_resource type="AudioStream" uid="uid://blavu273kye24" path="res://Assets/sfx/event_tick.wav" id="4_cpq7c"]
-[ext_resource type="Theme" uid="uid://dopeom4ydjiad" path="res://UI/Kaomoji/kaomoji_box_theme.tres" id="4_kihbt"]
+[ext_resource type="Theme" uid="uid://dopeom4ydjiad" path="res://UI/hud_theme.tres" id="4_kihbt"]
 [ext_resource type="AudioStream" uid="uid://da0dsx8gjqo30" path="res://Assets/sfx/event_end.wav" id="5_cpq7c"]
 [ext_resource type="PackedScene" uid="uid://clhmylgmstgur" path="res://UI/Kaomoji/Kaomoji.tscn" id="5_fwlmj"]
 [ext_resource type="AudioStream" uid="uid://bdcehpqds5s7n" path="res://Assets/sfx/winner_is_you.wav" id="6_fwlmj"]
@@ -25,9 +25,12 @@ const BULLET_SPEED:float = 200
 properties/0/path = NodePath(".:text")
 properties/0/spawn = true
 properties/0/replication_mode = 2
-properties/1/path = NodePath("Timer:text")
+properties/1/path = NodePath("../Timer:text")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+properties/2/path = NodePath("../Timer:visible")
+properties/2/spawn = true
+properties/2/replication_mode = 1
 
 [node name="Lobby" type="Node2D" unique_id=2146104970]
 script = ExtResource("1_0duqs")
@@ -161,65 +164,69 @@ max_value = 1000000.0
 layout_mode = 2
 text = "Join"
 
-[node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=313957006]
+[node name="HUD" type="MarginContainer" parent="UI" unique_id=313957006]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -615.0
-offset_right = 615.0
-offset_bottom = 220.0
+offset_left = -310.0
+offset_right = 310.0
+offset_bottom = 150.0
 grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
 theme_override_constants/margin_top = 10
 
-[node name="PanelContainer" type="PanelContainer" parent="UI/MarginContainer" unique_id=1988899628]
+[node name="PanelContainer" type="PanelContainer" parent="UI/HUD" unique_id=1988899628]
+custom_minimum_size = Vector2(650, 150)
 layout_mode = 2
 theme = ExtResource("4_kihbt")
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/MarginContainer/PanelContainer" unique_id=1023165231]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer/PanelContainer/MarginContainer" unique_id=885819878]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/HUD/PanelContainer" unique_id=885819878]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Kaomoji" parent="UI/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1540179947 instance=ExtResource("5_fwlmj")]
+[node name="Kaomoji" parent="UI/HUD/PanelContainer/VBoxContainer" unique_id=1540179947 instance=ExtResource("5_fwlmj")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="EventTerminal" type="RichTextLabel" parent="UI/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=814155835]
+[node name="EventTerminal" type="HBoxContainer" parent="UI/HUD/PanelContainer/VBoxContainer" unique_id=1517683835]
+layout_mode = 2
+alignment = 1
+
+[node name="EventText" type="RichTextLabel" parent="UI/HUD/PanelContainer/VBoxContainer/EventTerminal" unique_id=814155835]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(1200, 120)
+custom_maximum_size = Vector2(1200, -1)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
 theme_override_font_sizes/normal_font_size = 36
 bbcode_enabled = true
 text = "Host or Join a lobby."
-horizontal_alignment = 1
-
-[node name="Timer" type="RichTextLabel" parent="UI/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/EventTerminal" unique_id=479230774]
-layout_mode = 0
-offset_left = 540.0
-offset_top = 50.0
-offset_right = 620.0
-offset_bottom = 130.0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_font_sizes/normal_font_size = 50
+fit_content = true
+scroll_active = false
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TickSFX" type="AudioStreamPlayer" parent="UI/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/EventTerminal/Timer" unique_id=738144189]
+[node name="Timer" type="RichTextLabel" parent="UI/HUD/PanelContainer/VBoxContainer/EventTerminal" unique_id=479230774]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/normal_font_size = 50
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TickSFX" type="AudioStreamPlayer" parent="UI/HUD/PanelContainer/VBoxContainer/EventTerminal/Timer" unique_id=738144189]
 unique_name_in_owner = true
 stream = ExtResource("4_cpq7c")
 volume_db = -20.0
 pitch_scale = 2.0
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="UI/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/EventTerminal" unique_id=1159857400]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="UI/HUD/PanelContainer/VBoxContainer/EventTerminal" unique_id=1159857400]
+root_path = NodePath("../EventText")
 replication_config = SubResource("SceneReplicationConfig_0duqs")
 
 [node name="SFX" type="Node" parent="." unique_id=845318948]

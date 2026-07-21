@@ -15,9 +15,9 @@ var server_status:State = State.UNINIT:
 		server_status = value
 		match value:
 			State.LOBBY:
-				$UI.update_event_terminal("Waiting for host to begin match...")
+				$UI.update_event_text("Waiting for host to begin match...")
 			State.MATCH:
-				$UI.update_event_terminal("The match is about to begin...")
+				$UI.update_event_text("The match is about to begin...")
 
 #-------------------------------------------------------------------------------
 
@@ -322,7 +322,7 @@ func event_cycle()->void:
 	event_cycle_started.emit()
 	
 	#Prepare for the next event
-	$UI.update_event_terminal("Next event in:")
+	$UI.update_event_text("Next event in:")
 	await create_game_timer(10).timeout
 	
 	#Safety check to account for async contestant removal beahvior
@@ -335,7 +335,7 @@ func event_cycle()->void:
 	
 	#Event manager handles running an event
 	var new_event:StringName = EM.choose_event().id
-	$UI.update_event_terminal(new_event)
+	$UI.update_event_text(new_event)
 	EM.match_event(new_event, self)
 	
 	_play_event_start_sfx.rpc()
@@ -370,7 +370,7 @@ func _play_no_one_wins_sfx() -> void:
 func someone_wins(peer:int)->void:
 	var winner = get_player(peer)
 	var win_message:String = "Congrations to the winner: " + get_player_color_string(winner)
-	$UI.update_event_terminal(win_message)
+	$UI.update_event_text(win_message)
 	_play_win_sfx.rpc()
 	
 	game_ended.emit(false)
@@ -382,7 +382,7 @@ func someone_wins(peer:int)->void:
 #Handle game end when nobody is left alive
 func no_one_wins()->void:
 	var end_message:String = "Nobody wins... Thats hilarious"
-	$UI.update_event_terminal(end_message)
+	$UI.update_event_text(end_message)
 	_play_no_one_wins_sfx.rpc()
 	
 	game_ended.emit(true)
