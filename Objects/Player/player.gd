@@ -284,6 +284,8 @@ func _air_controls(input_v: Vector2, delta: float) -> void:
 
 @rpc("any_peer", "call_local", "reliable")
 func explode()->void:
+	if self.mode == Mode.SPECTATE: return	# Don't explode ghosts.
+	
 	spawn_explosion.rpc(global_position, Color(color_id))
 	self.mode = Mode.SPECTATE
 	$AnimatedSprite2D.play("ded")
