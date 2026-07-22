@@ -253,13 +253,14 @@ func fireballs(lobby:Lobby)->String:
 	
 	return "Fireballs are raining down from the sky. This is " + rand_subject_name + " fault somehow."
 
-func bouncy_balls(_lobby:Lobby)->String:
-	# Setup Ball Spawner node.
-	# This will continuousely spawn bouncy balls until the node is deleted.
-	bouncy_balls_helper.rpc()
+func bouncy_balls(lobby:Lobby)->String:
+	var ball_spawner: BallSpawner = _BOUNCY_BALLS_EVENT_SPAWNER_SCENE.instantiate()
+	lobby.add_child(ball_spawner, true)
 	
 	# Then, set the event timer.
 	end_event_by_timer(_BOUNCY_BALLS_EVENT_DURATION)
+	
+	event_complete.connect(ball_spawner.set_spawning.rpc.bind(false))
 	
 	return "The circus is dropping bouncy balls everywhere!"
 
@@ -357,18 +358,6 @@ func fireballs_helper()->void:
 	
 	# When the event timer expires, destroy the node to stop spawning fireballs.
 	event_complete.connect(fireball_spawner.queue_free)
-
-## Helper function for the Bouncy Balls event.
-## Using RPC allows the event node to be instantiated on both the server & clients.
-@rpc("authority", "call_local", "reliable")
-func bouncy_balls_helper()->void:
-	var ball_spawner: BallSpawner = _BOUNCY_BALLS_EVENT_SPAWNER_SCENE.instantiate()
-	get_tree().current_scene.add_child(ball_spawner)
-	
-	# When the event timer expires, destroy the node to stop spawning balls.
-	event_complete.connect(func(): 
-		if ball_spawner:
-			ball_spawner.spawning = false)
 
 ##--OS Events--
 

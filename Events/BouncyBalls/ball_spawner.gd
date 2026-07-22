@@ -16,17 +16,19 @@ var _sec_between_balls: float = 0.5
 @onready var _spawn_timer: Timer = %SpawnTimer
 
 ## While true, continuously spawns bouncy balls.
-var spawning: bool = true:
-	set(value):
-		spawning = value
-		
-		if (spawning):
-			_spawn_timer.start(_sec_between_balls)
-		else:
-			_spawn_timer.stop()
+var _spawning: bool = true
 
 func _ready() -> void:
 	_spawn_timer.start(_sec_between_balls)
+
+@rpc("authority", "call_local", "reliable")
+func set_spawning(new_value: bool) -> void:
+	_spawning = new_value
+		
+	if (_spawning):
+		_spawn_timer.start(_sec_between_balls)
+	else:
+		_spawn_timer.stop()
 
 func _spawn_ball() -> void:
 	# Get a random horizontal tile position in the level.
