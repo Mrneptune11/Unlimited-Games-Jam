@@ -219,6 +219,8 @@ func _state_walk(input_v: Vector2, delta: float) -> void:
 
 func _state_jump(input_v: Vector2, delta: float) -> void:
 	if (_check_fall()): return
+	if (_check_walk(input_v)): return
+	if (_check_idle(input_v)): return
 	_air_controls(input_v, delta)
 
 func _state_fall(input_v: Vector2, delta: float) -> void:
@@ -255,13 +257,13 @@ func _check_jump(input_v: Vector2) -> bool:
 	return false
 	
 func _check_walk(input_v: Vector2) -> bool:
-	if (!is_zero_approx(input_v.x)):
+	if (!is_zero_approx(input_v.x) && is_on_floor()):
 		state = State.WALK
 		return true
 	return false
 
 func _check_idle(input_v: Vector2) -> bool:
-	if (is_zero_approx(input_v.x)):
+	if (is_zero_approx(input_v.x) && is_on_floor()):
 		state = State.IDLE
 		return true
 	return false
