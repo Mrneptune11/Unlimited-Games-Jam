@@ -12,6 +12,8 @@ var current_track:Track = Track.NONE
 func play_music(track:Track)->AudioStreamPlayer:
 	if current_track == track: return 
 	
+	current_track = track
+	
 	for player:Node in self.get_children():
 		if player is AudioStreamPlayer:
 			player.stop()

@@ -59,6 +59,7 @@ func _init()->void:
 		
 
 func _ready() -> void:
+	MM.play_music(MM.Track.STUFF)
 	
 	# Listen to multiplayer signals
 	# The following emit on both clients and servers
