@@ -102,11 +102,11 @@ func match_event(event_id:StringName, lobby:Lobby):
 		"print_hi":
 			event_call = func(): 
 				end_event_by_timer(3)
-				return "No event! Just wanted to say hi ╰(*°▽°*)╯"
+				return "No event! Just wanted to say hi"
 		"print_buh":
 			event_call = func(): 
 				end_event_by_timer(3)
-				return "No event! Just wanted to say I hate you all (ㆆ_ㆆ)"
+				return "No event! Just wanted to say I hate you all"
 		"name_change":
 			event_call = name_change.bind(lobby)
 		"someone_explode":
