@@ -113,7 +113,7 @@ offset_right = 1000.0
 offset_bottom = 580.0
 
 [node name="Parallax2D" parent="UI/BG" unique_id=1872672102 instance=ExtResource("3_owp0v")]
-repeat_times = 16
+scroll_offset = Vector2(2435, 94)
 
 [node name="PanelContainer" type="PanelContainer" parent="UI/BG" unique_id=1031750815]
 custom_minimum_size = Vector2(800, 500)
