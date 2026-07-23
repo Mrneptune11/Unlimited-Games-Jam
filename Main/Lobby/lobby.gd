@@ -192,7 +192,7 @@ func load_level(new_level_idx: int) -> void:
 		var spawn_pos:Array[Node] = level.get_node("Spawns").get_children()
 		var players:Array[Player] = get_players()
 		for i:int in range(contestants.size()):
-			players[i].teleport.rpc(spawn_pos[i].position)
+			players[i].teleport.rpc(spawn_pos[i].position, true)
 	
 	else:
 		#spawn players to 0,0

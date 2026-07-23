@@ -134,10 +134,15 @@ func _ready() -> void:
 
 #Teleports peers to a specific position
 @rpc("authority", "call_local", "reliable")
-func teleport(new_pos: Vector2) -> void:
+func teleport(new_pos: Vector2, wait:bool = false) -> void:
 	velocity = Vector2.ZERO
 	global_position = new_pos
 	state = State.IDLE
+	 
+	if wait:
+		mode = Mode.PAUSE
+		await get_tree().create_timer(1).timeout
+		mode = Mode.PLAY
 
 #-------------------------------------------------------------------------------
 
